@@ -42,6 +42,24 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
+          "dependencies": {
+            "Microsoft.Extensions.Configuration": {
+              "target": "Package",
+              "version": "[3.1.3, )"
+            },
+            "Prism.Unity": {
+              "target": "Package",
+              "version": "[7.2.0.1422, )"
+            },
+            "Prism.Wpf": {
+              "target": "Package",
+              "version": "[7.2.0.1422, )"
+            },
+            "Refit": {
+              "target": "Package",
+              "version": "[5.1.54, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",

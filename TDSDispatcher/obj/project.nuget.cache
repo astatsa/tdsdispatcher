@@ -1,8 +1,23 @@
 {
   "version": 2,
-  "dgSpecHash": "7zJ9olGs3o2bN7cw2ZgbutLpeLvmZ1y91P79uG1mYNOVuA5rg3smtwSIYshD1TQ7579QH3B9xIEHkLglxT4BCw==",
+  "dgSpecHash": "5TX0F8pRP1qWIdJ/Q1zizFhqNhDasUnPG1YFk2/DOVxOhm/P9ggVw7ZHB5rk0TqH3kzf2hPBzhEbNGH+q+xR2Q==",
   "success": true,
   "projectFilePath": "D:\\Igor\\source\\repos\\TDSDispatcher\\TDSDispatcher\\TDSDispatcher.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\Igor\\.nuget\\packages\\commonservicelocator\\2.0.4\\commonservicelocator.2.0.4.nupkg.sha512",
+    "C:\\Users\\Igor\\.nuget\\packages\\microsoft.extensions.configuration\\3.1.3\\microsoft.extensions.configuration.3.1.3.nupkg.sha512",
+    "C:\\Users\\Igor\\.nuget\\packages\\microsoft.extensions.configuration.abstractions\\3.1.3\\microsoft.extensions.configuration.abstractions.3.1.3.nupkg.sha512",
+    "C:\\Users\\Igor\\.nuget\\packages\\microsoft.extensions.primitives\\3.1.3\\microsoft.extensions.primitives.3.1.3.nupkg.sha512",
+    "C:\\Users\\Igor\\.nuget\\packages\\newtonsoft.json\\12.0.3\\newtonsoft.json.12.0.3.nupkg.sha512",
+    "C:\\Users\\Igor\\.nuget\\packages\\prism.core\\7.2.0.1422\\prism.core.7.2.0.1422.nupkg.sha512",
+    "C:\\Users\\Igor\\.nuget\\packages\\prism.unity\\7.2.0.1422\\prism.unity.7.2.0.1422.nupkg.sha512",
+    "C:\\Users\\Igor\\.nuget\\packages\\prism.wpf\\7.2.0.1422\\prism.wpf.7.2.0.1422.nupkg.sha512",
+    "C:\\Users\\Igor\\.nuget\\packages\\refit\\5.1.54\\refit.5.1.54.nupkg.sha512",
+    "C:\\Users\\Igor\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\4.5.2\\system.runtime.compilerservices.unsafe.4.5.2.nupkg.sha512",
+    "C:\\Users\\Igor\\.nuget\\packages\\system.text.json\\4.7.1\\system.text.json.4.7.1.nupkg.sha512",
+    "C:\\Users\\Igor\\.nuget\\packages\\system.threading.tasks.extensions\\4.5.2\\system.threading.tasks.extensions.4.5.2.nupkg.sha512",
+    "C:\\Users\\Igor\\.nuget\\packages\\unity.abstractions\\5.11.1\\unity.abstractions.5.11.1.nupkg.sha512",
+    "C:\\Users\\Igor\\.nuget\\packages\\unity.container\\5.11.1\\unity.container.5.11.1.nupkg.sha512"
+  ],
   "logs": []
 }
