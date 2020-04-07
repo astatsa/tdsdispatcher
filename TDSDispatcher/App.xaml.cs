@@ -28,20 +28,25 @@ namespace TDSDispatcher
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
+            var configuration = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json")
+                .Build();
+            var httpSettings = configuration.GetSection("HTTPSettings");
+
             containerRegistry.RegisterSingleton<SessionContext>();
             containerRegistry.RegisterInstance<ITdsApiService>(Refit.RestService.For<ITdsApiService>(
                     new System.Net.Http.HttpClient(new ApiMessageHandler(new HttpClientHandler(), Container.Resolve<SessionContext>()))
                     {
-                        BaseAddress = new Uri(ConfigurationManager.AppSettings.Get("TDSServerUrl")),
-                        Timeout = TimeSpan.FromMilliseconds(ConfigurationManager.AppSettings.Get("HTTP")),
+                        BaseAddress = new Uri(httpSettings.GetValue<string>("Url")),
+                        Timeout = TimeSpan.FromMilliseconds(httpSettings.GetValue<int>("Timeout")),
                     }));
 
             ViewModelLocationProvider.Register<LoginView, LoginViewModel>();
+            ViewModelLocationProvider.Register<MainWindow, MainWindowViewModel>();
         }
 
         public override void Initialize()
-        {
-            var b = new ConfigurationBuilder();
+        {            
             base.Initialize();
         }
     }
