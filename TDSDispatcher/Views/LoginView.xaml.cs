@@ -9,6 +9,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using TDSDispatcher.Helpers;
 
 namespace TDSDispatcher.Views
 {
@@ -20,6 +21,11 @@ namespace TDSDispatcher.Views
         public LoginView()
         {
             InitializeComponent();
+
+            if(DataContext is ICloseRequest c)
+            {
+                c.CloseRequest += (s, e) => this.Close();
+            }
         }
 
         private void ThisWindow_MouseDown(object sender, MouseButtonEventArgs e)

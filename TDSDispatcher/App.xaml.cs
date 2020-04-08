@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Prism.Ioc;
 using Prism.Mvvm;
+using Prism.Regions;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -41,13 +42,11 @@ namespace TDSDispatcher
                         Timeout = TimeSpan.FromMilliseconds(httpSettings.GetValue<int>("Timeout")),
                     }));
 
+            containerRegistry.RegisterForNavigation<ReferenceView>();
+
             ViewModelLocationProvider.Register<LoginView, LoginViewModel>();
             ViewModelLocationProvider.Register<MainWindow, MainWindowViewModel>();
-        }
-
-        public override void Initialize()
-        {            
-            base.Initialize();
+            ViewModelLocationProvider.Register<ReferenceView, ReferenceViewModel>();
         }
     }
 }

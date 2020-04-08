@@ -5,10 +5,49 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:prism="http://prismlibrary.com/"
         xmlns:local="clr-namespace:TDSDispatcher"
+        xmlns:hlp="clr-namespace:TDSDispatcher.Helpers"
         mc:Ignorable="d"
         prism:ViewModelLocator.AutoWireViewModel="True"
-        Title="АРМ Диспетчера" Height="450" Width="800">
+        Title="АРМ Диспетчера" Height="450" Width="800"
+        WindowState="Maximized" FontFamily="Resources/Fonts/Roboto/#Roboto">
+    <Window.Resources>
+        <ResourceDictionary Source="/Resources/Styles/Generic.xaml"/>
+    </Window.Resources>
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Vertical">
+            <Menu>
+                <MenuItem Header="Справочники" Command="{Binding RefCommand}"/>
+            </Menu>
+            <ToolBar Visibility="Collapsed">                    
+            </ToolBar>            
+        </StackPanel>
+        <TabControl Grid.Row="1" prism:RegionManager.RegionName="{x:Static hlp:ViewRegions.MainContent}" Margin="0,5,0,0">
+            <TabControl.ItemTemplate>
+                <DataTemplate>
+                    <Grid MaxWidth="200" Margin="0,5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="{Binding Mode=OneWay, FallbackValue=Unknown}" Margin="0,0,10,0"/>
+                        <Button Grid.Column="1" BorderThickness="0" Background="Transparent">
+                            <Path Data="M0 0 L7 7 M0 7 L7 0" Stroke="Black"/>
+                        </Button>
+                    </Grid>
+                </DataTemplate>
+            </TabControl.ItemTemplate>
+            <TabControl.ContentTemplate>
+                <DataTemplate>
+                    <ContentPresenter Content="{Binding}" Margin="5,10"/>
+                </DataTemplate>
+            </TabControl.ContentTemplate>
+        </TabControl>
     </Grid>
 </Window>

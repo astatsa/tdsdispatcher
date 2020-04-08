@@ -1,5 +1,6 @@
 ﻿using Prism.Commands;
 using Prism.Mvvm;
+using Prism.Regions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,11 +12,13 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using TDSDispatcher.Helpers;
 using TDSDispatcher.Services;
+using TDSDispatcher.Views;
 
 namespace TDSDispatcher.ViewModels
 {
-    class LoginViewModel : BindableBase
+    class LoginViewModel : BindableBase, ICloseRequest
     {
         private string username;
         public string Username
@@ -38,9 +41,10 @@ namespace TDSDispatcher.ViewModels
             set => SetProperty(ref message, value);
         }
 
-        public LoginViewModel(ITdsApiService api)
+        public LoginViewModel(ITdsApiService api, IRegionManager regionManager)
         {
             apiService = api;
+            this.regionManager = regionManager;
         }
 
         #region Commands
@@ -66,6 +70,10 @@ namespace TDSDispatcher.ViewModels
                         Message = "Ошибка авторизации!";
                         return;
                     }
+
+
+                    new MainWindow(regionManager).Show();
+                    CloseRequest?.Invoke(this, EventArgs.Empty);
                 }
                 catch(Refit.ApiException ex) when (ex.StatusCode == System.Net.HttpStatusCode.Unauthorized)
                 {
@@ -90,6 +98,9 @@ namespace TDSDispatcher.ViewModels
         #endregion
 
         private readonly ITdsApiService apiService;
+        private readonly IRegionManager regionManager;
+
+        public event EventHandler CloseRequest;
 
         private string GetPasswordHash(string password)
         {
