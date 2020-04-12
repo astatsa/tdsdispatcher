@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NETCOREAPP;NETCOREAPP3_1
 D:\Igor\source\repos\TDSDispatcher\TDSDispatcher\App.xaml
-4-1632028367
+5243750793
 121391899491
-20-2081567088
-2101506341110
-Resources\Styles\Generic.xaml;Views\LoginView.xaml;Views\MainWindow.xaml;Views\ReferenceView.xaml;
+20-899903585
+211702279087
+Resources\Styles\Generic.xaml;Views\EmployeeView.xaml;Views\LoginView.xaml;Views\MainWindow.xaml;Views\ReferenceView.xaml;
 
-True
+False
 

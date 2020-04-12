@@ -1,9 +1,6 @@
-﻿using Prism.Regions;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -17,20 +14,13 @@ using System.Windows.Shapes;
 namespace TDSDispatcher.Views
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for EmployeeView.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class EmployeeView : UserControl
     {
-        public MainWindow(IRegionManager regionManager)
+        public EmployeeView()
         {
             InitializeComponent();
-
-            RegionManager.SetRegionManager(this, regionManager);
-        }
-
-        private void MenuItem_Click(object sender, RoutedEventArgs e)
-        {
-
         }
     }
 }

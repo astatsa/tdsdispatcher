@@ -11,7 +11,16 @@
         Title="АРМ Диспетчера" Height="450" Width="800"
         WindowState="Maximized" FontFamily="Resources/Fonts/Roboto/#Roboto">
     <Window.Resources>
-        <ResourceDictionary Source="/Resources/Styles/Generic.xaml"/>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Resources/Styles/Generic.xaml"/>
+                <ResourceDictionary>
+                    <Style TargetType="TabItem">
+                        <Setter Property="Header" Value="{Binding DataContext.Title}"/>
+                    </Style>
+                </ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -22,8 +31,16 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Vertical">
-            <Menu>
-                <MenuItem Header="Справочники" Command="{Binding RefCommand}"/>
+            <Menu IsMainMenu="True">
+                <Menu.Resources>
+                    <Style TargetType="MenuItem">
+                        <Setter Property="MinHeight" Value="25"/>
+                    </Style>
+                </Menu.Resources>
+                <MenuItem Header="Справочники">
+                    <MenuItem Header="Сотрудники" Click="MenuItem_Click" Command="{Binding RefCommand}" CommandParameter="Employees"/>
+                    <MenuItem Header="Должности" Command="{Binding RefCommand}" CommandParameter="Positions"/>
+                </MenuItem>
             </Menu>
             <ToolBar Visibility="Collapsed">                    
             </ToolBar>            
@@ -36,7 +53,7 @@
                             <ColumnDefinition/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Text="{Binding Mode=OneWay, FallbackValue=Unknown}" Margin="0,0,10,0"/>
+                        <TextBlock Text="{Binding Header, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=TabItem}}" Margin="0,0,10,0"/>
                         <Button Grid.Column="1" BorderThickness="0" Background="Transparent">
                             <Path Data="M0 0 L7 7 M0 7 L7 0" Stroke="Black"/>
                         </Button>

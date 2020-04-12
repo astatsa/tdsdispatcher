@@ -1,6 +1,10 @@
 ﻿using Prism.Regions;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -23,6 +27,20 @@ namespace TDSDispatcher.Views
         public ReferenceView()
         {
             InitializeComponent();
+        }
+
+        private void DataGrid_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
+        {
+            var pd = e.PropertyDescriptor as PropertyDescriptor;
+            var attr = pd.Attributes[typeof(DisplayNameAttribute)] as DisplayNameAttribute;
+            if(!String.IsNullOrEmpty(attr?.DisplayName))
+            {
+                e.Column.Header = attr.DisplayName;
+            }
+            else
+            {
+                e.Cancel = true;
+            }
         }
     }
 }

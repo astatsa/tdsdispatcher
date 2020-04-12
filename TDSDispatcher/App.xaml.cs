@@ -31,6 +31,7 @@ namespace TDSDispatcher
         {
             var configuration = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")
+                .AddJsonFile("appsettings.Local.json", true)
                 .Build();
             var httpSettings = configuration.GetSection("HTTPSettings");
 
@@ -43,6 +44,7 @@ namespace TDSDispatcher
                     }));
 
             containerRegistry.RegisterForNavigation<ReferenceView>();
+            containerRegistry.RegisterForNavigation<EmployeeView>("Employees");
 
             ViewModelLocationProvider.Register<LoginView, LoginViewModel>();
             ViewModelLocationProvider.Register<MainWindow, MainWindowViewModel>();

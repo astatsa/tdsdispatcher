@@ -13,12 +13,10 @@ namespace TDSDispatcher.ViewModels
 {
     class MainWindowViewModel : BindableBase
     {
-        public ICommand RefCommand => new DelegateCommand(
-            () =>
+        public ICommand RefCommand => new DelegateCommand<string>(
+            x =>
             {
-                regionManager.RequestNavigate(ViewRegions.MainContent, nameof(ReferenceView), x => 
-                { 
-                });
+                regionManager.RequestNavigate(ViewRegions.MainContent, nameof(ReferenceView), new NavigationParameters($"RefName={x}"));
             });
 
         private IRegionManager regionManager;

@@ -15,6 +15,7 @@ using System.Windows.Input;
 using TDSDispatcher.Helpers;
 using TDSDispatcher.Services;
 using TDSDispatcher.Views;
+using Unity;
 
 namespace TDSDispatcher.ViewModels
 {
@@ -41,10 +42,11 @@ namespace TDSDispatcher.ViewModels
             set => SetProperty(ref message, value);
         }
 
-        public LoginViewModel(ITdsApiService api, IRegionManager regionManager)
+        public LoginViewModel(ITdsApiService api, IRegionManager regionManager, SessionContext sessionContext)
         {
             apiService = api;
             this.regionManager = regionManager;
+            this.sessionContext = sessionContext;
         }
 
         #region Commands
@@ -71,6 +73,8 @@ namespace TDSDispatcher.ViewModels
                         return;
                     }
 
+                    sessionContext.Token = result.Token;
+                    sessionContext.Employee = result.Employee;
 
                     new MainWindow(regionManager).Show();
                     CloseRequest?.Invoke(this, EventArgs.Empty);
@@ -99,6 +103,7 @@ namespace TDSDispatcher.ViewModels
 
         private readonly ITdsApiService apiService;
         private readonly IRegionManager regionManager;
+        private readonly SessionContext sessionContext;
 
         public event EventHandler CloseRequest;
 
