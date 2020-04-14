@@ -22,7 +22,7 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <StackPanel Style="{StaticResource ToolBar}">
-            <Button Content="Создать новый" Style="{StaticResource AccentButton}"
+            <Button Content="Создать новый"
                     Command="{Binding AddCommand}"/>
             <Button Content="Изменить"
                     Command="{Binding EditCommand}"/>
@@ -33,7 +33,15 @@
                   CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False" AlternatingRowBackground="LightGray"
                   AlternationCount="2" RowHeaderWidth="15" SelectionMode="Single" SelectionUnit="FullRow"
                   SelectedItem="{Binding CurrentItem}">
-            
+            <DataGrid.RowHeaderStyle>
+                <Style TargetType="DataGridRowHeader">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsDeleted}" Value="True">
+                            <Setter Property="Background" Value="Red"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.RowHeaderStyle>            
         </DataGrid>
     </Grid>
 </UserControl>

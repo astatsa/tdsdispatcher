@@ -1,9 +1,11 @@
-﻿using Prism.Mvvm;
+﻿using Prism.Commands;
+using Prism.Mvvm;
 using Prism.Regions;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
+using System.Windows.Input;
 
 namespace TDSDispatcher.ViewModels
 {
@@ -13,8 +15,28 @@ namespace TDSDispatcher.ViewModels
         private string title;
         public string Title
         {
-            get => title;
+            get => $"{title}({(IsEdit ? "Редактирование" : "Новый")})";
             set => SetProperty(ref title, value);
+        }
+
+        private bool isEdit;
+        public bool IsEdit
+        {
+            get => isEdit;
+            set => SetProperty(ref isEdit, value, () => RaisePropertyChanged(nameof(Title)));
+        }
+
+        #region Commands
+        public ICommand PositionSelectCommand => new DelegateCommand(
+            () =>
+            {
+                System.Windows.MessageBox.Show("Hello");
+            });
+        #endregion
+
+        public EmployeeViewModel()
+        {
+            Title = "Сотрудник";
         }
 
         public bool IsNavigationTarget(NavigationContext navigationContext)
@@ -28,7 +50,10 @@ namespace TDSDispatcher.ViewModels
 
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
-            Title = "Сотрудник(Новый)";
+            if (navigationContext.Parameters.TryGetValue<bool>("IsEdit", out bool isEdit))
+            {
+                IsEdit = isEdit;
+            }
         }
     }
 }

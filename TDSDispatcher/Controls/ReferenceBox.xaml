@@ -1,0 +1,34 @@
+﻿<TextBox x:Class="TDSDispatcher.Controls.ReferenceBox"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TDSDispatcher.Controls"
+             mc:Ignorable="d">
+    <TextBox.Template>
+        <ControlTemplate TargetType="local:ReferenceBox">
+            <Border CornerRadius="2" BorderThickness="{TemplateBinding BorderThickness}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    VerticalAlignment="Center">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <ScrollViewer x:Name="PART_ContentHost" SnapsToDevicePixels="True"/>
+                    <Button Grid.Column="1" Content="..." Width="{Binding ActualHeight, RelativeSource={RelativeSource Mode=Self}}"
+                            Background="Transparent" BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="1,0,0,0" Focusable="False" Command="{TemplateBinding Tag}"/>
+                </Grid>
+            </Border>
+        </ControlTemplate>
+    </TextBox.Template>
+    <TextBox.Style>
+        <Style TargetType="local:ReferenceBox">
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="{x:Static SystemColors.ActiveBorderBrush}"/>
+            <Setter Property="Padding" Value="3"/>
+            <Setter Property="Margin" Value="5"/>
+        </Style>
+    </TextBox.Style>
+</TextBox>

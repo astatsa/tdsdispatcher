@@ -46,13 +46,13 @@ namespace TDSDispatcher.ViewModels
         public ICommand AddCommand => new DelegateCommand(
             () =>
             {
-                regionManager.RequestNavigate(ViewRegions.MainContent, refName);
+                regionManager.RequestNavigate(ViewRegions.MainContent, refName, new NavigationParameters($"IsEdit={false}"));
             });
 
         public ICommand EditCommand => new DelegateCommand(
             () =>
             {
-
+                regionManager.RequestNavigate(ViewRegions.MainContent, refName, new NavigationParameters($"IsEdit={true}"));
             });
 
         public ICommand DeleteCommand => new DelegateCommand(

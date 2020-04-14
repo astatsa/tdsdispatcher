@@ -79,4 +79,20 @@
             <Style TargetType="Button" BasedOn="{StaticResource SimpleButton}"/>
         </Style.Resources>
     </Style>
+
+    <Style TargetType="TextBoxBase" x:Key="RoundedTextBox">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="TextBoxBase">
+                    <Border BorderThickness="{TemplateBinding BorderThickness}" 
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            Background="{TemplateBinding Background}"
+                            CornerRadius="2">
+                        <ScrollViewer x:Name="PART_ContentHost" SnapsToDevicePixels="True"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Padding" Value="3"/>
+    </Style>
 </ResourceDictionary>

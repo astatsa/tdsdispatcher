@@ -9,7 +9,8 @@
         mc:Ignorable="d"
         prism:ViewModelLocator.AutoWireViewModel="True"
         Title="АРМ Диспетчера" Height="450" Width="800"
-        WindowState="Maximized" FontFamily="Resources/Fonts/Roboto/#Roboto">
+        WindowState="Maximized" FontFamily="Resources/Fonts/Roboto/#Roboto"
+        FontSize="14" Name="ThisWindow">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -24,13 +25,14 @@
     </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Vertical">
+        <!--<StackPanel Orientation="Vertical">
             <Menu IsMainMenu="True">
                 <Menu.Resources>
                     <Style TargetType="MenuItem">
@@ -38,14 +40,26 @@
                     </Style>
                 </Menu.Resources>
                 <MenuItem Header="Справочники">
-                    <MenuItem Header="Сотрудники" Click="MenuItem_Click" Command="{Binding RefCommand}" CommandParameter="Employees"/>
+                    <MenuItem Header="Сотрудники" Command="{Binding RefCommand}" CommandParameter="Employees"/>
                     <MenuItem Header="Должности" Command="{Binding RefCommand}" CommandParameter="Positions"/>
+                    <MenuItem Header="Контрагенты" Command="{Binding RefCommand}" CommandParameter="Counterparties"/>
                 </MenuItem>
             </Menu>
             <ToolBar Visibility="Collapsed">                    
             </ToolBar>            
+        </StackPanel>-->
+        <StackPanel Orientation="Vertical">
+            <TextBlock>
+                <Hyperlink Command="{Binding RefCommand}" CommandParameter="Employees">Сотрудники</Hyperlink>
+            </TextBlock>
+            <TextBlock>
+                <Hyperlink Command="{Binding RefCommand}" CommandParameter="Employees">Должности</Hyperlink>
+            </TextBlock>
+            <TextBlock>
+                <Hyperlink Command="{Binding RefCommand}" CommandParameter="Employees">Контрагенты</Hyperlink>
+            </TextBlock>
         </StackPanel>
-        <TabControl Grid.Row="1" prism:RegionManager.RegionName="{x:Static hlp:ViewRegions.MainContent}" Margin="0,5,0,0">
+        <TabControl Grid.Column="1" prism:RegionManager.RegionName="{x:Static hlp:ViewRegions.MainContent}" Margin="0,5,0,0">
             <TabControl.ItemTemplate>
                 <DataTemplate>
                     <Grid MaxWidth="200" Margin="0,5">
@@ -54,7 +68,8 @@
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="{Binding Header, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=TabItem}}" Margin="0,0,10,0"/>
-                        <Button Grid.Column="1" BorderThickness="0" Background="Transparent">
+                        <Button Grid.Column="1" BorderThickness="0" Background="Transparent"
+                                Command="{Binding DataContext.TabCloseCommand, ElementName=ThisWindow}" CommandParameter="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=TabItem}}">
                             <Path Data="M0 0 L7 7 M0 7 L7 0" Stroke="Black"/>
                         </Button>
                     </Grid>

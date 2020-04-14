@@ -19,6 +19,12 @@ namespace TDSDispatcher.ViewModels
                 regionManager.RequestNavigate(ViewRegions.MainContent, nameof(ReferenceView), new NavigationParameters($"RefName={x}"));
             });
 
+        public ICommand TabCloseCommand => new DelegateCommand<object>(
+            x =>
+            {
+                regionManager.Regions[ViewRegions.MainContent].Remove(x);
+            });
+
         private IRegionManager regionManager;
         public MainWindowViewModel(IRegionManager regionManager)
         {

@@ -7,6 +7,9 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
+    <Compile Update="Controls\ReferenceBox.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\EmployeeView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -18,7 +21,16 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Page Update="Controls\ReferenceBox.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Resources\Styles\ElementWindowStyles.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Resources\Styles\Generic.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Resources\Styles\ReferenceStyles.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\EmployeeView.xaml">
