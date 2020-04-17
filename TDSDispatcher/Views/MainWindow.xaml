@@ -24,31 +24,35 @@
         </ResourceDictionary>
     </Window.Resources>
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <!--<StackPanel Orientation="Vertical">
-            <Menu IsMainMenu="True">
+        <StackPanel Orientation="Vertical">
+            <Menu IsMainMenu="True" ItemsSource="{Binding MenuItems}">
                 <Menu.Resources>
                     <Style TargetType="MenuItem">
                         <Setter Property="MinHeight" Value="25"/>
+                        <Setter Property="Command" Value="{Binding DataContext.RefCommand, ElementName=ThisWindow}"/>
+                        <Setter Property="CommandParameter" Value="{Binding}"/>
                     </Style>
                 </Menu.Resources>
-                <MenuItem Header="Справочники">
-                    <MenuItem Header="Сотрудники" Command="{Binding RefCommand}" CommandParameter="Employees"/>
-                    <MenuItem Header="Должности" Command="{Binding RefCommand}" CommandParameter="Positions"/>
-                    <MenuItem Header="Контрагенты" Command="{Binding RefCommand}" CommandParameter="Counterparties"/>
-                </MenuItem>
+                <!--<MenuItem Header="Справочники">
+                    <MenuItem Header="Сотрудники" Command="{Binding RefCommand}"/>
+
+                    <MenuItem Header="Должности" Command="{Binding RefCommand}" CommandParameter="Position"/>
+                    <MenuItem Header="Контрагенты" Command="{Binding RefCommand}" CommandParameter="Counterparty"/>
+                </MenuItem>-->
+                <Menu.ItemTemplate>
+                    <HierarchicalDataTemplate ItemsSource="{Binding Childs}">
+                        <TextBlock Text="{Binding Title}"/>
+                    </HierarchicalDataTemplate>
+                </Menu.ItemTemplate>
             </Menu>
-            <ToolBar Visibility="Collapsed">                    
-            </ToolBar>            
-        </StackPanel>-->
-        <StackPanel Orientation="Vertical">
+            <ToolBar Visibility="Collapsed">
+            </ToolBar>
+        </StackPanel>
+        <!--<StackPanel Orientation="Vertical">
             <TextBlock>
                 <Hyperlink Command="{Binding RefCommand}" CommandParameter="Employees">Сотрудники</Hyperlink>
             </TextBlock>
@@ -58,8 +62,8 @@
             <TextBlock>
                 <Hyperlink Command="{Binding RefCommand}" CommandParameter="Employees">Контрагенты</Hyperlink>
             </TextBlock>
-        </StackPanel>
-        <TabControl Grid.Column="1" prism:RegionManager.RegionName="{x:Static hlp:ViewRegions.MainContent}" Margin="0,5,0,0">
+        </StackPanel>-->
+        <TabControl Grid.Row="1" prism:RegionManager.RegionName="{x:Static hlp:ViewRegions.MainContent}" Margin="0,3,0,0">
             <TabControl.ItemTemplate>
                 <DataTemplate>
                     <Grid MaxWidth="200" Margin="0,5">

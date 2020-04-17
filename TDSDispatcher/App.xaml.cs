@@ -1,19 +1,17 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Prism.Ioc;
 using Prism.Mvvm;
-using Prism.Regions;
+using Prism.Unity;
 using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
 using System.Net.Http;
-using System.Threading.Tasks;
 using System.Windows;
 using TDSDispatcher.Helpers;
 using TDSDispatcher.Services;
 using TDSDispatcher.ViewModels;
 using TDSDispatcher.Views;
+using TDSDTO.References;
+using Unity;
+using Unity.Lifetime;
 
 namespace TDSDispatcher
 {
@@ -43,12 +41,40 @@ namespace TDSDispatcher
                         Timeout = TimeSpan.FromMilliseconds(httpSettings.GetValue<int>("Timeout")),
                     }));
 
-            containerRegistry.RegisterForNavigation<ReferenceView>();
-            containerRegistry.RegisterForNavigation<EmployeeView>("Employees");
+            containerRegistry.RegisterSingleton<ReferenceService>();
+
+            containerRegistry.RegisterForNavigation<EmployeeView>("Employee");
+            containerRegistry.Register<ElementView>();
 
             ViewModelLocationProvider.Register<LoginView, LoginViewModel>();
             ViewModelLocationProvider.Register<MainWindow, MainWindowViewModel>();
-            ViewModelLocationProvider.Register<ReferenceView, ReferenceViewModel>();
+
+            RegisterReference<Employee>();
+            RegisterReference<Counterparty>();
+        }
+
+        private void RegisterReference<TModel>()
+        {
+            var cont = Container.GetContainer();
+            var modelTypeName = typeof(TModel).Name;
+            cont.RegisterType<object, ReferenceViewModel<TModel>>($"{modelTypeName}ListViewModel");
+            cont.RegisterFactory<object>($"{modelTypeName}List", (c, t, n) => 
+                new ReferenceView
+                {
+                    DataContext = Container.Resolve<object>($"{modelTypeName}ListViewModel")
+                });
+        }
+
+        protected override void ConfigureViewModelLocator()
+        {
+            base.ConfigureViewModelLocator();
+
+            /*ViewModelLocationProvider.SetDefaultViewTypeToViewModelTypeResolver(
+                tv =>
+                {
+                    Container.Resolve<>
+                    return tvm;
+                });*/
         }
     }
 }

@@ -10,6 +10,9 @@
     <Compile Update="Controls\ReferenceBox.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\ElementView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\EmployeeView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -31,6 +34,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Resources\Styles\ReferenceStyles.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\ElementView.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\EmployeeView.xaml">

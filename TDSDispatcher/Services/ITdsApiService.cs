@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using TDSDispatcher.Models;
-using DTORef = TDSDTO.References;
 
 namespace TDSDispatcher.Services
 {
@@ -14,6 +13,6 @@ namespace TDSDispatcher.Services
         Task<AuthResult> Auth([Body]object authModel, CancellationToken cancellationToken);
 
         [Get("/{name}")]
-        Task<ICollection<DTORef.Employee>> GetReferenceAsync(string name);
+        Task<ICollection<T>> GetReferenceAsync<T>(string name);
     }
 }

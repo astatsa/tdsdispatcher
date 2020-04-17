@@ -5,7 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
+using System.Windows;
 using System.Windows.Input;
+using TDSDispatcher.Services;
 
 namespace TDSDispatcher.ViewModels
 {
@@ -27,15 +29,22 @@ namespace TDSDispatcher.ViewModels
         }
 
         #region Commands
-        public ICommand PositionSelectCommand => new DelegateCommand(
-            () =>
+        public ICommand CancelCommand => new DelegateCommand<Window>(
+            x =>
             {
-                System.Windows.MessageBox.Show("Hello");
+                x.Close();
+            });
+
+        public ICommand SaveCloseCommand => new DelegateCommand<Window>(
+            x =>
+            {
+                x.Close();
             });
         #endregion
 
-        public EmployeeViewModel()
+        public EmployeeViewModel(ReferenceService referenceService)
         {
+            this.ReferenceService = referenceService;
             Title = "Сотрудник";
         }
 
@@ -54,6 +63,13 @@ namespace TDSDispatcher.ViewModels
             {
                 IsEdit = isEdit;
             }
+        }
+
+        private ReferenceService referenceService;
+        public ReferenceService ReferenceService 
+        { 
+            get => referenceService;
+            private set => SetProperty(ref referenceService, value); 
         }
     }
 }

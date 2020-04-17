@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TDSDispatcher.Controls"
-             mc:Ignorable="d">
+             mc:Ignorable="d" x:Name="This">
     <TextBox.Template>
         <ControlTemplate TargetType="local:ReferenceBox">
             <Border CornerRadius="2" BorderThickness="{TemplateBinding BorderThickness}"
@@ -18,7 +18,8 @@
                     <ScrollViewer x:Name="PART_ContentHost" SnapsToDevicePixels="True"/>
                     <Button Grid.Column="1" Content="..." Width="{Binding ActualHeight, RelativeSource={RelativeSource Mode=Self}}"
                             Background="Transparent" BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="1,0,0,0" Focusable="False" Command="{TemplateBinding Tag}"/>
+                            BorderThickness="1,0,0,0" Focusable="False" Command="{Binding SelectCommand, ElementName=This}"
+                            CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"/>
                 </Grid>
             </Border>
         </ControlTemplate>

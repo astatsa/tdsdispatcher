@@ -7,5 +7,6 @@ namespace TDSDispatcher.Helpers
     static class ViewRegions
     {
         public const string MainContent = "MainContent";
+        public const string ElementWindowContent = "ElementWindowContent";
     }
 }

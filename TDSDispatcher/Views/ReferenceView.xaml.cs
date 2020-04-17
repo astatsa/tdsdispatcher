@@ -1,4 +1,5 @@
-﻿using Prism.Regions;
+﻿using Prism.Ioc;
+using Prism.Regions;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -16,6 +17,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using TDSDispatcher.Helpers;
+using Unity;
 
 namespace TDSDispatcher.Views
 {

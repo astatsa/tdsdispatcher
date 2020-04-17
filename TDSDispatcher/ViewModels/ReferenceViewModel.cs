@@ -1,21 +1,28 @@
 ﻿using Prism.Commands;
+using Prism.Ioc;
 using Prism.Mvvm;
 using Prism.Regions;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel.Design;
 using System.Text;
+using System.Windows;
 using System.Windows.Input;
 using TDSDispatcher.Helpers;
+using TDSDispatcher.Models;
 using TDSDispatcher.Services;
+using TDSDispatcher.Views;
+using Unity;
 
 namespace TDSDispatcher.ViewModels
 {
     [RegionMemberLifetime(KeepAlive = true)]
-    class ReferenceViewModel : BindableBase, INavigationAware
+    class ReferenceViewModel<T> : BindableBase, INavigationAware
     {
         private readonly ITdsApiService apiService;
         private readonly IRegionManager regionManager;
+        private readonly IUnityContainer container;
         private string refName;
 
         private string title;
@@ -25,9 +32,9 @@ namespace TDSDispatcher.ViewModels
             set => SetProperty(ref title, value); 
         }
 
-        private ICollection<object> items;
+        private ICollection<T> items;
 
-        public ICollection<object> Items
+        public ICollection<T> Items
         {
             get => items;
             private set => SetProperty(ref items, value);
@@ -43,16 +50,18 @@ namespace TDSDispatcher.ViewModels
 
 
         #region Commands
-        public ICommand AddCommand => new DelegateCommand(
-            () =>
+        public ICommand AddCommand => new DelegateCommand<Window>(
+            x =>
             {
-                regionManager.RequestNavigate(ViewRegions.MainContent, refName, new NavigationParameters($"IsEdit={false}"));
+                var ev = container.Resolve<ElementView>();
+                ev.Navigate(refName, false, x);
             });
 
-        public ICommand EditCommand => new DelegateCommand(
-            () =>
+        public ICommand EditCommand => new DelegateCommand<Window>(
+            x =>
             {
-                regionManager.RequestNavigate(ViewRegions.MainContent, refName, new NavigationParameters($"IsEdit={true}"));
+                var ev = container.Resolve<ElementView>();
+                ev.Navigate(refName, true, x);
             });
 
         public ICommand DeleteCommand => new DelegateCommand(
@@ -62,14 +71,19 @@ namespace TDSDispatcher.ViewModels
             });
         #endregion
 
-        public ReferenceViewModel(ITdsApiService apiService, IRegionManager regionManager)
+        public ReferenceViewModel(ITdsApiService apiService, IRegionManager regionManager, IUnityContainer container)
         {
             this.apiService = apiService;
             this.regionManager = regionManager;
+            this.container = container;
         }
 
         public bool IsNavigationTarget(NavigationContext navigationContext)
         {
+            if(navigationContext.Parameters.TryGetValue("MenuItem", out MenuItem menuItem))
+            {
+                return menuItem.ModelName == refName;
+            }
             return false;
         }
 
@@ -80,10 +94,11 @@ namespace TDSDispatcher.ViewModels
 
         public async void OnNavigatedTo(NavigationContext navigationContext)
         {
-            if(navigationContext.Parameters.TryGetValue("RefName", out refName))
+            if(navigationContext.Parameters.TryGetValue("MenuItem", out MenuItem menuItem))
             {
-                Items = new ObservableCollection<object>(await apiService.GetReferenceAsync(refName));
-                Title = refName;
+                Items = new ObservableCollection<T>(await apiService.GetReferenceAsync<T>(menuItem.URL));
+                Title = menuItem.Title;
+                refName = menuItem.ModelName;
             }
         }
     }
