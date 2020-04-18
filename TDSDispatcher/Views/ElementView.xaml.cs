@@ -11,6 +11,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using TDSDispatcher.Helpers;
+using TDSDispatcher.Models;
+using TDSDispatcher.ViewModels;
 using Unity;
 
 namespace TDSDispatcher.Views
@@ -27,28 +29,37 @@ namespace TDSDispatcher.Views
             this.container = container;
         }
 
-        public bool? Navigate(string refName, bool isEdit, Window owner = null)
+        public bool? Navigate(EntityInfo entityInfo, bool isEdit, Window owner = null)
         {
-            this.ContentControl.Content = container.Resolve<object>(refName);
-            //regionManager.RequestNavigate(ViewRegions.ElementWindowContent, refName, new NavigationParameters($"IsEdit={isEdit}"));
+            this.ContentControl.Content = container.Resolve<object>(entityInfo.ModelName);
             this.Owner = owner;
             return this.ShowDialog();
         }
 
-        public object Select(string refName, Window owner)
+        public object Select(EntityInfo entityInfo, Window owner)
         {
-            var view = container.Resolve<object>($"{refName}List") as FrameworkElement;
+            var view = container.Resolve<object>($"{entityInfo.ModelName}List") as FrameworkElement;
             if(view != null && view.DataContext != null && view.DataContext is INavigationAware navigation)
             {
-                var nc = new NavigationContext(container.Resolve<IRegionNavigationService>(), new Uri(refName, UriKind.Relative));
-                nc.Parameters.Add("RefName", refName);
+                var nc = new NavigationContext(container.Resolve<IRegionNavigationService>(), new Uri(entityInfo.ModelName, UriKind.Relative));
+                nc.Parameters.Add("EntityInfo", entityInfo);
                 nc.Parameters.Add("SelectionMode", true);
                 navigation.OnNavigatedTo(nc);
             }
             this.ContentControl.Content = view;
             this.Owner = owner;
+            object res = null;
+            if(view.DataContext is ISelectionAware selectionAware)
+            {
+                selectionAware.Selected +=
+                    (s, e) =>
+                    {
+                        res = e;
+                        this.Close();
+                    };
+            }
             this.ShowDialog();
-            return null;
+            return res;
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)

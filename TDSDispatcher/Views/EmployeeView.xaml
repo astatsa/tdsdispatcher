@@ -41,9 +41,11 @@
             <TextBlock Grid.Row="1" Text="ФИО:"/>
             <TextBox Grid.Row="1" Grid.Column="1"/>
             <TextBlock Grid.Row="2" Text="Должность:"/>
-            <controls:ReferenceBox Grid.Row="2" Grid.Column="1" RefName="Employee" SelectService="{Binding ReferenceService, Mode=OneWay}"/>
+            <controls:ReferenceBox Grid.Row="2" Grid.Column="1" RefName="Position" SelectService="{Binding ReferenceService, Mode=OneWay}"
+                                   DisplayMember="Name"/>
             <TextBlock Grid.Row="3" Text="Пользователь:"/>
-            <controls:ReferenceBox Grid.Row="3" Grid.Column="1" RefName="Users"/>
+            <controls:ReferenceBox Grid.Row="3" Grid.Column="1" RefName="User" SelectService="{Binding ReferenceService, Mode=OneWay}"
+                                   DisplayMember="FullName"/>
         </Grid>
     </UserControl.Content>
 </UserControl>

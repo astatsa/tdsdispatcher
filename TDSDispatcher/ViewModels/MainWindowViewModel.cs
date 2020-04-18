@@ -1,27 +1,25 @@
 ﻿using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Regions;
-using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Windows;
+using System.Linq;
 using System.Windows.Input;
 using TDSDispatcher.Helpers;
 using TDSDispatcher.Models;
-using TDSDispatcher.Views;
+using TDSDispatcher.Repositories;
 using TDSDTO.References;
 
 namespace TDSDispatcher.ViewModels
 {
     class MainWindowViewModel : BindableBase
     {
-        public ICommand RefCommand => new DelegateCommand<MenuItem>(
+        public ICommand RefCommand => new DelegateCommand<MenuItemVM>(
             x =>
             {
-                regionManager.RequestNavigate(ViewRegions.MainContent, $"{x.ModelName}List", 
+                regionManager.RequestNavigate(ViewRegions.MainContent, $"{x.EntityName}List",
                     new NavigationParameters
                     {
-                        { "MenuItem", x }
+                        { "EntityInfo", repository.GetEntityByName(x.EntityName) }
                     });
             });
 
@@ -31,35 +29,37 @@ namespace TDSDispatcher.ViewModels
                 regionManager.Regions[ViewRegions.MainContent].Remove(x);
             });
 
-        public List<MenuItem> MenuItems { get; set; }
+        public List<MenuItemVM> MenuItems { get; set; }
 
-        private IRegionManager regionManager;
-        public MainWindowViewModel(IRegionManager regionManager)
+        private readonly IRegionManager regionManager;
+        private readonly ITDSRepository repository;
+
+        public MainWindowViewModel(IRegionManager regionManager, ITDSRepository repository)
         {
             this.regionManager = regionManager;
+            this.repository = repository;
 
-            MenuItems = new List<MenuItem>
-            {
-                new MenuItem
-                {
-                    Title = "Справочники",
-                    Childs = new List<MenuItem>
-                    {
-                        new MenuItem
-                        {
-                            Title = "Сотрудники",
-                            ModelName = nameof(Employee),
-                            URL = "Employees"
-                        },
-                        new MenuItem
-                        {
-                            Title = "Контрагенты",
-                            ModelName = nameof(Counterparty),
-                            URL = "Counterparties"
-                        }
-                    }
-                }
-            };
+            MenuItems = GetMenuItems(repository.GetMenuItems());
+        }
+
+        private List<MenuItemVM> GetMenuItems(ICollection<Models.MenuItem> menuItems, int parentId = 0)
+        {
+            return menuItems
+                .Where(x => x.ParentId == parentId)
+                .Select(x => new MenuItemVM
+                { 
+                    Title = x.Title, 
+                    EntityName = x.EntityName, 
+                    Childs = GetMenuItems(menuItems, x.Id) 
+                })
+                .ToList();
         }
     }
+
+    internal class MenuItemVM
+    {
+        public string Title { get; set; }
+        public string EntityName { get; set; }
+        public List<MenuItemVM> Childs { get; set; }
+}
 }

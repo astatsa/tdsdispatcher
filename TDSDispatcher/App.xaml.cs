@@ -6,11 +6,13 @@ using System;
 using System.Net.Http;
 using System.Windows;
 using TDSDispatcher.Helpers;
+using TDSDispatcher.Repositories;
 using TDSDispatcher.Services;
 using TDSDispatcher.ViewModels;
 using TDSDispatcher.Views;
 using TDSDTO.References;
 using Unity;
+using Unity.Injection;
 using Unity.Lifetime;
 
 namespace TDSDispatcher
@@ -40,6 +42,7 @@ namespace TDSDispatcher
                         BaseAddress = new Uri(httpSettings.GetValue<string>("Url")),
                         Timeout = TimeSpan.FromMilliseconds(httpSettings.GetValue<int>("Timeout")),
                     }));
+            containerRegistry.RegisterSingleton<ITDSRepository, TDSConstRepository>();
 
             containerRegistry.RegisterSingleton<ReferenceService>();
 
@@ -51,6 +54,8 @@ namespace TDSDispatcher
 
             RegisterReference<Employee>();
             RegisterReference<Counterparty>();
+            RegisterReference<Position>();
+            RegisterReference<User>();
         }
 
         private void RegisterReference<TModel>()
@@ -58,11 +63,8 @@ namespace TDSDispatcher
             var cont = Container.GetContainer();
             var modelTypeName = typeof(TModel).Name;
             cont.RegisterType<object, ReferenceViewModel<TModel>>($"{modelTypeName}ListViewModel");
-            cont.RegisterFactory<object>($"{modelTypeName}List", (c, t, n) => 
-                new ReferenceView
-                {
-                    DataContext = Container.Resolve<object>($"{modelTypeName}ListViewModel")
-                });
+            cont.RegisterType<object, ReferenceView>($"{modelTypeName}List", 
+                new InjectionConstructor((Func<object>)(() => Container.Resolve<object>($"{modelTypeName}ListViewModel"))));
         }
 
         protected override void ConfigureViewModelLocator()

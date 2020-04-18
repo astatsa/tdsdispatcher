@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TDSDispatcher.Views"
              xmlns:prism="http://prismlibrary.com/"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              mc:Ignorable="d" 
              prism:ViewModelLocator.AutoWireViewModel="False"
              d:DesignHeight="450" d:DesignWidth="800"
@@ -14,6 +15,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Resources/Styles/Generic.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+            <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
@@ -21,7 +23,9 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <StackPanel Style="{StaticResource ToolBar}">
+        <StackPanel Style="{StaticResource ToolBar}" Orientation="Horizontal">
+            <Button Content="Выбрать" HorizontalAlignment="Right" Margin="0,0,50,0" Style="{StaticResource AccentButton}"
+                    Visibility="{Binding SelectionMode, Converter={StaticResource BoolToVisibilityConverter}}"/>
             <Button Content="Создать новый"
                     Command="{Binding AddCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"/>
             <Button Content="Изменить"
@@ -41,7 +45,12 @@
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
-            </DataGrid.RowHeaderStyle>            
+            </DataGrid.RowHeaderStyle>
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseDoubleClick">
+                    <i:InvokeCommandAction Command="{Binding RowDoubleClickCommand}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
         </DataGrid>
     </Grid>
 </UserControl>

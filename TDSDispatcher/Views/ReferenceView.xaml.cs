@@ -26,9 +26,11 @@ namespace TDSDispatcher.Views
     /// </summary>
     public partial class ReferenceView : UserControl
     {
-        public ReferenceView()
+        public ReferenceView(Func<object> dataContextResolver)
         {
             InitializeComponent();
+
+            DataContext = dataContextResolver();
         }
 
         private void DataGrid_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)

@@ -15,11 +15,6 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Resources/Styles/Generic.xaml"/>
-                <ResourceDictionary>
-                    <Style TargetType="TabItem">
-                        <Setter Property="Header" Value="{Binding DataContext.Title}"/>
-                    </Style>
-                </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
@@ -37,12 +32,6 @@
                         <Setter Property="CommandParameter" Value="{Binding}"/>
                     </Style>
                 </Menu.Resources>
-                <!--<MenuItem Header="Справочники">
-                    <MenuItem Header="Сотрудники" Command="{Binding RefCommand}"/>
-
-                    <MenuItem Header="Должности" Command="{Binding RefCommand}" CommandParameter="Position"/>
-                    <MenuItem Header="Контрагенты" Command="{Binding RefCommand}" CommandParameter="Counterparty"/>
-                </MenuItem>-->
                 <Menu.ItemTemplate>
                     <HierarchicalDataTemplate ItemsSource="{Binding Childs}">
                         <TextBlock Text="{Binding Title}"/>
@@ -52,26 +41,16 @@
             <ToolBar Visibility="Collapsed">
             </ToolBar>
         </StackPanel>
-        <!--<StackPanel Orientation="Vertical">
-            <TextBlock>
-                <Hyperlink Command="{Binding RefCommand}" CommandParameter="Employees">Сотрудники</Hyperlink>
-            </TextBlock>
-            <TextBlock>
-                <Hyperlink Command="{Binding RefCommand}" CommandParameter="Employees">Должности</Hyperlink>
-            </TextBlock>
-            <TextBlock>
-                <Hyperlink Command="{Binding RefCommand}" CommandParameter="Employees">Контрагенты</Hyperlink>
-            </TextBlock>
-        </StackPanel>-->
         <TabControl Grid.Row="1" prism:RegionManager.RegionName="{x:Static hlp:ViewRegions.MainContent}" Margin="0,3,0,0">
             <TabControl.ItemTemplate>
                 <DataTemplate>
-                    <Grid MaxWidth="200" Margin="0,5">
+                    <!-- У TabItem DataContext - вьюха, поэтому берем DataContext вьюхи(DataContext.DataContext) -->
+                    <Grid MaxWidth="200" Margin="0,5" DataContext="{Binding DataContext.DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=TabItem}}">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Text="{Binding Header, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=TabItem}}" Margin="0,0,10,0"/>
+                        <TextBlock Text="{Binding Title}" Margin="0,0,10,0"/>
                         <Button Grid.Column="1" BorderThickness="0" Background="Transparent"
                                 Command="{Binding DataContext.TabCloseCommand, ElementName=ThisWindow}" CommandParameter="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=TabItem}}">
                             <Path Data="M0 0 L7 7 M0 7 L7 0" Stroke="Black"/>

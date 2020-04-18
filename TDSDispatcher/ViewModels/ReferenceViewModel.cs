@@ -8,9 +8,11 @@ using System.Collections.ObjectModel;
 using System.ComponentModel.Design;
 using System.Text;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using TDSDispatcher.Helpers;
 using TDSDispatcher.Models;
+using TDSDispatcher.Repositories;
 using TDSDispatcher.Services;
 using TDSDispatcher.Views;
 using Unity;
@@ -18,12 +20,13 @@ using Unity;
 namespace TDSDispatcher.ViewModels
 {
     [RegionMemberLifetime(KeepAlive = true)]
-    class ReferenceViewModel<T> : BindableBase, INavigationAware
+    class ReferenceViewModel<T> : BindableBase, INavigationAware, ISelectionAware
     {
         private readonly ITdsApiService apiService;
         private readonly IRegionManager regionManager;
         private readonly IUnityContainer container;
-        private string refName;
+        private readonly ITDSRepository repository;
+        private EntityInfo entityInfo;
 
         private string title;
         public string Title
@@ -40,28 +43,37 @@ namespace TDSDispatcher.ViewModels
             private set => SetProperty(ref items, value);
         }
 
-        private object currentItem;
+        private T currentItem;
 
-        public object CurrentItem
+        public T CurrentItem
         {
             get => currentItem;
             set => SetProperty(ref currentItem, value);
         }
 
+        private bool selectionMode;
+
+        public event EventHandler<object> Selected;
+
+        public bool SelectionMode
+        {
+            get => selectionMode;
+            set => SetProperty(ref selectionMode, value);
+        }
 
         #region Commands
         public ICommand AddCommand => new DelegateCommand<Window>(
             x =>
             {
                 var ev = container.Resolve<ElementView>();
-                ev.Navigate(refName, false, x);
+                ev.Navigate(entityInfo, false, x);
             });
 
         public ICommand EditCommand => new DelegateCommand<Window>(
             x =>
             {
                 var ev = container.Resolve<ElementView>();
-                ev.Navigate(refName, true, x);
+                ev.Navigate(entityInfo, true, x);
             });
 
         public ICommand DeleteCommand => new DelegateCommand(
@@ -69,20 +81,31 @@ namespace TDSDispatcher.ViewModels
             {
 
             });
+
+        public ICommand RowDoubleClickCommand => new DelegateCommand(
+            () =>
+            {
+                if(SelectionMode)
+                {
+                    Selected?.Invoke(this, CurrentItem);
+                }
+            });
+
         #endregion
 
-        public ReferenceViewModel(ITdsApiService apiService, IRegionManager regionManager, IUnityContainer container)
+        public ReferenceViewModel(ITdsApiService apiService, IRegionManager regionManager, IUnityContainer container, ITDSRepository repository)
         {
             this.apiService = apiService;
             this.regionManager = regionManager;
             this.container = container;
+            this.repository = repository;
         }
 
         public bool IsNavigationTarget(NavigationContext navigationContext)
         {
-            if(navigationContext.Parameters.TryGetValue("MenuItem", out MenuItem menuItem))
+            if(navigationContext.Parameters.TryGetValue("EntityInfo", out EntityInfo entityInfo))
             {
-                return menuItem.ModelName == refName;
+                return this.entityInfo.ModelName == entityInfo.ModelName;
             }
             return false;
         }
@@ -94,11 +117,22 @@ namespace TDSDispatcher.ViewModels
 
         public async void OnNavigatedTo(NavigationContext navigationContext)
         {
-            if(navigationContext.Parameters.TryGetValue("MenuItem", out MenuItem menuItem))
+            if(navigationContext.Parameters.TryGetValue("EntityInfo", out entityInfo))
             {
-                Items = new ObservableCollection<T>(await apiService.GetReferenceAsync<T>(menuItem.URL));
-                Title = menuItem.Title;
-                refName = menuItem.ModelName;
+                if (entityInfo != null)
+                {
+                    Items = new ObservableCollection<T>(await apiService.GetReferenceAsync<T>(entityInfo.URL));
+                    Title = entityInfo.Title;
+                }
+            }
+
+            if(navigationContext.Parameters.TryGetValue("SelectionMode", out bool selectionMode))
+            {
+                SelectionMode = selectionMode;
+            }
+            else
+            {
+                SelectionMode = false;
             }
         }
     }

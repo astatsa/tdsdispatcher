@@ -24,6 +24,7 @@ namespace TDSDispatcher.Controls
         public static readonly DependencyProperty RefNameProperty = DependencyProperty.Register(nameof(RefName), typeof(string), typeof(ReferenceBox));
         public static readonly DependencyProperty SelectedValueProperty = DependencyProperty.Register(nameof(SelectedValue), typeof(object), typeof(ReferenceBox));
         public static readonly DependencyProperty SelectServiceProperty = DependencyProperty.Register(nameof(SelectService), typeof(ISelectable), typeof(ReferenceBox));
+        public static readonly DependencyProperty DisplayMemberProperty = DependencyProperty.Register(nameof(DisplayMember), typeof(string), typeof(ReferenceBox));
 
         public ReferenceBox()
         {
@@ -39,13 +40,27 @@ namespace TDSDispatcher.Controls
         public object SelectedValue
         {
             get => GetValue(SelectedValueProperty);
-            set => SetValue(SelectedValueProperty, value);
+            set
+            {
+                SetValue(SelectedValueProperty, value);
+                SetText();
+            }
         }
 
         public ISelectable SelectService
         { 
             get => (ISelectable)GetValue(SelectServiceProperty);
             set => SetValue(SelectServiceProperty, value); 
+        }
+
+        public string DisplayMember 
+        { 
+            get => (string)GetValue(DisplayMemberProperty);
+            set
+            {
+                SetValue(DisplayMemberProperty, value);
+                SetText();
+            }
         }
 
         public ICommand SelectCommand => new DelegateCommand<Window>(
@@ -56,5 +71,19 @@ namespace TDSDispatcher.Controls
                     SelectedValue = SelectService.Select(RefName, SelectedValue, x);
                 }
             });
+
+        private void SetText()
+        {
+            var value = SelectedValue;
+            var dm = DisplayMember;
+            if (value != null && dm != null)
+            {
+                Text = (string)value.GetType().GetProperty(dm)?.GetValue(value);
+            }
+            else
+            {
+                Text = null;
+            }
+        }
     }
 }

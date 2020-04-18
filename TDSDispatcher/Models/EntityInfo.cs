@@ -4,11 +4,10 @@ using System.Text;
 
 namespace TDSDispatcher.Models
 {
-    public class MenuItem
+    public class EntityInfo
     {
-        public int Id { get; set; }
         public string Title { get; set; }
-        public string EntityName { get; set; }
-        public int ParentId { get; set; }
+        public string URL { get; set; }
+        public string ModelName { get; set; }
     }
 }
