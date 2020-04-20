@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NETCOREAPP;NETCOREAPP3_1
 D:\Igor\source\repos\TDSDispatcher\TDSDispatcher\App.xaml
-10-281797783
+111892115767
 121391899491
-31995008394
+33112655006
 211702279087
-Controls\ReferenceBox.xaml;Resources\Styles\ElementWindowStyles.xaml;Resources\Styles\Generic.xaml;Resources\Styles\ReferenceStyles.xaml;Views\CounterpartyView.xaml;Views\ElementView.xaml;Views\EmployeeView.xaml;Views\LoginView.xaml;Views\MainWindow.xaml;Views\ReferenceView.xaml;
+Controls\ReferenceBox.xaml;Controls\SwitchButton.xaml;Resources\Styles\ElementWindowStyles.xaml;Resources\Styles\Generic.xaml;Resources\Styles\ReferenceStyles.xaml;Views\CounterpartyView.xaml;Views\ElementView.xaml;Views\EmployeeView.xaml;Views\LoginView.xaml;Views\MainWindow.xaml;Views\ReferenceView.xaml;
 
-True
+False
 

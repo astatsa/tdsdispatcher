@@ -8,12 +8,13 @@ using System.Text;
 using System.Windows;
 using System.Windows.Input;
 using TDSDispatcher.Services;
+using TDSDTO.References;
 
 namespace TDSDispatcher.ViewModels
 {
-    class EmployeeViewModel : BaseEntityViewModel
+    class EmployeeViewModel : BaseEntityViewModel<Employee>
     {
-        public EmployeeViewModel(ReferenceService referenceService) : base(referenceService)
+        public EmployeeViewModel(ReferenceService referenceService, ITdsApiService apiService) : base(referenceService, apiService)
         {
         }
     }

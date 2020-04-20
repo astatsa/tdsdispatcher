@@ -4,6 +4,7 @@ using Prism.Regions;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using TDSDispatcher.Helpers;
 using TDSDispatcher.Models;
@@ -11,7 +12,7 @@ using TDSDispatcher.Services;
 
 namespace TDSDispatcher.ViewModels
 {
-    class BaseEntityViewModel : BindableBase, INavigationAware, ICloseRequest, IRegionMemberLifetime
+    class BaseEntityViewModel<T> : BindableBase, INavigationAware, ICloseRequest, IRegionMemberLifetime where T : class
     {
         #region Properties
         private string title;
@@ -26,6 +27,13 @@ namespace TDSDispatcher.ViewModels
         {
             get => isEdit;
             set => SetProperty(ref isEdit, value, () => RaisePropertyChanged(nameof(title)));
+        }
+
+        private T model;
+        public T Model
+        {
+            get => model;
+            set => SetProperty(ref model, value);
         }
 
         private ReferenceService referenceService;
@@ -44,15 +52,19 @@ namespace TDSDispatcher.ViewModels
             });
 
         public ICommand SaveCloseCommand => new DelegateCommand(
-            () =>
+            async () =>
             {
-                CloseRequest?.Invoke(this, true);
+                if (await Save())
+                {
+                    CloseRequest?.Invoke(this, true);
+                }
             });
         #endregion
 
-        public BaseEntityViewModel(ReferenceService referenceService)
+        public BaseEntityViewModel(ReferenceService referenceService, ITdsApiService apiService)
         {
             this.referenceService = referenceService;
+            this.apiService = apiService;
         }
 
         #region NavigationAware
@@ -64,7 +76,7 @@ namespace TDSDispatcher.ViewModels
 
         public virtual void OnNavigatedFrom(NavigationContext navigationContext)
         {
-            throw new NotImplementedException();
+            
         }
 
         public virtual void OnNavigatedTo(NavigationContext navigationContext)
@@ -76,11 +88,22 @@ namespace TDSDispatcher.ViewModels
             if (navigationContext.Parameters.TryGetValue<bool>("IsEdit", out bool isEdit))
             {
                 IsEdit = isEdit;
+                if(isEdit && navigationContext.Parameters.TryGetValue<T>("Model", out T model))
+                {
+                    Model = model;
+                }
             }
         }
         #endregion
 
+        protected virtual async Task<bool> Save()
+        {
+            var res = await apiService.SaveReferenceModelAsync(entityInfo.URL, Model);
+            return res.Result;
+        }
+
         public event EventHandler<bool> CloseRequest;
         protected EntityInfo entityInfo;
+        private readonly ITdsApiService apiService;
     }
 }

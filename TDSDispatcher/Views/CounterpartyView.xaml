@@ -39,49 +39,16 @@
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <TextBox/>
+                <TextBox Text="{Binding Model.Name}"/>
                 <TextBlock Grid.Column="1" Text="Тип:"/>
-                <CheckBox Grid.Column="2" IsChecked="True" Margin="0,0,5,0" VerticalAlignment="Center">
-                    <CheckBox.Template>
-                        <ControlTemplate TargetType="CheckBox">
-                            <Border>
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition/>
-                                        <ColumnDefinition/>
-                                    </Grid.ColumnDefinitions>
-                                    <Border x:Name="TrueButton" Background="{StaticResource SimpleButtonBrush}"
-                                            CornerRadius="3,0,0,3" BorderThickness="1,1,1,1" BorderBrush="{TemplateBinding BorderBrush}">
-                                        <TextBlock Text="Поставщик" TextAlignment="Center" Margin="5"
-                                               VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                                    </Border>
-                                    <Border x:Name="FalseButton" Grid.Column="1" 
-                                            Background="{StaticResource SimpleButtonPressedBrush}"
-                                            CornerRadius="0,3,3,0" BorderThickness="0,1,1,1" BorderBrush="{TemplateBinding BorderBrush}">
-                                        <TextBlock Text="Покупатель" TextAlignment="Center" Margin="5"
-                                                   VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                                    </Border>
-                                </Grid>
-                            </Border>
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsChecked" Value="True">
-                                    <Setter TargetName="FalseButton" Property="Background" Value="{StaticResource SimpleButtonBrush}"/>
-                                    <Setter TargetName="TrueButton" Property="Background" Value="{StaticResource SimpleButtonPressedBrush}"/>
-                                </Trigger>
-                                <Trigger Property="IsChecked" Value="False">
-                                    <Setter TargetName="TrueButton" Property="Background" Value="{StaticResource SimpleButtonBrush}"/>
-                                    <Setter TargetName="FalseButton" Property="Background" Value="{StaticResource SimpleButtonPressedBrush}"/>
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </CheckBox.Template>
-                </CheckBox>
+                <controls:SwitchButton Grid.Column="2" TrueText="Поставщик" FalseText="Покупатель" Margin="0,0,5,0" VerticalAlignment="Center"
+                                       IsChecked="{Binding Model.IsSupplier}"/>
             </Grid>
             <TextBlock Grid.Row="1" Text="Адрес:"/>
-            <TextBox Grid.Row="1" Grid.Column="1"/>
+            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Model.Address}"/>
             <TextBlock Grid.Row="2" Text="Описание:"/>
             <TextBox Grid.Row="2" Grid.Column="1" TextWrapping="Wrap" AcceptsReturn="True" ScrollViewer.VerticalScrollBarVisibility="Auto"
-                     VerticalContentAlignment="Stretch"/>
+                     VerticalContentAlignment="Stretch" Text="{Binding Model.Description}"/>
         </Grid>
     </UserControl.Content>
 </UserControl>

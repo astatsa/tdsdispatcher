@@ -52,8 +52,8 @@ namespace TDSDispatcher
 
             ViewModelLocationProvider.Register<LoginView, LoginViewModel>();
             ViewModelLocationProvider.Register<MainWindow, MainWindowViewModel>();
-            ViewModelLocationProvider.Register<EmployeeView, BaseEntityViewModel>();
-            ViewModelLocationProvider.Register<CounterpartyView, BaseEntityViewModel>();
+            ViewModelLocationProvider.Register<EmployeeView, EmployeeViewModel>();
+            ViewModelLocationProvider.Register<CounterpartyView, CounterpartyViewModel>();
 
             RegisterReference<Employee>();
             RegisterReference<Counterparty>();

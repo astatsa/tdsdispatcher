@@ -73,7 +73,7 @@ namespace TDSDispatcher.ViewModels
             x =>
             {
                 var ev = container.Resolve<ElementView>();
-                ev.AddOrEdit(entityInfo, true, x);
+                ev.AddOrEdit(entityInfo, true, x, CurrentItem);
             });
 
         public ICommand DeleteCommand => new DelegateCommand(
@@ -82,12 +82,16 @@ namespace TDSDispatcher.ViewModels
 
             });
 
-        public ICommand RowDoubleClickCommand => new DelegateCommand(
-            () =>
+        public ICommand RowDoubleClickCommand => new DelegateCommand<Window>(
+            x =>
             {
                 if(SelectionMode)
                 {
                     Selected?.Invoke(this, CurrentItem);
+                }
+                else
+                {
+                    EditCommand.Execute(x);
                 }
             });
 

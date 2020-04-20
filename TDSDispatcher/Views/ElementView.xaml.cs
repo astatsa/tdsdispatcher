@@ -29,9 +29,9 @@ namespace TDSDispatcher.Views
             this.container = container;
         }
 
-        public bool? AddOrEdit(EntityInfo entityInfo, bool isEdit, Window owner = null)
+        public bool? AddOrEdit(EntityInfo entityInfo, bool isEdit, Window owner = null, object model = null)
         {
-            var view = GetInitializedView(entityInfo.ModelName, ("EntityInfo", entityInfo), ("IsEdit", isEdit));
+            var view = GetInitializedView(entityInfo.ModelName, ("EntityInfo", entityInfo), ("IsEdit", isEdit), ("Model", model));
             if (view == null)
                 return null;
 
