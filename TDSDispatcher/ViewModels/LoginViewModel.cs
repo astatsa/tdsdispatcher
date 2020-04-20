@@ -77,7 +77,7 @@ namespace TDSDispatcher.ViewModels
                     sessionContext.Employee = result.Employee;
 
                     new MainWindow(regionManager).Show();
-                    CloseRequest?.Invoke(this, EventArgs.Empty);
+                    CloseRequest?.Invoke(this, true);
                 }
                 catch(Refit.ApiException ex) when (ex.StatusCode == System.Net.HttpStatusCode.Unauthorized)
                 {
@@ -105,7 +105,7 @@ namespace TDSDispatcher.ViewModels
         private readonly IRegionManager regionManager;
         private readonly SessionContext sessionContext;
 
-        public event EventHandler CloseRequest;
+        public event EventHandler<bool> CloseRequest;
 
         private string GetPasswordHash(string password)
         {

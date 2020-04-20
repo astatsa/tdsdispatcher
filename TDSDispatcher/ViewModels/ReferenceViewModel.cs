@@ -66,14 +66,14 @@ namespace TDSDispatcher.ViewModels
             x =>
             {
                 var ev = container.Resolve<ElementView>();
-                ev.Navigate(entityInfo, false, x);
+                ev.AddOrEdit(entityInfo, false, x);
             });
 
         public ICommand EditCommand => new DelegateCommand<Window>(
             x =>
             {
                 var ev = container.Resolve<ElementView>();
-                ev.Navigate(entityInfo, true, x);
+                ev.AddOrEdit(entityInfo, true, x);
             });
 
         public ICommand DeleteCommand => new DelegateCommand(

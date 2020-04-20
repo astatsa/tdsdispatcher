@@ -7,7 +7,7 @@
         xmlns:prism="http://prismlibrary.com/"
         xmlns:hlp="clr-namespace:TDSDispatcher.Helpers"
         mc:Ignorable="d"
-        Title="ElementView" Height="400" Width="700" Closing="Window_Closing"
+        Title="{Binding Title}" Closing="Window_Closing"
         ShowInTaskbar="False" WindowStartupLocation="CenterOwner"
         FontFamily="/Resources/Fonts/Roboto/#Roboto" FontSize="14">
     <ContentControl x:Name="ContentControl"

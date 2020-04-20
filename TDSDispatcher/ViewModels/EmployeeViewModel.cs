@@ -11,65 +11,10 @@ using TDSDispatcher.Services;
 
 namespace TDSDispatcher.ViewModels
 {
-    [RegionMemberLifetime(KeepAlive = true)]
-    class EmployeeViewModel : BindableBase, INavigationAware
+    class EmployeeViewModel : BaseEntityViewModel
     {
-        private string title;
-        public string Title
+        public EmployeeViewModel(ReferenceService referenceService) : base(referenceService)
         {
-            get => $"{title}({(IsEdit ? "Редактирование" : "Новый")})";
-            set => SetProperty(ref title, value);
-        }
-
-        private bool isEdit;
-        public bool IsEdit
-        {
-            get => isEdit;
-            set => SetProperty(ref isEdit, value, () => RaisePropertyChanged(nameof(Title)));
-        }
-
-        #region Commands
-        public ICommand CancelCommand => new DelegateCommand<Window>(
-            x =>
-            {
-                x.Close();
-            });
-
-        public ICommand SaveCloseCommand => new DelegateCommand<Window>(
-            x =>
-            {
-                x.Close();
-            });
-        #endregion
-
-        public EmployeeViewModel(ReferenceService referenceService)
-        {
-            this.ReferenceService = referenceService;
-            Title = "Сотрудник";
-        }
-
-        public bool IsNavigationTarget(NavigationContext navigationContext)
-        {
-            return true;
-        }
-
-        public void OnNavigatedFrom(NavigationContext navigationContext)
-        {
-        }
-
-        public void OnNavigatedTo(NavigationContext navigationContext)
-        {
-            if (navigationContext.Parameters.TryGetValue<bool>("IsEdit", out bool isEdit))
-            {
-                IsEdit = isEdit;
-            }
-        }
-
-        private ReferenceService referenceService;
-        public ReferenceService ReferenceService 
-        { 
-            get => referenceService;
-            private set => SetProperty(ref referenceService, value); 
         }
     }
 }

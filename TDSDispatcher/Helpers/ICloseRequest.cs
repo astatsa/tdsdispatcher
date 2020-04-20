@@ -7,6 +7,6 @@ namespace TDSDispatcher.Helpers
 {
     interface ICloseRequest
     {
-        event EventHandler CloseRequest;
+        event EventHandler<bool> CloseRequest;
     }
 }

@@ -29,25 +29,38 @@ namespace TDSDispatcher.Views
             this.container = container;
         }
 
-        public bool? Navigate(EntityInfo entityInfo, bool isEdit, Window owner = null)
+        public bool? AddOrEdit(EntityInfo entityInfo, bool isEdit, Window owner = null)
         {
-            this.ContentControl.Content = container.Resolve<object>(entityInfo.ModelName);
+            var view = GetInitializedView(entityInfo.ModelName, ("EntityInfo", entityInfo), ("IsEdit", isEdit));
+            if (view == null)
+                return null;
+
+            this.ContentControl.Content = view;
             this.Owner = owner;
+            this.DataContext = view.DataContext;
+
+            if(view.DataContext is ICloseRequest closeRequest)
+            {
+                closeRequest.CloseRequest +=
+                    (s, e) =>
+                    {
+                        this.DialogResult = e;
+                        this.Close();
+                    };
+            }
+
             return this.ShowDialog();
         }
 
         public object Select(EntityInfo entityInfo, Window owner)
         {
-            var view = container.Resolve<object>($"{entityInfo.ModelName}List") as FrameworkElement;
-            if(view != null && view.DataContext != null && view.DataContext is INavigationAware navigation)
-            {
-                var nc = new NavigationContext(container.Resolve<IRegionNavigationService>(), new Uri(entityInfo.ModelName, UriKind.Relative));
-                nc.Parameters.Add("EntityInfo", entityInfo);
-                nc.Parameters.Add("SelectionMode", true);
-                navigation.OnNavigatedTo(nc);
-            }
+            var view = GetInitializedView($"{entityInfo.ModelName}List", ("EntityInfo", entityInfo), ("SelectionMode", true));
+            if (view == null)
+                return null;
+
             this.ContentControl.Content = view;
             this.Owner = owner;
+            this.DataContext = view.DataContext;
             object res = null;
             if(view.DataContext is ISelectionAware selectionAware)
             {
@@ -60,6 +73,22 @@ namespace TDSDispatcher.Views
             }
             this.ShowDialog();
             return res;
+        }
+
+        private FrameworkElement GetInitializedView(string name, params (string name, object value)[] parameters)
+        {
+            var view = container.Resolve<object>(name) as FrameworkElement;
+            if (view != null && view.DataContext != null && view.DataContext is INavigationAware navigation)
+            {
+                var nc = new NavigationContext(container.Resolve<IRegionNavigationService>(), new Uri(name, UriKind.Relative));
+                foreach(var par in parameters)
+                {
+                    nc.Parameters.Add(par.name, par.value);
+                }
+                navigation.OnNavigatedTo(nc);
+            }
+
+            return view;
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)

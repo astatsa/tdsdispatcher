@@ -47,10 +47,13 @@ namespace TDSDispatcher
             containerRegistry.RegisterSingleton<ReferenceService>();
 
             containerRegistry.RegisterForNavigation<EmployeeView>("Employee");
+            containerRegistry.RegisterForNavigation<CounterpartyView>("Counterparty");
             containerRegistry.Register<ElementView>();
 
             ViewModelLocationProvider.Register<LoginView, LoginViewModel>();
             ViewModelLocationProvider.Register<MainWindow, MainWindowViewModel>();
+            ViewModelLocationProvider.Register<EmployeeView, BaseEntityViewModel>();
+            ViewModelLocationProvider.Register<CounterpartyView, BaseEntityViewModel>();
 
             RegisterReference<Employee>();
             RegisterReference<Counterparty>();
