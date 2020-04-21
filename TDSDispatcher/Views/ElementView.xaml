@@ -7,6 +7,7 @@
         xmlns:prism="http://prismlibrary.com/"
         xmlns:hlp="clr-namespace:TDSDispatcher.Helpers"
         mc:Ignorable="d"
+        SizeToContent="WidthAndHeight"
         Title="{Binding Title}" Closing="Window_Closing"
         ShowInTaskbar="False" WindowStartupLocation="CenterOwner"
         FontFamily="/Resources/Fonts/Roboto/#Roboto" FontSize="14">

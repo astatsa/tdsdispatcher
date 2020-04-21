@@ -22,9 +22,19 @@ namespace TDSDispatcher.Controls
     public partial class ReferenceBox : TextBox
     {
         public static readonly DependencyProperty RefNameProperty = DependencyProperty.Register(nameof(RefName), typeof(string), typeof(ReferenceBox));
-        public static readonly DependencyProperty SelectedValueProperty = DependencyProperty.Register(nameof(SelectedValue), typeof(object), typeof(ReferenceBox));
+        public static readonly DependencyProperty SelectedValueProperty = DependencyProperty.Register(nameof(SelectedValue), typeof(object), typeof(ReferenceBox),
+            new FrameworkPropertyMetadata
+            {
+                BindsTwoWayByDefault = true
+            });
         public static readonly DependencyProperty SelectServiceProperty = DependencyProperty.Register(nameof(SelectService), typeof(ISelectable), typeof(ReferenceBox));
         public static readonly DependencyProperty DisplayMemberProperty = DependencyProperty.Register(nameof(DisplayMember), typeof(string), typeof(ReferenceBox));
+        public static readonly DependencyProperty ValueMemberProperty = DependencyProperty.Register(nameof(ValueMember), typeof(string), typeof(ReferenceBox));
+        public static readonly DependencyProperty ValueProperty = DependencyProperty.Register(nameof(Value), typeof(object), typeof(ReferenceBox),
+            new FrameworkPropertyMetadata
+            {
+                BindsTwoWayByDefault = true
+            });
 
         public ReferenceBox()
         {
@@ -43,7 +53,8 @@ namespace TDSDispatcher.Controls
             set
             {
                 SetValue(SelectedValueProperty, value);
-                SetText();
+                Text = GetPropertyValue<string>(DisplayMember, SelectedValue);
+                Value = GetPropertyValue<object>(ValueMember, SelectedValue);
             }
         }
 
@@ -59,8 +70,24 @@ namespace TDSDispatcher.Controls
             set
             {
                 SetValue(DisplayMemberProperty, value);
-                SetText();
+                Text = GetPropertyValue<string>(DisplayMember, SelectedValue);
             }
+        }
+
+        public string ValueMember 
+        { 
+            get => (string)GetValue(ValueMemberProperty);
+            set
+            {
+                SetValue(ValueMemberProperty, value);
+                Value = GetPropertyValue<object>(ValueMember, SelectedValue);
+            }
+        }
+
+        public object Value
+        {
+            get => GetValue(ValueProperty);
+            set => SetValue(ValueProperty, value);
         }
 
         public ICommand SelectCommand => new DelegateCommand<Window>(
@@ -72,18 +99,17 @@ namespace TDSDispatcher.Controls
                 }
             });
 
-        private void SetText()
+        private T GetPropertyValue<T>(string propertyName, object obj)
         {
-            var value = SelectedValue;
-            var dm = DisplayMember;
-            if (value != null && dm != null)
+            if (!String.IsNullOrWhiteSpace(propertyName))
             {
-                Text = (string)value.GetType().GetProperty(dm)?.GetValue(value);
+                var value = SelectedValue;
+                if (value != null)
+                {
+                    return (T)value.GetType().GetProperty(propertyName)?.GetValue(value);
+                }
             }
-            else
-            {
-                Text = null;
-            }
+            return default;
         }
     }
 }

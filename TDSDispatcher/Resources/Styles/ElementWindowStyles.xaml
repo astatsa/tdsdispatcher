@@ -7,7 +7,7 @@
     </ResourceDictionary.MergedDictionaries>
 
     <Style TargetType="UserControl" x:Key="ElementWindowControl">
-        <Setter Property="FontFamily" Value="Resources/Fonts/Roboto/#Roboto"/>
+        <Setter Property="FontFamily" Value="/Resources/Fonts/Roboto/#Roboto"/>
         <Setter Property="FontSize" Value="14"/>
         <Setter Property="prism:ViewModelLocator.AutoWireViewModel" Value="True"/>
         <Setter Property="Template">
@@ -19,13 +19,15 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition/>
                         </Grid.RowDefinitions>
-                        <TextBlock FontSize="20" FontWeight="Bold" Text="{Binding Title, FallbackValue=Заголовок......}"
+                        <TextBlock FontSize="20" FontWeight="Medium" Text="{Binding Title, FallbackValue=Заголовок......}"
                                    Margin="0,0,0,10"/>
                         <StackPanel Grid.Row="1" Orientation="Horizontal">
                             <Button Style="{StaticResource AccentButton}" Content="Записать и закрыть" Command="{Binding SaveCloseCommand}"
-                                    CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"/>
+                                    CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+                                    IsDefault="True"/>
                             <Button Style="{StaticResource SimpleButton}" Content="Отмена" Command="{Binding CancelCommand}"
-                                    CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"/>
+                                    CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+                                    IsCancel="True"/>
                         </StackPanel>
                         <ContentPresenter Grid.Row="2" Margin="0,10,0,0">
                         </ContentPresenter>

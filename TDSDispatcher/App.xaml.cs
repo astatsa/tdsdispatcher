@@ -9,7 +9,9 @@ using TDSDispatcher.Helpers;
 using TDSDispatcher.Repositories;
 using TDSDispatcher.Services;
 using TDSDispatcher.ViewModels;
+using TDSDispatcher.ViewModels.Dialogs;
 using TDSDispatcher.Views;
+using TDSDispatcher.Views.Dialogs;
 using TDSDTO.References;
 using Unity;
 using Unity.Injection;
@@ -54,6 +56,8 @@ namespace TDSDispatcher
             ViewModelLocationProvider.Register<MainWindow, MainWindowViewModel>();
             ViewModelLocationProvider.Register<EmployeeView, EmployeeViewModel>();
             ViewModelLocationProvider.Register<CounterpartyView, CounterpartyViewModel>();
+
+            containerRegistry.RegisterDialog<MessageBoxView, MessageBoxViewModel>("MessageBox");
 
             RegisterReference<Employee>();
             RegisterReference<Counterparty>();

@@ -6,7 +6,7 @@
              xmlns:prism="http://prismlibrary.com/"
              xmlns:local="clr-namespace:TDSDispatcher.Views"
              xmlns:controls="clr-namespace:TDSDispatcher.Controls"
-             mc:Ignorable="d" >
+             mc:Ignorable="d">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -39,7 +39,7 @@
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <TextBox Text="{Binding Model.Name}"/>
+                <TextBox Text="{Binding Model.Name}" MinWidth="100"/>
                 <TextBlock Grid.Column="1" Text="Тип:"/>
                 <controls:SwitchButton Grid.Column="2" TrueText="Поставщик" FalseText="Покупатель" Margin="0,0,5,0" VerticalAlignment="Center"
                                        IsChecked="{Binding Model.IsSupplier}"/>

@@ -1,6 +1,7 @@
 ﻿using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Regions;
+using Prism.Services.Dialogs;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -14,7 +15,8 @@ namespace TDSDispatcher.ViewModels
 {
     class EmployeeViewModel : BaseEntityViewModel<Employee>
     {
-        public EmployeeViewModel(ReferenceService referenceService, ITdsApiService apiService) : base(referenceService, apiService)
+        public EmployeeViewModel(ReferenceService referenceService, ITdsApiService apiService, IDialogService dialogService) 
+            : base(referenceService, apiService, dialogService)
         {
         }
     }

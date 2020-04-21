@@ -1,18 +1,20 @@
 ﻿using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Regions;
+using Prism.Services.Dialogs;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using TDSDispatcher.Extensions;
 using TDSDispatcher.Helpers;
 using TDSDispatcher.Models;
 using TDSDispatcher.Services;
 
 namespace TDSDispatcher.ViewModels
 {
-    class BaseEntityViewModel<T> : BindableBase, INavigationAware, ICloseRequest, IRegionMemberLifetime where T : class
+    class BaseEntityViewModel<T> : BindableBase, INavigationAware, ICloseRequest, IRegionMemberLifetime where T : new()
     {
         #region Properties
         private string title;
@@ -61,10 +63,11 @@ namespace TDSDispatcher.ViewModels
             });
         #endregion
 
-        public BaseEntityViewModel(ReferenceService referenceService, ITdsApiService apiService)
+        public BaseEntityViewModel(ReferenceService referenceService, ITdsApiService apiService, IDialogService dialogService)
         {
             this.referenceService = referenceService;
             this.apiService = apiService;
+            this.dialogService = dialogService;
         }
 
         #region NavigationAware
@@ -92,18 +95,42 @@ namespace TDSDispatcher.ViewModels
                 {
                     Model = model;
                 }
+                else
+                {
+                    Model = new T();
+                }
             }
         }
         #endregion
 
         protected virtual async Task<bool> Save()
         {
-            var res = await apiService.SaveReferenceModelAsync(entityInfo.URL, Model);
-            return res.Result;
+            bool res = true;
+            string error = null;
+            try
+            {
+                var apiRes = await apiService.SaveReferenceModelAsync(entityInfo.URL, Model);
+                if (!String.IsNullOrEmpty(apiRes.Error))
+                {
+                    res = false;
+                    error = apiRes.Error;
+                }
+            }
+            catch(Exception ex)
+            {
+                error = ex.Message;
+                res = false;
+            }
+            if(!res)
+            {
+                dialogService.ShowMessageBox("Ошибка", $"Произошла ошибка при сохранении изменений!", error, null);
+            }
+            return res;
         }
 
         public event EventHandler<bool> CloseRequest;
         protected EntityInfo entityInfo;
         private readonly ITdsApiService apiService;
+        private readonly IDialogService dialogService;
     }
 }

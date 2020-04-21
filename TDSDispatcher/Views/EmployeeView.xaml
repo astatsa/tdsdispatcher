@@ -6,8 +6,7 @@
              xmlns:local="clr-namespace:TDSDispatcher.Views"
              xmlns:prism="http://prismlibrary.com/"
              xmlns:controls="clr-namespace:TDSDispatcher.Controls"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             mc:Ignorable="d" >
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -35,15 +34,15 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <TextBlock Text="Наименование:"/>
-            <TextBox Grid.Column="1"/>
+            <TextBox Grid.Column="1" Text="{Binding Model.Name}"/>
             <TextBlock Grid.Row="1" Text="ФИО:"/>
-            <TextBox Grid.Row="1" Grid.Column="1"/>
+            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Model.FullName}"/>
             <TextBlock Grid.Row="2" Text="Должность:"/>
             <controls:ReferenceBox Grid.Row="2" Grid.Column="1" RefName="Position" SelectService="{Binding ReferenceService, Mode=OneWay}"
-                                   DisplayMember="Name"/>
+                                   DisplayMember="Name" ValueMember="Id" Value="{Binding Model.PositionId}" Text="{Binding Model.PositionName}"/>
             <TextBlock Grid.Row="3" Text="Пользователь:"/>
             <controls:ReferenceBox Grid.Row="3" Grid.Column="1" RefName="User" SelectService="{Binding ReferenceService, Mode=OneWay}"
-                                   DisplayMember="FullName"/>
+                                   DisplayMember="FullName" ValueMember="Id"  Value="{Binding Model.UserId}" Text="{Binding Model.UserName}"/>
         </Grid>
     </UserControl.Content>
 </UserControl>
