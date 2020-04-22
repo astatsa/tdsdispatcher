@@ -1,11 +1,11 @@
-﻿<UserControl x:Class="TDSDispatcher.Views.EmployeeView"
+﻿<UserControl x:Class="TDSDispatcher.Views.MeasureView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TDSDispatcher.Views"
-             xmlns:controls="clr-namespace:TDSDispatcher.Controls"
-             mc:Ignorable="d">
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -29,19 +29,11 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <TextBlock Text="Наименование:"/>
-            <TextBox Grid.Column="1" Text="{Binding Model.Name}"/>
-            <TextBlock Grid.Row="1" Text="ФИО:"/>
+            <TextBlock Text="Краткое наименование:"/>
+            <TextBox Grid.Column="1" Width="100" HorizontalAlignment="Left" Text="{Binding Model.Name}"/>
+            <TextBlock Grid.Row="1" Text="Полное наименование:"/>
             <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Model.FullName}"/>
-            <TextBlock Grid.Row="2" Text="Должность:"/>
-            <controls:ReferenceBox Grid.Row="2" Grid.Column="1" RefName="Position" SelectService="{Binding ReferenceService, Mode=OneWay}"
-                                   DisplayMember="Name" ValueMember="Id" Value="{Binding Model.PositionId}" Text="{Binding Model.PositionName}"/>
-            <TextBlock Grid.Row="3" Text="Пользователь:"/>
-            <controls:ReferenceBox Grid.Row="3" Grid.Column="1" RefName="User" SelectService="{Binding ReferenceService, Mode=OneWay}"
-                                   DisplayMember="FullName" ValueMember="Id"  Value="{Binding Model.UserId}" Text="{Binding Model.UserName}"/>
         </Grid>
     </UserControl.Content>
 </UserControl>

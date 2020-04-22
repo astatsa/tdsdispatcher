@@ -123,7 +123,7 @@ namespace TDSDispatcher.ViewModels
             }
             if(!res)
             {
-                dialogService.ShowMessageBox("Ошибка", $"Произошла ошибка при сохранении изменений!", error, null);
+                dialogService.ShowMessageBox("Ошибка", $"Произошла ошибка при сохранении изменений!", detail: error);
             }
             return res;
         }

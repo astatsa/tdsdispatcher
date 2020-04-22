@@ -1,6 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using TDSDispatcher.Models;
+using TDSDTO.Documents;
 using TDSDTO.References;
 
 namespace TDSDispatcher.Repositories
@@ -40,7 +40,32 @@ namespace TDSDispatcher.Repositories
                     Title = "Пользователи",
                     URL = "Users"
                 }
+            },
+            {
+                "Material", new EntityInfo
+                {
+                    ModelName = nameof(Material),
+                    Title = "Материалы",
+                    URL = "Materials"
+                }
+            },
+            {
+                "Measure", new EntityInfo
+                {
+                    ModelName = nameof(Measure),
+                    Title = "Единицы измерения",
+                    URL = "Measures"
+                }
+            },
+            {
+                "Order", new EntityInfo
+                {
+                    ModelName = nameof(Order),
+                    Title = "Заявки",
+                    URL = "Orders"
+                }
             }
+
         };
 
         private readonly List<MenuItem> menuItems = new List<MenuItem>
@@ -63,6 +88,32 @@ namespace TDSDispatcher.Repositories
                     EntityName = "Counterparty",
                     Title = "Контрагенты",
                     ParentId = 1
+                },
+                new MenuItem
+                {
+                    Id = 6,
+                    EntityName = "Measure",
+                    Title = "Единицы измерения",
+                    ParentId = 1
+                },
+                new MenuItem
+                {
+                    Id = 7,
+                    EntityName = "Material",
+                    Title = "Материалы",
+                    ParentId = 1
+                },
+            new MenuItem
+            {
+                Id = 8,
+                Title = "Документы"
+            },
+                new MenuItem
+                {
+                    Id = 9,
+                    Title = "Заявки",
+                    EntityName = "Order",
+                    ParentId = 8
                 },
             new MenuItem
             {

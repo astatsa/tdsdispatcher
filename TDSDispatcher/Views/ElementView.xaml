@@ -12,7 +12,7 @@
         ShowInTaskbar="False" WindowStartupLocation="CenterOwner"
         FontFamily="/Resources/Fonts/Roboto/#Roboto" FontSize="14">
     <ContentControl x:Name="ContentControl"
-                    Margin="5">
+                    Margin="5" MinHeight="100" MinWidth="200">
         
     </ContentControl>
 </Window>

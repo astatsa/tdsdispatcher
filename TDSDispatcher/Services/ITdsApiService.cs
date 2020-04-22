@@ -14,7 +14,7 @@ namespace TDSDispatcher.Services
         Task<AuthResult> Auth([Body]object authModel, CancellationToken cancellationToken);
 
         [Get("/{name}")]
-        Task<ICollection<T>> GetReferenceAsync<T>(string name);
+        Task<ICollection<T>> GetReferenceAsync<T>(string name, CancellationToken cancellationToken);
 
         [Post("/{name}")]
         Task<DTO.ApiResult<bool>> SaveReferenceModelAsync<T>(string name, [Body] T model);

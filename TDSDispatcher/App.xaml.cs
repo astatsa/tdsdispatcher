@@ -12,6 +12,7 @@ using TDSDispatcher.ViewModels;
 using TDSDispatcher.ViewModels.Dialogs;
 using TDSDispatcher.Views;
 using TDSDispatcher.Views.Dialogs;
+using TDSDTO.Documents;
 using TDSDTO.References;
 using Unity;
 using Unity.Injection;
@@ -50,12 +51,16 @@ namespace TDSDispatcher
 
             containerRegistry.RegisterForNavigation<EmployeeView>("Employee");
             containerRegistry.RegisterForNavigation<CounterpartyView>("Counterparty");
+            containerRegistry.RegisterForNavigation<MeasureView>("Measure");
+            containerRegistry.RegisterForNavigation<MaterialView>("Material");
             containerRegistry.Register<ElementView>();
 
             ViewModelLocationProvider.Register<LoginView, LoginViewModel>();
             ViewModelLocationProvider.Register<MainWindow, MainWindowViewModel>();
             ViewModelLocationProvider.Register<EmployeeView, EmployeeViewModel>();
             ViewModelLocationProvider.Register<CounterpartyView, CounterpartyViewModel>();
+            ViewModelLocationProvider.Register<MeasureView, MeasureViewModel>();
+            ViewModelLocationProvider.Register<MaterialView, MaterialViewModel>();
 
             containerRegistry.RegisterDialog<MessageBoxView, MessageBoxViewModel>("MessageBox");
 
@@ -63,6 +68,9 @@ namespace TDSDispatcher
             RegisterReference<Counterparty>();
             RegisterReference<Position>();
             RegisterReference<User>();
+            RegisterReference<Measure>();
+            RegisterReference<Material>();
+            RegisterReference<Order>();
         }
 
         private void RegisterReference<TModel>()

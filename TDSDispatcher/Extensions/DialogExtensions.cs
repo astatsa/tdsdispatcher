@@ -1,19 +1,19 @@
 ﻿using Prism.Services.Dialogs;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace TDSDispatcher.Extensions
 {
     static class DialogExtensions
     {
-        public static void ShowMessageBox(this IDialogService dialogService, string title, string message, string detail, Action<IDialogResult> callback)
+        public static void ShowMessageBox(this IDialogService dialogService, string title, string message,
+            ButtonResult[] buttons = null, string detail = null, Action<IDialogResult> callback = null)
         {
             dialogService.ShowDialog("MessageBox", new DialogParameters
             {
                 { "Title", title },
                 { "Message", message },
-                { "Detail", detail }
+                { "Detail", detail },
+                { "Buttons", buttons }
             }, callback);
         }
     }

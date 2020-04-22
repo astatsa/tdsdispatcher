@@ -2,14 +2,19 @@
 using Prism.Ioc;
 using Prism.Mvvm;
 using Prism.Regions;
+using Prism.Services.Dialogs;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.Design;
+using System.Net.Http;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using TDSDispatcher.Extensions;
 using TDSDispatcher.Helpers;
 using TDSDispatcher.Models;
 using TDSDispatcher.Repositories;
@@ -26,7 +31,9 @@ namespace TDSDispatcher.ViewModels
         private readonly IRegionManager regionManager;
         private readonly IUnityContainer container;
         private readonly ITDSRepository repository;
+        private readonly IDialogService dialogService;
         private EntityInfo entityInfo;
+        private CancellationTokenSource cts;
 
         private string title;
         public string Title
@@ -61,19 +68,35 @@ namespace TDSDispatcher.ViewModels
             set => SetProperty(ref selectionMode, value);
         }
 
+        private bool isLoading;
+        public bool IsLoading
+        {
+            get => isLoading;
+            set => SetProperty(ref isLoading, value);
+        }
+
+
         #region Commands
         public ICommand AddCommand => new DelegateCommand<Window>(
             x =>
             {
                 var ev = container.Resolve<ElementView>();
-                ev.AddOrEdit(entityInfo, false, x);
+                var res = ev.AddOrEdit(entityInfo, false, x);
+                if(res.HasValue && res.Value)
+                {
+                    LoadItems();
+                }
             });
 
         public ICommand EditCommand => new DelegateCommand<Window>(
             x =>
             {
                 var ev = container.Resolve<ElementView>();
-                ev.AddOrEdit(entityInfo, true, x, CurrentItem);
+                var res = ev.AddOrEdit(entityInfo, true, x, CurrentItem);
+                if(res.HasValue && res.Value)
+                {
+                    LoadItems();
+                }
             });
 
         public ICommand DeleteCommand => new DelegateCommand(
@@ -97,12 +120,14 @@ namespace TDSDispatcher.ViewModels
 
         #endregion
 
-        public ReferenceViewModel(ITdsApiService apiService, IRegionManager regionManager, IUnityContainer container, ITDSRepository repository)
+        public ReferenceViewModel(ITdsApiService apiService, IRegionManager regionManager, IUnityContainer container, ITDSRepository repository,
+            IDialogService dialogService)
         {
             this.apiService = apiService;
             this.regionManager = regionManager;
             this.container = container;
             this.repository = repository;
+            this.dialogService = dialogService;
         }
 
         public bool IsNavigationTarget(NavigationContext navigationContext)
@@ -116,17 +141,20 @@ namespace TDSDispatcher.ViewModels
 
         public void OnNavigatedFrom(NavigationContext navigationContext)
         {
-            
+            if(cts != null && cts.IsCancellationRequested)
+            {
+                cts.Cancel();
+            }
         }
 
-        public async void OnNavigatedTo(NavigationContext navigationContext)
+        public void OnNavigatedTo(NavigationContext navigationContext)
         {
             if(navigationContext.Parameters.TryGetValue("EntityInfo", out entityInfo))
             {
                 if (entityInfo != null)
                 {
-                    Items = new ObservableCollection<T>(await apiService.GetReferenceAsync<T>(entityInfo.URL));
                     Title = entityInfo.Title;
+                    LoadItems();
                 }
             }
 
@@ -137,6 +165,32 @@ namespace TDSDispatcher.ViewModels
             else
             {
                 SelectionMode = false;
+            }
+        }
+
+        private async void LoadItems()
+        {
+            cts = new CancellationTokenSource();
+            IsLoading = true;
+            try
+            {
+                Items = new ObservableCollection<T>(await apiService.GetReferenceAsync<T>(entityInfo.URL, cts.Token));
+            }
+            catch(TaskCanceledException)
+            {
+
+            }
+            catch(Refit.ApiException ex) when (ex.StatusCode == System.Net.HttpStatusCode.Forbidden)
+            {
+                dialogService.ShowMessageBox("Ошибка", $"У текущего пользователя нет прав на просмотр справочника \"{Title}\"!");
+            }
+            catch(Exception ex)
+            {
+                dialogService.ShowMessageBox("Ошибка", "Произошла ошибка во время запроса данных!", detail: ex.Message);
+            }
+            finally
+            {
+                IsLoading = false;
             }
         }
     }

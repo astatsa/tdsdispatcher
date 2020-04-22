@@ -8,7 +8,7 @@
              prism:ViewModelLocator.AutoWireViewModel="True"
              mc:Ignorable="d"
              FontFamily="/Resources/Fonts/Roboto/#Roboto"
-             FontSize="14">
+             FontSize="14" x:Name="ThisControl">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -22,7 +22,7 @@
             <Setter Property="ResizeMode" Value="NoResize"/>
             <Setter Property="ShowInTaskbar" Value="False"/>
             <Setter Property="SizeToContent" Value="WidthAndHeight"/>
-            <Setter Property="MaxWidth" Value="600"/>
+            <Setter Property="MaxWidth" Value="700"/>
             <Setter Property="prism:Dialog.WindowStartupLocation" Value="CenterScreen"/>
         </Style>
     </prism:Dialog.WindowStyle>
@@ -38,14 +38,24 @@
                   FontSize="12"
                   Visibility="{Binding ShowDetail, Converter={StaticResource BoolToVisibleConverter}}">
             <TextBox FontSize="12" Text="{Binding Detail, FallbackValue=Детали}" Margin="5"
-                     IsReadOnly="True" Padding="5"/>
+                     IsReadOnly="True" Padding="5" MaxHeight="200" AcceptsReturn="True" TextWrapping="Wrap"/>
         </Expander>
-        <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft"
-                    Grid.Row="2" Margin="0,5,5,0">
-            <Button Style="{StaticResource SimpleButton}" Content="Отмена" IsCancel="True"
-                    Command="{Binding ButtonCommand}" CommandParameter="Cancel"/>
-            <Button Style="{StaticResource SimpleButton}" Content="OK" IsDefault="True"
-                    Command="{Binding ButtonCommand}" CommandParameter="OK"/>
-        </StackPanel>
+        <ItemsControl FlowDirection="RightToLeft"
+                    Grid.Row="2" Margin="0,5,5,0" ItemsSource="{Binding Buttons}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Button Content="{Binding Text}" 
+                            IsDefault="{Binding IsDefault}"
+                            IsCancel="{Binding IsCancel}"
+                            Style="{StaticResource SimpleButton}"
+                            Command="{Binding DataContext.ButtonCommand, ElementName=ThisControl}" CommandParameter="{Binding ButtonResult}"/>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
     </Grid>
 </UserControl>

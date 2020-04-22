@@ -28,6 +28,12 @@
     <Compile Update="Views\LoginView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\MaterialView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\MeasureView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\ReferenceView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -64,6 +70,12 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\MainWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\MaterialView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\MeasureView.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\ReferenceView.xaml">
