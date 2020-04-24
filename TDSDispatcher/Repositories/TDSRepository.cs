@@ -1,11 +1,14 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using TDSDispatcher.Models;
+using TDSDispatcher.Services;
 using TDSDTO.Documents;
 using TDSDTO.References;
 
 namespace TDSDispatcher.Repositories
 {
-    public class TDSConstRepository : ITDSRepository
+    class TDSRepository : ITDSRepository
     {
         private readonly Dictionary<string, EntityInfo> entities = new Dictionary<string, EntityInfo>
         {
@@ -128,9 +131,11 @@ namespace TDSDispatcher.Repositories
                     ParentId = 4
                 }
         };
-        public TDSConstRepository()
-        {
+        private readonly ITdsApiService apiService;
 
+        public TDSRepository(ITdsApiService apiService)
+        {
+            this.apiService = apiService;
         }
         public ICollection<EntityInfo> GetEntities()
         {
@@ -142,6 +147,11 @@ namespace TDSDispatcher.Repositories
             if (entities.TryGetValue(name, out EntityInfo res))
                 return res;
             return null;
+        }
+
+        public Task<ICollection<T>> GetList<T>(string entityName, CancellationToken token)
+        {
+            return apiService.GetReferenceAsync<T>(entityName, token);
         }
 
         public ICollection<MenuItem> GetMenuItems()

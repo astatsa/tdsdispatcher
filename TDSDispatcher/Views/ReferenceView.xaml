@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:TDSDispatcher.Views"
              xmlns:prism="http://prismlibrary.com/"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:bhv="clr-namespace:TDSDispatcher.Behaviors"
              mc:Ignorable="d" 
              prism:ViewModelLocator.AutoWireViewModel="False"
              MinHeight="300"
@@ -51,9 +52,13 @@
                     <i:InvokeCommandAction Command="{Binding RowDoubleClickCommand}" 
                                            CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"/>
                 </i:EventTrigger>
+                <i:EventTrigger EventName="KeyUp">
+                    <bhv:EventToCommand Command="{Binding KeyUpCommand}"/>
+                </i:EventTrigger>
             </i:Interaction.Triggers>
         </DataGrid>
         <ProgressBar Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Top" Height="5"
-                     Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}" Foreground="LightSteelBlue" IsIndeterminate="True"/>
+                     Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}" 
+                     Foreground="LightSteelBlue" IsIndeterminate="True"/>
     </Grid>
 </UserControl>

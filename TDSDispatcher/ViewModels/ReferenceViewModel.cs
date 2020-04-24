@@ -6,19 +6,13 @@ using Prism.Services.Dialogs;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel.Design;
-using System.Net.Http;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using TDSDispatcher.Extensions;
-using TDSDispatcher.Helpers;
 using TDSDispatcher.Models;
 using TDSDispatcher.Repositories;
-using TDSDispatcher.Services;
 using TDSDispatcher.Views;
 using Unity;
 
@@ -27,7 +21,6 @@ namespace TDSDispatcher.ViewModels
     [RegionMemberLifetime(KeepAlive = true)]
     class ReferenceViewModel<T> : BindableBase, INavigationAware, ISelectionAware
     {
-        private readonly ITdsApiService apiService;
         private readonly IRegionManager regionManager;
         private readonly IUnityContainer container;
         private readonly ITDSRepository repository;
@@ -37,9 +30,9 @@ namespace TDSDispatcher.ViewModels
 
         private string title;
         public string Title
-        { 
-            get => title; 
-            set => SetProperty(ref title, value); 
+        {
+            get => title;
+            set => SetProperty(ref title, value);
         }
 
         private ICollection<T> items;
@@ -82,7 +75,7 @@ namespace TDSDispatcher.ViewModels
             {
                 var ev = container.Resolve<ElementView>();
                 var res = ev.AddOrEdit(entityInfo, false, x);
-                if(res.HasValue && res.Value)
+                if (res.HasValue && res.Value)
                 {
                     LoadItems();
                 }
@@ -93,7 +86,7 @@ namespace TDSDispatcher.ViewModels
             {
                 var ev = container.Resolve<ElementView>();
                 var res = ev.AddOrEdit(entityInfo, true, x, CurrentItem);
-                if(res.HasValue && res.Value)
+                if (res.HasValue && res.Value)
                 {
                     LoadItems();
                 }
@@ -108,7 +101,7 @@ namespace TDSDispatcher.ViewModels
         public ICommand RowDoubleClickCommand => new DelegateCommand<Window>(
             x =>
             {
-                if(SelectionMode)
+                if (SelectionMode)
                 {
                     Selected?.Invoke(this, CurrentItem);
                 }
@@ -118,12 +111,18 @@ namespace TDSDispatcher.ViewModels
                 }
             });
 
+        private ICommand keyUpCommand;
+        public ICommand KeyUpCommand =>
+            keyUpCommand ?? (keyUpCommand = new DelegateCommand<KeyEventArgs>(
+                x =>
+                {
+
+                }));
         #endregion
 
-        public ReferenceViewModel(ITdsApiService apiService, IRegionManager regionManager, IUnityContainer container, ITDSRepository repository,
+        public ReferenceViewModel(IRegionManager regionManager, IUnityContainer container, ITDSRepository repository,
             IDialogService dialogService)
         {
-            this.apiService = apiService;
             this.regionManager = regionManager;
             this.container = container;
             this.repository = repository;
@@ -132,7 +131,7 @@ namespace TDSDispatcher.ViewModels
 
         public bool IsNavigationTarget(NavigationContext navigationContext)
         {
-            if(navigationContext.Parameters.TryGetValue("EntityInfo", out EntityInfo entityInfo))
+            if (navigationContext.Parameters.TryGetValue("EntityInfo", out EntityInfo entityInfo))
             {
                 return this.entityInfo.ModelName == entityInfo.ModelName;
             }
@@ -141,7 +140,7 @@ namespace TDSDispatcher.ViewModels
 
         public void OnNavigatedFrom(NavigationContext navigationContext)
         {
-            if(cts != null && cts.IsCancellationRequested)
+            if (cts != null && cts.IsCancellationRequested)
             {
                 cts.Cancel();
             }
@@ -149,7 +148,7 @@ namespace TDSDispatcher.ViewModels
 
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
-            if(navigationContext.Parameters.TryGetValue("EntityInfo", out entityInfo))
+            if (navigationContext.Parameters.TryGetValue("EntityInfo", out entityInfo))
             {
                 if (entityInfo != null)
                 {
@@ -158,7 +157,7 @@ namespace TDSDispatcher.ViewModels
                 }
             }
 
-            if(navigationContext.Parameters.TryGetValue("SelectionMode", out bool selectionMode))
+            if (navigationContext.Parameters.TryGetValue("SelectionMode", out bool selectionMode))
             {
                 SelectionMode = selectionMode;
             }
@@ -174,17 +173,17 @@ namespace TDSDispatcher.ViewModels
             IsLoading = true;
             try
             {
-                Items = new ObservableCollection<T>(await apiService.GetReferenceAsync<T>(entityInfo.URL, cts.Token));
+                Items = new ObservableCollection<T>(await repository.GetList<T>(entityInfo.URL, cts.Token));
             }
-            catch(TaskCanceledException)
+            catch (TaskCanceledException)
             {
 
             }
-            catch(Refit.ApiException ex) when (ex.StatusCode == System.Net.HttpStatusCode.Forbidden)
+            catch (Refit.ApiException ex) when (ex.StatusCode == System.Net.HttpStatusCode.Forbidden)
             {
                 dialogService.ShowMessageBox("Ошибка", $"У текущего пользователя нет прав на просмотр справочника \"{Title}\"!");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 dialogService.ShowMessageBox("Ошибка", "Произошла ошибка во время запроса данных!", detail: ex.Message);
             }

@@ -45,7 +45,7 @@ namespace TDSDispatcher
                         BaseAddress = new Uri(httpSettings.GetValue<string>("Url")),
                         Timeout = TimeSpan.FromMilliseconds(httpSettings.GetValue<int>("Timeout")),
                     }));
-            containerRegistry.RegisterSingleton<ITDSRepository, TDSConstRepository>();
+            containerRegistry.RegisterSingleton<ITDSRepository, TDSRepository>();
 
             containerRegistry.RegisterSingleton<ReferenceService>();
 

@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TDSDispatcher", "TDSDispatc
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TDSDTO", "..\tds\TDSServer\TDSDTO\TDSDTO.csproj", "{6ED7EF70-7AB0-49C3-8546-A047D71784BE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TDSDTO.Tests", "TDSDTO.Tests\TDSDTO.Tests.csproj", "{F50C0702-0AD4-42ED-8996-807F104AF8CA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{6ED7EF70-7AB0-49C3-8546-A047D71784BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6ED7EF70-7AB0-49C3-8546-A047D71784BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6ED7EF70-7AB0-49C3-8546-A047D71784BE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F50C0702-0AD4-42ED-8996-807F104AF8CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F50C0702-0AD4-42ED-8996-807F104AF8CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F50C0702-0AD4-42ED-8996-807F104AF8CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F50C0702-0AD4-42ED-8996-807F104AF8CA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
