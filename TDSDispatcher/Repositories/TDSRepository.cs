@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using TDSDispatcher.Models;
 using TDSDispatcher.Services;
 using TDSDTO.Documents;
+using TDSDTO.Filter;
 using TDSDTO.References;
 
 namespace TDSDispatcher.Repositories
@@ -17,7 +19,8 @@ namespace TDSDispatcher.Repositories
                 {
                     ModelName = nameof(Employee),
                     Title = "Сотрудники",
-                    URL = "Employees"
+                    URL = "Employees",
+                    ModelType = typeof(Employee)
                 } 
             },
             {
@@ -25,7 +28,8 @@ namespace TDSDispatcher.Repositories
                 {
                     ModelName = nameof(Position),
                     Title = "Должности",
-                    URL = "Positions"
+                    URL = "Positions",
+                    ModelType = typeof(Position)
                 }
             },
             {
@@ -33,7 +37,8 @@ namespace TDSDispatcher.Repositories
                 {
                     ModelName = nameof(Counterparty),
                     Title = "Контрагенты",
-                    URL = "Counterparties"
+                    URL = "Counterparties",
+                    ModelType = typeof(Counterparty)
                 }
             },
             {
@@ -41,7 +46,8 @@ namespace TDSDispatcher.Repositories
                 {
                     ModelName = nameof(User),
                     Title = "Пользователи",
-                    URL = "Users"
+                    URL = "Users",
+                    ModelType = typeof(User)
                 }
             },
             {
@@ -49,7 +55,8 @@ namespace TDSDispatcher.Repositories
                 {
                     ModelName = nameof(Material),
                     Title = "Материалы",
-                    URL = "Materials"
+                    URL = "Materials",
+                    ModelType = typeof(Material)
                 }
             },
             {
@@ -57,7 +64,8 @@ namespace TDSDispatcher.Repositories
                 {
                     ModelName = nameof(Measure),
                     Title = "Единицы измерения",
-                    URL = "Measures"
+                    URL = "Measures",
+                    ModelType = typeof(Measure)
                 }
             },
             {
@@ -65,7 +73,8 @@ namespace TDSDispatcher.Repositories
                 {
                     ModelName = nameof(Order),
                     Title = "Заявки",
-                    URL = "Orders"
+                    URL = "Orders",
+                    ModelType = typeof(Order)
                 }
             }
 
@@ -152,6 +161,16 @@ namespace TDSDispatcher.Repositories
         public Task<ICollection<T>> GetList<T>(string entityName, CancellationToken token)
         {
             return apiService.GetReferenceAsync<T>(entityName, token);
+        }
+
+        public async Task<ICollection<T>> GetList<T>(string entityName, Filter filter, CancellationToken token)
+        {
+            var data = await GetList<T>(entityName, token);
+            if (filter != null)
+            {
+                return data.Where(filter.GetPredicate<T>()).ToList();
+            }
+            return data;
         }
 
         public ICollection<MenuItem> GetMenuItems()

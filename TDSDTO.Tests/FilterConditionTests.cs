@@ -22,5 +22,16 @@ namespace TDSDTO.Tests
 
             Assert.AreEqual(true, equalCondition.ExecuteFilter(new { Value = 5 }));
         }
+
+        [Test]
+        public void FieldNameContainsTest()
+        {
+            var ec = new FilterCondition<FieldOperand, string>(
+                new FieldOperand("Name"),
+                "Test",
+                ConditionOperation.Contains);
+
+            Assert.IsTrue(ec.ExecuteFilter(new { Name = "asdasd Testsdf adadfsdf" }));
+        }
     }
 }

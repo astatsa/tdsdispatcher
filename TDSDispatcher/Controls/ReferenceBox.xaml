@@ -7,21 +7,31 @@
              mc:Ignorable="d" x:Name="This">
     <TextBox.Template>
         <ControlTemplate TargetType="local:ReferenceBox">
-            <Border CornerRadius="2" BorderThickness="{TemplateBinding BorderThickness}"
-                    BorderBrush="{TemplateBinding BorderBrush}"
-                    VerticalAlignment="Center">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
-                    <ScrollViewer x:Name="PART_ContentHost" SnapsToDevicePixels="True"/>
-                    <Button Grid.Column="1" Content="..." Width="{Binding ActualHeight, RelativeSource={RelativeSource Mode=Self}}"
-                            Background="Transparent" BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="1,0,0,0" Focusable="False" Command="{Binding SelectCommand, ElementName=This}"
-                            CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"/>
-                </Grid>
-            </Border>
+            <Grid>
+                <Border CornerRadius="2" BorderThickness="{TemplateBinding BorderThickness}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        VerticalAlignment="Center" x:Name="Border">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <ScrollViewer x:Name="PART_ContentHost" SnapsToDevicePixels="True"/>
+                        <Button Grid.Column="1" Content="..." Width="{Binding ActualHeight, RelativeSource={RelativeSource Mode=Self}}"
+                                Background="Transparent" BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="1,0,0,0" Focusable="False" Command="{Binding SelectCommand, ElementName=This}"
+                                CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"/>
+                    </Grid>
+                </Border>
+                <Popup IsOpen="False" PopupAnimation="Slide" Placement="Bottom"
+                       Focusable="False" AllowsTransparency="True">
+                    <Grid MinWidth="{Binding ActuaWidth, ElementName=This}">
+                        <ListBox ItemsSource="{Binding SearchList, ElementName=This}"
+                                 MaxHeight="200" DisplayMemberPath="{Binding DisplayMember, ElementName=This}">
+                        </ListBox>
+                    </Grid>
+                </Popup>
+            </Grid>
         </ControlTemplate>
     </TextBox.Template>
     <TextBox.Style>

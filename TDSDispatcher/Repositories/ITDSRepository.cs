@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using TDSDispatcher.Models;
+using TDSDTO.Filter;
 
 namespace TDSDispatcher.Repositories
 {
@@ -14,5 +15,6 @@ namespace TDSDispatcher.Repositories
         ICollection<MenuItem> GetMenuItems();
 
         Task<ICollection<T>> GetList<T>(string entityName, CancellationToken token);
+        Task<ICollection<T>> GetList<T>(string entityName, Filter filter, CancellationToken token);
     }
 }

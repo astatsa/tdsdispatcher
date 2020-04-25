@@ -1,25 +1,19 @@
 ﻿using Prism.Commands;
 using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Text;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using TDSDispatcher.Services;
-using TDSDispatcher.Views;
 
 namespace TDSDispatcher.Controls
 {
     /// <summary>
     /// Interaction logic for ReferenceBox.xaml
     /// </summary>
-    public partial class ReferenceBox : TextBox
+    public partial class ReferenceBox : TextBox, INotifyPropertyChanged
     {
         public static readonly DependencyProperty RefNameProperty = DependencyProperty.Register(nameof(RefName), typeof(string), typeof(ReferenceBox));
         public static readonly DependencyProperty SelectedValueProperty = DependencyProperty.Register(nameof(SelectedValue), typeof(object), typeof(ReferenceBox),
@@ -28,6 +22,7 @@ namespace TDSDispatcher.Controls
                 BindsTwoWayByDefault = true
             });
         public static readonly DependencyProperty SelectServiceProperty = DependencyProperty.Register(nameof(SelectService), typeof(ISelectable), typeof(ReferenceBox));
+        public static readonly DependencyProperty SearchServiceProperty = DependencyProperty.Register(nameof(SearchService), typeof(ISearchAware), typeof(ReferenceBox));
         public static readonly DependencyProperty DisplayMemberProperty = DependencyProperty.Register(nameof(DisplayMember), typeof(string), typeof(ReferenceBox));
         public static readonly DependencyProperty ValueMemberProperty = DependencyProperty.Register(nameof(ValueMember), typeof(string), typeof(ReferenceBox));
         public static readonly DependencyProperty ValueProperty = DependencyProperty.Register(nameof(Value), typeof(object), typeof(ReferenceBox),
@@ -39,9 +34,34 @@ namespace TDSDispatcher.Controls
         public ReferenceBox()
         {
             InitializeComponent();
+            this.TextChanged += ReferenceBox_TextChanged;
         }
 
-        public string RefName 
+        private async void ReferenceBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (SearchService == null || this.Text.Length < 3)
+                return;
+
+            SearchList = await SearchService.SearchAsync(RefName, DisplayMember, this.Text);
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private IEnumerable searchList;
+        public IEnumerable SearchList
+        {
+            get => searchList;
+            set
+            {
+                if(searchList != value)
+                {
+                    searchList = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SearchList)));
+                }
+            }
+        }
+
+        public string RefName
         {
             get => (string)GetValue(RefNameProperty);
             set => SetValue(RefNameProperty, value);
@@ -59,13 +79,19 @@ namespace TDSDispatcher.Controls
         }
 
         public ISelectable SelectService
-        { 
+        {
             get => (ISelectable)GetValue(SelectServiceProperty);
-            set => SetValue(SelectServiceProperty, value); 
+            set => SetValue(SelectServiceProperty, value);
         }
 
-        public string DisplayMember 
-        { 
+        public ISearchAware SearchService
+        {
+            get => (ISearchAware)GetValue(SearchServiceProperty);
+            set => SetValue(SearchServiceProperty, value);
+        }
+
+        public string DisplayMember
+        {
             get => (string)GetValue(DisplayMemberProperty);
             set
             {
@@ -74,8 +100,8 @@ namespace TDSDispatcher.Controls
             }
         }
 
-        public string ValueMember 
-        { 
+        public string ValueMember
+        {
             get => (string)GetValue(ValueMemberProperty);
             set
             {
@@ -93,7 +119,7 @@ namespace TDSDispatcher.Controls
         public ICommand SelectCommand => new DelegateCommand<Window>(
             x =>
             {
-                if(SelectService != null)
+                if (SelectService != null)
                 {
                     SelectedValue = SelectService.Select(RefName, SelectedValue, x);
                 }

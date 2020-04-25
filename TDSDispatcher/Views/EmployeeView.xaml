@@ -38,7 +38,8 @@
             <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Model.FullName}"/>
             <TextBlock Grid.Row="2" Text="Должность:"/>
             <controls:ReferenceBox Grid.Row="2" Grid.Column="1" RefName="Position" SelectService="{Binding ReferenceService, Mode=OneWay}"
-                                   DisplayMember="Name" ValueMember="Id" Value="{Binding Model.PositionId}" Text="{Binding Model.PositionName}"/>
+                                   DisplayMember="Name" ValueMember="Id" Value="{Binding Model.PositionId}" Text="{Binding Model.PositionName}"
+                                   SearchService="{Binding ReferenceService, Mode=OneWay}"/>
             <TextBlock Grid.Row="3" Text="Пользователь:"/>
             <controls:ReferenceBox Grid.Row="3" Grid.Column="1" RefName="User" SelectService="{Binding ReferenceService, Mode=OneWay}"
                                    DisplayMember="FullName" ValueMember="Id"  Value="{Binding Model.UserId}" Text="{Binding Model.UserName}"/>
