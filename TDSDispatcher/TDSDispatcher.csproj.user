@@ -25,6 +25,9 @@
     <Compile Update="Views\EmployeeView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\GasStationView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\LoginView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -32,6 +35,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\MeasureView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\OrderView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\ReferenceView.xaml.cs">
@@ -66,6 +72,9 @@
     <Page Update="Views\EmployeeView.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="Views\GasStationView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Views\LoginView.xaml">
       <SubType>Designer</SubType>
     </Page>
@@ -76,6 +85,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\MeasureView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\OrderView.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\ReferenceView.xaml">

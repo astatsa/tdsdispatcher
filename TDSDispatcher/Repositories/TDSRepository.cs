@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -76,6 +77,15 @@ namespace TDSDispatcher.Repositories
                     URL = "Orders",
                     ModelType = typeof(Order)
                 }
+            },
+            {
+                "GasStation", new EntityInfo
+                {
+                    ModelName = nameof(GasStation),
+                    Title = "АЗС",
+                    URL = "GasStations",
+                    ModelType = typeof(GasStation)
+                }
             }
 
         };
@@ -113,6 +123,13 @@ namespace TDSDispatcher.Repositories
                     Id = 7,
                     EntityName = "Material",
                     Title = "Материалы",
+                    ParentId = 1
+                },
+                new MenuItem
+                {
+                    Id = 10,
+                    EntityName = "GasStation",
+                    Title = "АЗС",
                     ParentId = 1
                 },
             new MenuItem
@@ -158,9 +175,15 @@ namespace TDSDispatcher.Repositories
             return null;
         }
 
-        public Task<ICollection<T>> GetList<T>(string entityName, CancellationToken token)
+        public async Task<ICollection<T>> GetList<T>(string entityName, CancellationToken token)
         {
-            return apiService.GetReferenceAsync<T>(entityName, token);
+            var res = await apiService.GetReferenceAsync<T>(entityName, token);
+            if(string.IsNullOrWhiteSpace(res.Error))
+            {
+                return res.Result;
+            }
+
+            throw new Exception(res.Error);
         }
 
         public async Task<ICollection<T>> GetList<T>(string entityName, Filter filter, CancellationToken token)

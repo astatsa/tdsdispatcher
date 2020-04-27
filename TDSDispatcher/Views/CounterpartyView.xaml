@@ -46,9 +46,9 @@
             </Grid>
             <TextBlock Grid.Row="1" Text="Адрес:"/>
             <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Model.Address}"/>
-            <TextBlock Grid.Row="2" Text="Описание:"/>
+            <TextBlock Grid.Row="2" Text="Описание:" VerticalAlignment="Top"/>
             <TextBox Grid.Row="2" Grid.Column="1" TextWrapping="Wrap" AcceptsReturn="True" ScrollViewer.VerticalScrollBarVisibility="Auto"
-                     VerticalContentAlignment="Stretch" Text="{Binding Model.Description}"/>
+                     VerticalContentAlignment="Stretch" Text="{Binding Model.Description}" MinLines="3"/>
         </Grid>
     </UserControl.Content>
 </UserControl>

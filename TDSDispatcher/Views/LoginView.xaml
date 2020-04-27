@@ -107,18 +107,21 @@
                 <DropShadowEffect ShadowDepth="1" BlurRadius="20"/>
             </Border.Effect>
         </Border>
-        <Grid Background="White">
+        <Grid Background="White" FocusManager.FocusedElement="{Binding ElementName=Login}">
             <Button Style="{StaticResource RoundCloseButton}" HorizontalAlignment="Right"
                     VerticalAlignment="Top" Height="25" Margin="5"
-                    Command="{Binding CloseCommand}" CommandParameter="{Binding ElementName=ThisWindow}"/>
+                    Command="{Binding CloseCommand}" CommandParameter="{Binding ElementName=ThisWindow}"
+                    IsCancel="True"/>
             <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="50,0">
                 <TextBlock Text="Логин:" Style="{StaticResource Label}"/>
-                <TextBox Style="{StaticResource TextBoxStyle}" Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBox Style="{StaticResource TextBoxStyle}" Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"
+                         x:Name="Login"/>
                 <TextBlock Text="Пароль:" Style="{StaticResource Label}"/>
                 <PasswordBox x:Name="Password" Style="{StaticResource TextBoxStyle}"/>
                 <Button Content="ВОЙТИ" Background="White" Style="{StaticResource LoginButton}"
                         Margin="0,10" FontSize="14" Cursor="Hand"
-                        Command="{Binding LoginCommand}" CommandParameter="{Binding ElementName=Password}"/>
+                        Command="{Binding LoginCommand}" CommandParameter="{Binding ElementName=Password}"
+                        IsDefault="True"/>
                 <TextBlock Text="{Binding Message}" Foreground="Red" TextAlignment="Center"/>
             </StackPanel>
         </Grid>

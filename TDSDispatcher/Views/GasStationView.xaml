@@ -1,11 +1,10 @@
-﻿<UserControl x:Class="TDSDispatcher.Views.MaterialView"
+﻿<UserControl x:Class="TDSDispatcher.Views.GasStationView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TDSDispatcher.Views"
-             mc:Ignorable="d" 
-             xmlns:controls="clr-namespace:TDSDispatcher.Controls">
+             mc:Ignorable="d">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -29,13 +28,15 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <TextBlock Text="Наименование:"/>
             <TextBox Grid.Column="1" Text="{Binding Model.Name}"/>
-            <TextBlock Grid.Row="1" Text="Ед. изм.:"/>
-            <controls:ReferenceBox Grid.Row="1" Grid.Column="1" RefName="Measure" SelectService="{Binding ReferenceService, Mode=OneWay}"
-                                   DisplayMember="Name" ValueMember="Id" Value="{Binding Model.MeasureId}" Text="{Binding Model.MeasureName}"
-                                   Width="100" HorizontalAlignment="Left"/>
+            <TextBlock Grid.Row="1" Text="Адрес:"/>
+            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Model.Address}"/>
+            <TextBlock Grid.Row="2" Text="Описание:" VerticalAlignment="Top"/>
+            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Model.Description}"
+                     AcceptsReturn="True" MinLines="3"/>
         </Grid>
     </UserControl.Content>
 </UserControl>

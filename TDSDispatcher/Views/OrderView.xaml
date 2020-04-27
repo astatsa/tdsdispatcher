@@ -1,0 +1,76 @@
+﻿<UserControl x:Class="TDSDispatcher.Views.OrderView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TDSDispatcher.Views"
+             xmlns:controls="clr-namespace:TDSDispatcher.Controls"
+             xmlns:sys="clr-namespace:System;assembly=System.Runtime"
+             mc:Ignorable="d" >
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Resources/Styles/ElementWindowStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <UserControl.Style>
+        <Style TargetType="UserControl" BasedOn="{StaticResource ElementWindowControl}"/>
+    </UserControl.Style>
+    <UserControl.Content>
+        <Grid>
+            <Grid.Resources>
+                <Style TargetType="TextBlock" BasedOn="{StaticResource GridLabel}"/>
+                <Style TargetType="TextBox" BasedOn="{StaticResource GridTextBox}"/>
+            </Grid.Resources>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <TextBlock Text="Номер:"/>
+            <Grid Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="120"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <TextBox Text="{Binding Model.Name}"/>
+                <TextBlock Grid.Column="1" Text="Дата:"/>
+                <DatePicker Grid.Column="2" SelectedDateFormat="Short" Style="{StaticResource RoundedDatePicker}"
+                            
+                            SelectedDate="{Binding Model.Date, TargetNullValue={x:Static sys:DateTime.Now}}"/>
+                <TextBlock Grid.Column="3" Text="{Binding Model.OrderStateName, FallbackValue=Статус}" TextAlignment="Center"
+                           HorizontalAlignment="Right"/>
+            </Grid>
+            <TextBlock Grid.Row="1" Text="Поставщик:"/>
+            <controls:ReferenceBox Grid.Row="1" Grid.Column="1" RefName="Counterparty" SelectService="{Binding ReferenceService, Mode=OneWay}"
+                                   DisplayMember="Name" ValueMember="Id" Value="{Binding Model.SupplierId}" Text="{Binding Model.SupplierName}"/>
+            <TextBlock Grid.Row="2" Text="Покупатель:"/>
+            <controls:ReferenceBox Grid.Row="2" Grid.Column="1" RefName="Counterparty" SelectService="{Binding ReferenceService, Mode=OneWay}"
+                                   DisplayMember="Name" ValueMember="Id" Value="{Binding Model.CustomerId}" Text="{Binding Model.CustomerName}"/>
+            <TextBlock Grid.Row="3" Text="Материал:"/>
+            <Grid Grid.Row="3" Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="100"/>
+                </Grid.ColumnDefinitions>
+                <controls:ReferenceBox RefName="Material" SelectService="{Binding ReferenceService, Mode=OneWay}"
+                                   DisplayMember="FullName" ValueMember="Id"  Value="{Binding Model.MaterialId}" Text="{Binding Model.MaterialName}"/>
+                <TextBlock Grid.Column="1" Text="Количество:"/>
+                <TextBox Grid.Column="2" TextAlignment="Right" Text="{Binding Model.Volume}"/>
+            </Grid>
+            <TextBlock Grid.Row="4" Text="Водитель:"/>
+            <controls:ReferenceBox Grid.Row="4" Grid.Column="1" RefName="Employee" SelectService="{Binding ReferenceService, Mode=OneWay}"
+                                   DisplayMember="Name" ValueMember="Id"  Value="{Binding Model.DriverId}" Text="{Binding Model.DriverName}"/>
+        </Grid>
+    </UserControl.Content>
+</UserControl>
