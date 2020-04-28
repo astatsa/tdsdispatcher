@@ -175,25 +175,20 @@ namespace TDSDispatcher.Repositories
             return null;
         }
 
-        public async Task<ICollection<T>> GetList<T>(string entityName, CancellationToken token)
+        public Task<ICollection<T>> GetList<T>(string entityName, CancellationToken token)
         {
-            var res = await apiService.GetReferenceAsync<T>(entityName, token);
-            if(string.IsNullOrWhiteSpace(res.Error))
+            return GetList<T>(entityName, null, token);
+        }
+
+        public async Task<ICollection<T>> GetList<T>(string entityName, Filter filter, CancellationToken token)
+        {
+            var res = await apiService.GetReferenceAsync<T>(entityName, filter, token);
+            if (string.IsNullOrWhiteSpace(res.Error))
             {
                 return res.Result;
             }
 
             throw new Exception(res.Error);
-        }
-
-        public async Task<ICollection<T>> GetList<T>(string entityName, Filter filter, CancellationToken token)
-        {
-            var data = await GetList<T>(entityName, token);
-            if (filter != null)
-            {
-                return data.Where(filter.GetPredicate<T>()).ToList();
-            }
-            return data;
         }
 
         public ICollection<MenuItem> GetMenuItems()

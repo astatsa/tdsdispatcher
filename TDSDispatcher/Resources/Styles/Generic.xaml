@@ -103,7 +103,10 @@
                 <ControlTemplate TargetType="DatePicker">
                     <Border CornerRadius="2" BorderThickness="1" BorderBrush="{x:Static SystemColors.ActiveBorderBrush}" 
                                 Background="White">
-                        <DatePicker BorderThickness="0"/>
+                        <DatePicker BorderThickness="0"
+                                    SelectedDate="{TemplateBinding SelectedDate}"
+                                    DisplayDate="{TemplateBinding DisplayDate}"
+                                    Text="{TemplateBinding Text}"/>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>

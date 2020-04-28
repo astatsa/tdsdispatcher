@@ -8,6 +8,6 @@ namespace TDSDispatcher.Services
 {
     public interface ISelectable
     {
-        object Select(string refName, object selectedItem = null, Window owner = null);
+        object Select(string refName, object selectedItem = null, Window owner = null, object filterParameter = null);
     }
 }

@@ -22,6 +22,7 @@ namespace TDSDispatcher.Controls
                 BindsTwoWayByDefault = true
             });
         public static readonly DependencyProperty SelectServiceProperty = DependencyProperty.Register(nameof(SelectService), typeof(ISelectable), typeof(ReferenceBox));
+        public static readonly DependencyProperty SelectParameterProperty = DependencyProperty.Register(nameof(SelectParameter), typeof(object), typeof(ReferenceBox));
         public static readonly DependencyProperty SearchServiceProperty = DependencyProperty.Register(nameof(SearchService), typeof(ISearchAware), typeof(ReferenceBox));
         public static readonly DependencyProperty DisplayMemberProperty = DependencyProperty.Register(nameof(DisplayMember), typeof(string), typeof(ReferenceBox));
         public static readonly DependencyProperty ValueMemberProperty = DependencyProperty.Register(nameof(ValueMember), typeof(string), typeof(ReferenceBox));
@@ -78,6 +79,12 @@ namespace TDSDispatcher.Controls
             }
         }
 
+        public object SelectParameter 
+        { 
+            get => GetValue(SelectParameterProperty); 
+            set => SetValue(SelectParameterProperty, value); 
+        }
+
         public ISelectable SelectService
         {
             get => (ISelectable)GetValue(SelectServiceProperty);
@@ -121,7 +128,9 @@ namespace TDSDispatcher.Controls
             {
                 if (SelectService != null)
                 {
-                    SelectedValue = SelectService.Select(RefName, SelectedValue, x);
+                    var res = SelectService.Select(RefName, SelectedValue, x, SelectParameter);
+                    if (res != null)
+                        SelectedValue = res;
                 }
             });
 
@@ -129,10 +138,9 @@ namespace TDSDispatcher.Controls
         {
             if (!String.IsNullOrWhiteSpace(propertyName))
             {
-                var value = SelectedValue;
-                if (value != null)
+                if (obj != null)
                 {
-                    return (T)value.GetType().GetProperty(propertyName)?.GetValue(value);
+                    return (T)obj.GetType().GetProperty(propertyName)?.GetValue(obj);
                 }
             }
             return default;

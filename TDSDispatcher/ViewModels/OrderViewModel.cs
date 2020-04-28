@@ -4,11 +4,38 @@ using System.Collections.Generic;
 using System.Text;
 using TDSDispatcher.Services;
 using TDSDTO.Documents;
+using TDSDTO.Filter;
 
 namespace TDSDispatcher.ViewModels
 {
     class OrderViewModel : BaseEntityViewModel<Order>
     {
+        #region Properties
+        public Filter SupplierFilter =>
+            new FilterConditionGroup
+            {
+                Conditions = new FilterConditionCollection
+                {
+                    new FilterCondition<FieldOperand, bool>(
+                        new FieldOperand("IsSupplier"),
+                        true,
+                        ConditionOperation.Equal)
+                }
+            };
+
+        public Filter CustomerFilter =>
+            new FilterConditionGroup
+            {
+                Conditions = new FilterConditionCollection
+                {
+                    new FilterCondition<FieldOperand, bool>(
+                        new FieldOperand("IsSupplier"),
+                        false,
+                        ConditionOperation.Equal)
+                }
+            };
+        #endregion
+
         public OrderViewModel(ReferenceService referenceService, ITdsApiService apiService, IDialogService dialogService) 
             : base(referenceService, apiService, dialogService)
         {

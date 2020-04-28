@@ -14,6 +14,7 @@ using TDSDispatcher.Extensions;
 using TDSDispatcher.Models;
 using TDSDispatcher.Repositories;
 using TDSDispatcher.Views;
+using TDSDTO.Filter;
 using Unity;
 
 namespace TDSDispatcher.ViewModels
@@ -27,6 +28,7 @@ namespace TDSDispatcher.ViewModels
         private readonly IDialogService dialogService;
         private EntityInfo entityInfo;
         private CancellationTokenSource cts;
+        private Filter filterParameter;
 
         private string title;
         public string Title
@@ -148,6 +150,20 @@ namespace TDSDispatcher.ViewModels
 
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
+            if (navigationContext.Parameters.TryGetValue("SelectionMode", out bool selectionMode))
+            {
+                SelectionMode = selectionMode;
+                if(SelectionMode && navigationContext.Parameters.TryGetValue("SelectedItem", out T selItem))
+                {
+                    //TODO:....
+                }
+            }
+            else
+            {
+                SelectionMode = false;
+            }
+            navigationContext.Parameters.TryGetValue("FilterParameter", out filterParameter);
+
             if (navigationContext.Parameters.TryGetValue("EntityInfo", out entityInfo))
             {
                 if (entityInfo != null)
@@ -155,15 +171,6 @@ namespace TDSDispatcher.ViewModels
                     Title = entityInfo.Title;
                     LoadItems();
                 }
-            }
-
-            if (navigationContext.Parameters.TryGetValue("SelectionMode", out bool selectionMode))
-            {
-                SelectionMode = selectionMode;
-            }
-            else
-            {
-                SelectionMode = false;
             }
         }
 
@@ -173,7 +180,7 @@ namespace TDSDispatcher.ViewModels
             IsLoading = true;
             try
             {
-                Items = new ObservableCollection<T>(await repository.GetList<T>(entityInfo.URL, cts.Token));
+                Items = new ObservableCollection<T>(await repository.GetList<T>(entityInfo.URL, filterParameter, cts.Token));
             }
             catch (TaskCanceledException)
             {

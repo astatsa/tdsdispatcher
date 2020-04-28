@@ -46,12 +46,12 @@ namespace TDSDispatcher.Services
             return null;
         }
 
-        public object Select(string refName, object selectedItem = null, Window owner = null)
+        public object Select(string refName, object selectedItem = null, Window owner = null, object filterParameter = null)
         {
             var entityInfo = repository.GetEntityByName(refName);
             if (entityInfo != null)
             {
-                return container.Resolve<ElementView>().Select(entityInfo, owner);
+                return container.Resolve<ElementView>().Select(entityInfo, selectedItem, owner, filterParameter);
             }
             return null;
         }

@@ -31,7 +31,13 @@ namespace TDSDispatcher.Views
 
         public bool? AddOrEdit(EntityInfo entityInfo, bool isEdit, Window owner = null, object model = null)
         {
-            var view = GetInitializedView(entityInfo.ModelName, ("EntityInfo", entityInfo), ("IsEdit", isEdit), ("Model", model));
+            var view = GetInitializedView(entityInfo.ModelName, 
+                new Dictionary<string, object>
+                {
+                    { "EntityInfo", entityInfo },
+                    { "IsEdit", isEdit },
+                    { "Model", model }
+                });
             if (view == null)
                 return null;
 
@@ -52,9 +58,16 @@ namespace TDSDispatcher.Views
             return this.ShowDialog();
         }
 
-        public object Select(EntityInfo entityInfo, Window owner)
+        public object Select(EntityInfo entityInfo, object selectedItem, Window owner, object filterParameter = null)
         {
-            var view = GetInitializedView($"{entityInfo.ModelName}List", ("EntityInfo", entityInfo), ("SelectionMode", true));
+            var view = GetInitializedView($"{entityInfo.ModelName}List", 
+                new Dictionary<string, object>
+                {
+                    { "EntityInfo", entityInfo },
+                    { "SelectionMode", true },
+                    { "SelectedItem", selectedItem },
+                    { "FilterParameter", filterParameter }
+                });
             if (view == null)
                 return null;
 
@@ -75,7 +88,7 @@ namespace TDSDispatcher.Views
             return res;
         }
 
-        private FrameworkElement GetInitializedView(string name, params (string name, object value)[] parameters)
+        private FrameworkElement GetInitializedView(string name, Dictionary<string, object> parameters)
         {
             var view = container.Resolve<object>(name) as FrameworkElement;
             if (view != null && view.DataContext != null && view.DataContext is INavigationAware navigation)
@@ -83,7 +96,7 @@ namespace TDSDispatcher.Views
                 var nc = new NavigationContext(container.Resolve<IRegionNavigationService>(), new Uri(name, UriKind.Relative));
                 foreach(var par in parameters)
                 {
-                    nc.Parameters.Add(par.name, par.value);
+                    nc.Parameters.Add(par.Key, par.Value);
                 }
                 navigation.OnNavigatedTo(nc);
             }

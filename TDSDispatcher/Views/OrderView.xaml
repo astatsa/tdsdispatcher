@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:TDSDispatcher.Views"
              xmlns:controls="clr-namespace:TDSDispatcher.Controls"
              xmlns:sys="clr-namespace:System;assembly=System.Runtime"
+             xmlns:filter="clr-namespace:TDSDTO.Filter;assembly=TDSDTO"
              mc:Ignorable="d" >
     <UserControl.Resources>
         <ResourceDictionary>
@@ -42,20 +43,21 @@
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <TextBox Text="{Binding Model.Name}"/>
+                <TextBox Text="{Binding Model.Number}"/>
                 <TextBlock Grid.Column="1" Text="Дата:"/>
                 <DatePicker Grid.Column="2" SelectedDateFormat="Short" Style="{StaticResource RoundedDatePicker}"
-                            
-                            SelectedDate="{Binding Model.Date, TargetNullValue={x:Static sys:DateTime.Now}}"/>
+                            SelectedDate="{Binding Model.Date, Mode=TwoWay, TargetNullValue={x:Static sys:DateTime.Now}}"/>
                 <TextBlock Grid.Column="3" Text="{Binding Model.OrderStateName, FallbackValue=Статус}" TextAlignment="Center"
-                           HorizontalAlignment="Right"/>
+                           HorizontalAlignment="Right" Foreground="Blue"/>
             </Grid>
             <TextBlock Grid.Row="1" Text="Поставщик:"/>
-            <controls:ReferenceBox Grid.Row="1" Grid.Column="1" RefName="Counterparty" SelectService="{Binding ReferenceService, Mode=OneWay}"
-                                   DisplayMember="Name" ValueMember="Id" Value="{Binding Model.SupplierId}" Text="{Binding Model.SupplierName}"/>
+            <controls:ReferenceBox Grid.Row="1" Grid.Column="1" RefName="Counterparty" SelectService="{Binding ReferenceService}"
+                                   DisplayMember="Name" ValueMember="Id" Value="{Binding Model.SupplierId}" Text="{Binding Model.SupplierName}"
+                                   SelectParameter="{Binding SupplierFilter}"/>
             <TextBlock Grid.Row="2" Text="Покупатель:"/>
-            <controls:ReferenceBox Grid.Row="2" Grid.Column="1" RefName="Counterparty" SelectService="{Binding ReferenceService, Mode=OneWay}"
-                                   DisplayMember="Name" ValueMember="Id" Value="{Binding Model.CustomerId}" Text="{Binding Model.CustomerName}"/>
+            <controls:ReferenceBox Grid.Row="2" Grid.Column="1" RefName="Counterparty" SelectService="{Binding ReferenceService}"
+                                   DisplayMember="Name" ValueMember="Id" Value="{Binding Model.CustomerId}" Text="{Binding Model.CustomerName}"
+                                   SelectParameter="{Binding CustomerFilter}"/>
             <TextBlock Grid.Row="3" Text="Материал:"/>
             <Grid Grid.Row="3" Grid.Column="1">
                 <Grid.ColumnDefinitions>
@@ -63,13 +65,13 @@
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="100"/>
                 </Grid.ColumnDefinitions>
-                <controls:ReferenceBox RefName="Material" SelectService="{Binding ReferenceService, Mode=OneWay}"
-                                   DisplayMember="FullName" ValueMember="Id"  Value="{Binding Model.MaterialId}" Text="{Binding Model.MaterialName}"/>
+                <controls:ReferenceBox RefName="Material" SelectService="{Binding ReferenceService}"
+                                   DisplayMember="Name" ValueMember="Id"  Value="{Binding Model.MaterialId}" Text="{Binding Model.MaterialName}"/>
                 <TextBlock Grid.Column="1" Text="Количество:"/>
                 <TextBox Grid.Column="2" TextAlignment="Right" Text="{Binding Model.Volume}"/>
             </Grid>
             <TextBlock Grid.Row="4" Text="Водитель:"/>
-            <controls:ReferenceBox Grid.Row="4" Grid.Column="1" RefName="Employee" SelectService="{Binding ReferenceService, Mode=OneWay}"
+            <controls:ReferenceBox Grid.Row="4" Grid.Column="1" RefName="Employee" SelectService="{Binding ReferenceService}"
                                    DisplayMember="Name" ValueMember="Id"  Value="{Binding Model.DriverId}" Text="{Binding Model.DriverName}"/>
         </Grid>
     </UserControl.Content>
