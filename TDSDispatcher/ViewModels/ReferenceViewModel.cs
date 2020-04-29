@@ -97,14 +97,23 @@ namespace TDSDispatcher.ViewModels
             });
 
         public ICommand DeleteCommand => new DelegateCommand(
-            async () =>
+            () =>
             {
                 if(CurrentItem != null)
                 {
-                    if(await repository.MarkUnmarkToDeleteAsync(CurrentItem))
-                    {
-                        LoadItems(CurrentItem);
-                    }
+                    dialogService.ShowMessageBox("Пометка на удаление", 
+                        (CurrentItem.IsDeleted ? "У выбранного элемента будет снята пометка на удаление!" 
+                            : "Выбранный элемент будет помечен на удаление!") + " Продолжить?",
+                        new ButtonResult[] { ButtonResult.No, ButtonResult.Yes },
+                        callback: async x =>
+                        {
+                            if (x.Result == ButtonResult.No) return;
+
+                            if (await repository.MarkUnmarkToDeleteAsync(CurrentItem))
+                            {
+                                LoadItems(CurrentItem);
+                            }
+                        });
                 }
             });
 
