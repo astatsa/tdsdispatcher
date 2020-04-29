@@ -10,6 +10,7 @@ using System.Windows.Input;
 using TDSDispatcher.Extensions;
 using TDSDispatcher.Helpers;
 using TDSDispatcher.Models;
+using TDSDispatcher.Repositories;
 using TDSDispatcher.Services;
 
 namespace TDSDispatcher.ViewModels
@@ -35,7 +36,7 @@ namespace TDSDispatcher.ViewModels
         public T Model
         {
             get => model;
-            set => SetProperty(ref model, value);
+            set => SetProperty(ref model, value, ModelChanged);
         }
 
         private ReferenceService referenceService;
@@ -63,11 +64,12 @@ namespace TDSDispatcher.ViewModels
             });
         #endregion
 
-        public BaseEntityViewModel(ReferenceService referenceService, ITdsApiService apiService, IDialogService dialogService)
+        public BaseEntityViewModel(ReferenceService referenceService, ITdsApiService apiService, IDialogService dialogService, ITDSRepository repository)
         {
             this.referenceService = referenceService;
             this.apiService = apiService;
             this.dialogService = dialogService;
+            this.repository = repository;
         }
 
         #region NavigationAware
@@ -128,9 +130,32 @@ namespace TDSDispatcher.ViewModels
             return res;
         }
 
+        protected virtual void ModelChanged()
+        {
+
+        }
+
+        protected async Task<TEntity> GetEntityByIdAsync<TEntity>(int id)
+        {
+            if(id != 0)
+            {
+                try
+                {
+                     return await repository.GetEntityByIdAsync<TEntity>(id);
+                }
+                catch(Exception ex)
+                {
+                    dialogService.ShowMessageBox("Ошибка", $"Произошла ошибка при получении данных!", detail: ex.Message);
+                }
+                
+            }
+            return default;
+        }
+
         public event EventHandler<bool> CloseRequest;
         protected EntityInfo entityInfo;
-        private readonly ITdsApiService apiService;
-        private readonly IDialogService dialogService;
+        protected readonly ITdsApiService apiService;
+        protected readonly IDialogService dialogService;
+        private readonly ITDSRepository repository;
     }
 }

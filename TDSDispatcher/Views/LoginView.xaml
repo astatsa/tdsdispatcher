@@ -111,7 +111,7 @@
             <Button Style="{StaticResource RoundCloseButton}" HorizontalAlignment="Right"
                     VerticalAlignment="Top" Height="25" Margin="5"
                     Command="{Binding CloseCommand}" CommandParameter="{Binding ElementName=ThisWindow}"
-                    IsCancel="True"/>
+                    IsCancel="True" Focusable="False"/>
             <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="50,0">
                 <TextBlock Text="Логин:" Style="{StaticResource Label}"/>
                 <TextBox Style="{StaticResource TextBoxStyle}" Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"

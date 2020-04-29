@@ -52,22 +52,32 @@
                     </Setter>
                     <Style.Triggers>
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter Property="Background" Value="LightGoldenrodYellow"/>
-                            <Setter Property="BorderBrush" Value="LightGoldenrodYellow"/>
+                            <Setter Property="Background" Value="#FFF9EB91"/>
+                            <Setter Property="BorderBrush" Value="#FFF9EB91"/>
                             <Setter Property="Foreground" Value="Black"/>
                         </Trigger>
                         <Trigger Property="IsFocused" Value="True">
-                            <Setter Property="BorderBrush" Value="#FDF1A3"/>
-                            <Setter Property="Background" Value="#FDF1A3"/>
+                            <Setter Property="BorderBrush" Value="#FFF0F095"/>
+                            <Setter Property="Background" Value="#FFF0F095"/>
                         </Trigger>
                     </Style.Triggers>
                 </Style>
             </DataGrid.CellStyle>
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsDeleted}" Value="True">
+                            <Setter Property="Header" Value="{StaticResource PathX}"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.RowStyle>
             <DataGrid.RowHeaderStyle>
                 <Style TargetType="DataGridRowHeader">
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding IsDeleted}" Value="True">
                             <Setter Property="Background" Value="Red"/>
+                            <Setter Property="Content" Value="{StaticResource PathX}"/>
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>

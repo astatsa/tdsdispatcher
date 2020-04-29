@@ -20,5 +20,11 @@ namespace TDSDispatcher.Services
 
         [Post("/{name}")]
         Task<DTO.ApiResult<bool>> SaveReferenceModelAsync<T>(string name, [Body] T model);
+
+        [Get("/{name}/{id}")]
+        Task<ApiResult<T>> GetReferenceEntityByIdAsync<T>(string name, int id);
+
+        [Post("/{name}/delete/{id}")]
+        Task<ApiResult<bool>> MarkUnmarkToDeleteAsync(string name, int id);
     }
 }

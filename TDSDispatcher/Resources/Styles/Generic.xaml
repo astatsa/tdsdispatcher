@@ -104,7 +104,7 @@
                     <Border CornerRadius="2" BorderThickness="1" BorderBrush="{x:Static SystemColors.ActiveBorderBrush}" 
                                 Background="White">
                         <DatePicker BorderThickness="0"
-                                    SelectedDate="{TemplateBinding SelectedDate}"
+                                    SelectedDate="{Binding SelectedDate, RelativeSource={RelativeSource Mode=TemplatedParent}, Mode=TwoWay}"
                                     DisplayDate="{TemplateBinding DisplayDate}"
                                     Text="{TemplateBinding Text}"/>
                     </Border>

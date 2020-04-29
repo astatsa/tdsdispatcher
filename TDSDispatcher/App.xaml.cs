@@ -12,6 +12,7 @@ using TDSDispatcher.ViewModels;
 using TDSDispatcher.ViewModels.Dialogs;
 using TDSDispatcher.Views;
 using TDSDispatcher.Views.Dialogs;
+using TDSDTO;
 using TDSDTO.Documents;
 using TDSDTO.References;
 using Unity;
@@ -78,7 +79,7 @@ namespace TDSDispatcher
             RegisterReference<GasStation>();
         }
 
-        private void RegisterReference<TModel>()
+        private void RegisterReference<TModel>() where TModel : BaseModel
         {
             var cont = Container.GetContainer();
             var modelTypeName = typeof(TModel).Name;

@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using TDSDTO;
 
 namespace TDSDispatcher.Views
@@ -27,17 +28,20 @@ namespace TDSDispatcher.Views
             {
                 e.Column.Header = attr.DisplayName;
                 e.Column.MinWidth = attr.MinWidth;
+                e.Column.CellStyle = new Style(typeof(DataGridCell), dg.CellStyle);
+                e.Column.CellStyle.Setters.Add(new Setter(TextBox.TextAlignmentProperty,
+                    (TextAlignment)attr.HorizontalAlignment));
 
-                if (e.Column is DataGridTextColumn col)
+                if (e.Column is DataGridBoundColumn col)
                 {
+                    if (!String.IsNullOrWhiteSpace(attr.MemberName))
+                    {
+                        col.Binding = new Binding($"{e.PropertyName}.{attr.MemberName}");
+                    }
                     if (!string.IsNullOrWhiteSpace(attr.Format))
                     {
                         col.Binding.StringFormat = attr.Format;
-                    }
-                    col.CellStyle = new Style(typeof(DataGridCell), dg.CellStyle);
-
-                    col.CellStyle.Setters.Add(new Setter(TextBox.TextAlignmentProperty,
-                        (TextAlignment)attr.HorizontalAlignment));
+                    }                    
                 }
             }
             else

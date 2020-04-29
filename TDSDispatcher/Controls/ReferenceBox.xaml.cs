@@ -19,7 +19,13 @@ namespace TDSDispatcher.Controls
         public static readonly DependencyProperty SelectedValueProperty = DependencyProperty.Register(nameof(SelectedValue), typeof(object), typeof(ReferenceBox),
             new FrameworkPropertyMetadata
             {
-                BindsTwoWayByDefault = true
+                BindsTwoWayByDefault = true,
+                PropertyChangedCallback = (d, e) =>
+                {
+                    var o = d as ReferenceBox;
+                    if (o != null)
+                        o.SelectedValue = e.NewValue;
+                }
             });
         public static readonly DependencyProperty SelectServiceProperty = DependencyProperty.Register(nameof(SelectService), typeof(ISelectable), typeof(ReferenceBox));
         public static readonly DependencyProperty SelectParameterProperty = DependencyProperty.Register(nameof(SelectParameter), typeof(object), typeof(ReferenceBox));

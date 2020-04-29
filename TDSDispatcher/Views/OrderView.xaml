@@ -52,11 +52,11 @@
             </Grid>
             <TextBlock Grid.Row="1" Text="Поставщик:"/>
             <controls:ReferenceBox Grid.Row="1" Grid.Column="1" RefName="Counterparty" SelectService="{Binding ReferenceService}"
-                                   DisplayMember="Name" ValueMember="Id" Value="{Binding Model.SupplierId}" Text="{Binding Model.SupplierName}"
+                                   DisplayMember="Name" ValueMember="Id" SelectedValue="{Binding Supplier}"
                                    SelectParameter="{Binding SupplierFilter}"/>
             <TextBlock Grid.Row="2" Text="Покупатель:"/>
             <controls:ReferenceBox Grid.Row="2" Grid.Column="1" RefName="Counterparty" SelectService="{Binding ReferenceService}"
-                                   DisplayMember="Name" ValueMember="Id" Value="{Binding Model.CustomerId}" Text="{Binding Model.CustomerName}"
+                                   DisplayMember="Name" ValueMember="Id" SelectedValue="{Binding Customer}"
                                    SelectParameter="{Binding CustomerFilter}"/>
             <TextBlock Grid.Row="3" Text="Материал:"/>
             <Grid Grid.Row="3" Grid.Column="1">
@@ -66,13 +66,13 @@
                     <ColumnDefinition Width="100"/>
                 </Grid.ColumnDefinitions>
                 <controls:ReferenceBox RefName="Material" SelectService="{Binding ReferenceService}"
-                                   DisplayMember="Name" ValueMember="Id"  Value="{Binding Model.MaterialId}" Text="{Binding Model.MaterialName}"/>
+                                   DisplayMember="Name" ValueMember="Id"  SelectedValue="{Binding Material}"/>
                 <TextBlock Grid.Column="1" Text="Количество:"/>
                 <TextBox Grid.Column="2" TextAlignment="Right" Text="{Binding Model.Volume}"/>
             </Grid>
             <TextBlock Grid.Row="4" Text="Водитель:"/>
             <controls:ReferenceBox Grid.Row="4" Grid.Column="1" RefName="Employee" SelectService="{Binding ReferenceService}"
-                                   DisplayMember="Name" ValueMember="Id"  Value="{Binding Model.DriverId}" Text="{Binding Model.DriverName}"/>
+                                   DisplayMember="Name" ValueMember="Id" SelectedValue="{Binding Driver}"/>
         </Grid>
     </UserControl.Content>
 </UserControl>

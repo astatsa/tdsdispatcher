@@ -6,6 +6,7 @@ using Prism.Services.Dialogs;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -14,13 +15,14 @@ using TDSDispatcher.Extensions;
 using TDSDispatcher.Models;
 using TDSDispatcher.Repositories;
 using TDSDispatcher.Views;
+using TDSDTO;
 using TDSDTO.Filter;
 using Unity;
 
 namespace TDSDispatcher.ViewModels
 {
     [RegionMemberLifetime(KeepAlive = true)]
-    class ReferenceViewModel<T> : BindableBase, INavigationAware, ISelectionAware
+    class ReferenceViewModel<T> : BindableBase, INavigationAware, ISelectionAware where T : BaseModel
     {
         private readonly IRegionManager regionManager;
         private readonly IUnityContainer container;
@@ -90,14 +92,20 @@ namespace TDSDispatcher.ViewModels
                 var res = ev.AddOrEdit(entityInfo, true, x, CurrentItem);
                 if (res.HasValue && res.Value)
                 {
-                    LoadItems();
+                    LoadItems(CurrentItem);
                 }
             });
 
         public ICommand DeleteCommand => new DelegateCommand(
-            () =>
+            async () =>
             {
-
+                if(CurrentItem != null)
+                {
+                    if(await repository.MarkUnmarkToDeleteAsync(CurrentItem))
+                    {
+                        LoadItems(CurrentItem);
+                    }
+                }
             });
 
         public ICommand RowDoubleClickCommand => new DelegateCommand<Window>(
@@ -150,13 +158,12 @@ namespace TDSDispatcher.ViewModels
 
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
+            T selItem = default;
             if (navigationContext.Parameters.TryGetValue("SelectionMode", out bool selectionMode))
             {
                 SelectionMode = selectionMode;
-                if(SelectionMode && navigationContext.Parameters.TryGetValue("SelectedItem", out T selItem))
-                {
-                    //TODO:....
-                }
+                if(SelectionMode)
+                    navigationContext.Parameters.TryGetValue("SelectedItem", out selItem);
             }
             else
             {
@@ -169,18 +176,22 @@ namespace TDSDispatcher.ViewModels
                 if (entityInfo != null)
                 {
                     Title = entityInfo.Title;
-                    LoadItems();
+                    LoadItems(selItem);
                 }
             }
         }
 
-        private async void LoadItems()
+        private async void LoadItems(T selItem = null)
         {
             cts = new CancellationTokenSource();
             IsLoading = true;
             try
             {
-                Items = new ObservableCollection<T>(await repository.GetList<T>(entityInfo.URL, filterParameter, cts.Token));
+                Items = await repository.GetListAsync<T>(entityInfo.URL, filterParameter, cts.Token);
+                if(selItem != null)
+                {
+                    CurrentItem = Items.FirstOrDefault(x => x.Equals(selItem));
+                }
             }
             catch (TaskCanceledException)
             {

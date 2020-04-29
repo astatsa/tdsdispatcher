@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using TDSDispatcher.Models;
 using TDSDispatcher.Services;
+using TDSDTO;
 using TDSDTO.Documents;
 using TDSDTO.Filter;
 using TDSDTO.References;
@@ -168,6 +169,16 @@ namespace TDSDispatcher.Repositories
             return entities.Values;
         }
 
+        public async Task<T> GetEntityByIdAsync<T>(int id)
+        {
+            var res = await apiService.GetReferenceEntityByIdAsync<T>(GetEntityByName(typeof(T).Name).URL, id);
+            if (String.IsNullOrEmpty(res.Error))
+            {
+                return res.Result;
+            }
+            throw new Exception(res.Error);
+        }
+
         public EntityInfo GetEntityByName(string name)
         {
             if (entities.TryGetValue(name, out EntityInfo res))
@@ -175,12 +186,12 @@ namespace TDSDispatcher.Repositories
             return null;
         }
 
-        public Task<ICollection<T>> GetList<T>(string entityName, CancellationToken token)
+        public Task<ICollection<T>> GetListAsync<T>(string entityName, CancellationToken token)
         {
-            return GetList<T>(entityName, null, token);
+            return GetListAsync<T>(entityName, null, token);
         }
 
-        public async Task<ICollection<T>> GetList<T>(string entityName, Filter filter, CancellationToken token)
+        public async Task<ICollection<T>> GetListAsync<T>(string entityName, Filter filter, CancellationToken token)
         {
             var res = await apiService.GetReferenceAsync<T>(entityName, filter, token);
             if (string.IsNullOrWhiteSpace(res.Error))
@@ -194,6 +205,15 @@ namespace TDSDispatcher.Repositories
         public ICollection<MenuItem> GetMenuItems()
         {
             return menuItems;
+        }
+
+        public async Task<bool> MarkUnmarkToDeleteAsync<T>(T entity) where T : BaseModel
+        {
+            var res = await apiService.MarkUnmarkToDeleteAsync(GetEntityByName(typeof(T).Name).URL, entity.Id);
+            if (String.IsNullOrEmpty(res.Error))
+                return true;
+
+            throw new Exception(res.Error);
         }
     }
 }
