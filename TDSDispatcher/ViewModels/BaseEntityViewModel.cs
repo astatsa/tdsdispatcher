@@ -152,6 +152,25 @@ namespace TDSDispatcher.ViewModels
             return default;
         }
 
+        protected async Task SetEntityByIdAsync<TEntity>(int? id, Action<TEntity> setAction)
+        {
+            if (!id.HasValue)
+                return;
+
+            if (id.Value != 0)
+            {
+                try
+                {
+                    setAction(await repository.GetEntityByIdAsync<TEntity>(id.Value));                    
+                }
+                catch (Exception ex)
+                {
+                    dialogService.ShowMessageBox("Ошибка", $"Произошла ошибка при получении данных!", detail: ex.Message);
+                }
+            }
+        }
+
+
         public event EventHandler<bool> CloseRequest;
         protected EntityInfo entityInfo;
         protected readonly ITdsApiService apiService;

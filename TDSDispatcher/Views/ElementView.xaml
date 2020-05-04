@@ -7,10 +7,22 @@
         xmlns:prism="http://prismlibrary.com/"
         xmlns:hlp="clr-namespace:TDSDispatcher.Helpers"
         mc:Ignorable="d"
-        SizeToContent="WidthAndHeight"
         Title="{Binding Title}" Closing="Window_Closing"
         ShowInTaskbar="False" WindowStartupLocation="CenterOwner"
         FontFamily="/Resources/Fonts/Roboto/#Roboto" FontSize="14">
+    <Window.Style>
+        <Style TargetType="Window">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsReferenceList, FallbackValue=False}" Value="True">
+                    <Setter Property="Height" Value="500"/>
+                    <Setter Property="Width" Value="800"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding IsReferenceList, FallbackValue=False}" Value="False">
+                    <Setter Property="SizeToContent" Value="WidthAndHeight"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Style>
     <ContentControl x:Name="ContentControl"
                     Margin="5" MinHeight="100" MinWidth="200">
         

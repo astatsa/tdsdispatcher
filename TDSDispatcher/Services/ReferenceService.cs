@@ -32,7 +32,7 @@ namespace TDSDispatcher.Services
             if (entityInfo != null)
             {
                 var mi = repository.GetType()
-                    .GetMethod("GetList", new Type[] { typeof(string), typeof(Filter), typeof(CancellationToken) })
+                    .GetMethod(nameof(repository.GetListAsync), new Type[] { typeof(string), typeof(Filter), typeof(CancellationToken) })
                     .MakeGenericMethod(entityInfo.ModelType);
                 var task = (Task)mi.Invoke(repository, new object[] 
                 {

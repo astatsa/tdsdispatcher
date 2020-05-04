@@ -32,6 +32,8 @@ namespace TDSDispatcher.ViewModels
         private CancellationTokenSource cts;
         private Filter filterParameter;
 
+        public bool IsReferenceList => true;
+
         private string title;
         public string Title
         {
@@ -40,7 +42,6 @@ namespace TDSDispatcher.ViewModels
         }
 
         private ICollection<T> items;
-
         public ICollection<T> Items
         {
             get => items;

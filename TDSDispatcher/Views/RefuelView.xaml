@@ -1,11 +1,12 @@
-﻿<UserControl x:Class="TDSDispatcher.Views.EmployeeView"
+﻿<UserControl x:Class="TDSDispatcher.Views.RefuelView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TDSDispatcher.Views"
              xmlns:controls="clr-namespace:TDSDispatcher.Controls"
-             mc:Ignorable="d">
+             xmlns:sys="clr-namespace:System;assembly=System.Runtime"
+             mc:Ignorable="d" >
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -30,18 +31,26 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <TextBlock Text="Наименование:"/>
-            <TextBox Grid.Column="1" Text="{Binding Model.Name}"/>
-            <TextBlock Grid.Row="1" Text="ФИО:"/>
-            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Model.FullName}"/>
-            <TextBlock Grid.Row="2" Text="Должность:"/>
-            <controls:ReferenceBox Grid.Row="2" Grid.Column="1" RefName="Position" SelectService="{Binding ReferenceService, Mode=OneWay}"
-                                   DisplayMember="Name" ValueMember="Id" SelectedValue="{Binding Position}"/>
-            <TextBlock Grid.Row="3" Text="Пользователь:"/>
-            <controls:ReferenceBox Grid.Row="3" Grid.Column="1" RefName="User" SelectService="{Binding ReferenceService, Mode=OneWay}"
-                                   DisplayMember="FullName" ValueMember="Id" SelectedValue="{Binding User}"/>
+            <TextBlock Text="Дата:"/>
+            <DatePicker Grid.Column="1" HorizontalAlignment="Left" SelectedDateFormat="Short" Style="{StaticResource RoundedDatePicker}"
+                        SelectedDate="{Binding Model.Date}"/>
+            <TextBlock Grid.Row="1" Text="АЗС:"/>
+            <Grid Grid.Row="1" Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="100"/>
+                </Grid.ColumnDefinitions>
+                <controls:ReferenceBox RefName="GasStation" SelectService="{Binding ReferenceService}"
+                                       DisplayMember="Name" ValueMember="Id" SelectedValue="{Binding GasStation}"/>
+                <TextBlock Grid.Column="1" Text="Объем:"/>
+                <TextBox Grid.Column="2" Text="{Binding Model.Volume}" TextAlignment="Right"/>
+            </Grid>
+            <TextBlock Grid.Row="2" Text="Водитель:"/>
+            <controls:ReferenceBox Grid.Row="2" Grid.Column="1" RefName="Employee" SelectService="{Binding ReferenceService}"
+                                   DisplayMember="Name" ValueMember="Id" SelectedValue="{Binding Driver}"
+                                   SelectParameter="{Binding DriverFilter}"/>
         </Grid>
     </UserControl.Content>
 </UserControl>

@@ -87,6 +87,15 @@ namespace TDSDispatcher.Repositories
                     URL = "GasStations",
                     ModelType = typeof(GasStation)
                 }
+            },
+            {
+                "Refuel", new EntityInfo
+                {
+                    ModelName = nameof(Refuel),
+                    Title = "Дозаправки",
+                    URL = "Refuels",
+                    ModelType = typeof(Refuel)
+                }
             }
 
         };
@@ -143,6 +152,13 @@ namespace TDSDispatcher.Repositories
                     Id = 9,
                     Title = "Заявки",
                     EntityName = "Order",
+                    ParentId = 8
+                },
+                new MenuItem
+                {
+                    Id = 11,
+                    Title = "Дозаправки",
+                    EntityName = "Refuel",
                     ParentId = 8
                 },
             new MenuItem

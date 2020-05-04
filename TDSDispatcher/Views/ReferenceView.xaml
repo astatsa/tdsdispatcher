@@ -10,7 +10,8 @@
              mc:Ignorable="d" 
              prism:ViewModelLocator.AutoWireViewModel="False"
              MinHeight="300"
-             FontFamily="Resources/Fonts/Roboto/#Roboto" FontSize="14">
+             FontFamily="Resources/Fonts/Roboto/#Roboto" FontSize="14"
+             FocusManager.FocusedElement="{Binding ElementName=dataGrid}">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -19,7 +20,7 @@
             <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid FocusManager.FocusedElement="{Binding ElementName=dataGrid}">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
@@ -52,13 +53,13 @@
                     </Setter>
                     <Style.Triggers>
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter Property="Background" Value="#FFFAFA64"/>
-                            <Setter Property="BorderBrush" Value="#FFFAFA64"/>
+                            <Setter Property="Background" Value="#F0F0F0"/>
+                            <Setter Property="BorderBrush" Value="#F0F0F0"/>
                             <Setter Property="Foreground" Value="Black"/>
                         </Trigger>
                         <Trigger Property="IsFocused" Value="True">
-                            <Setter Property="BorderBrush" Value="#FFFFFF3C"/>
-                            <Setter Property="Background" Value="#FFFFFF3C"/>
+                            <Setter Property="BorderBrush" Value="#E5E5E5"/>
+                            <Setter Property="Background" Value="#E5E5E5"/>
                         </Trigger>
                     </Style.Triggers>
                 </Style>
