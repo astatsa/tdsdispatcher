@@ -55,7 +55,11 @@ namespace TDSDispatcher.Views
             DataGrid grid = (DataGrid)sender;
             if (grid.Columns.Count > 0)
             {
-                grid.Columns[^1].Width = new DataGridLength(1, DataGridLengthUnitType.Star);
+                grid.Columns.Add(new DataGridTextColumn
+                {
+                    Width = new DataGridLength(1, DataGridLengthUnitType.Star)
+                });
+                //grid.Columns[^1].Width = new DataGridLength(1, DataGridLengthUnitType.Star);
             }
         }
     }

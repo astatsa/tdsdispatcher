@@ -12,6 +12,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Resources/Styles/ElementWindowStyles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+            <BooleanToVisibilityConverter x:Key="BoolToVisibleConverter"/>
         </ResourceDictionary>
     </UserControl.Resources>
     <UserControl.Style>
@@ -38,11 +39,15 @@
                     <ColumnDefinition/>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 <TextBox Text="{Binding Model.Name}" MinWidth="100"/>
                 <TextBlock Grid.Column="1" Text="Тип:"/>
                 <controls:SwitchButton Grid.Column="2" TrueText="Поставщик" FalseText="Покупатель" Margin="0,0,5,0" VerticalAlignment="Center"
                                        IsChecked="{Binding Model.IsSupplier}"/>
+                <Button Grid.Column="3" Content="Остатки..." Style="{StaticResource SimpleButton}" VerticalAlignment="Center"
+                        Visibility="{Binding Model.IsSupplier, Converter={StaticResource BoolToVisibleConverter}}"
+                        Command="{Binding OpenRestCommand}"/>
             </Grid>
             <TextBlock Grid.Row="1" Text="Адрес:"/>
             <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Model.Address}"/>

@@ -70,6 +70,7 @@ namespace TDSDispatcher
             ViewModelLocationProvider.Register<RefuelView, RefuelViewModel>();
 
             containerRegistry.RegisterDialog<MessageBoxView, MessageBoxViewModel>("MessageBox");
+            containerRegistry.RegisterDialog<CounterpartyRestView, CounterpartyRestViewModel>();
 
             RegisterReference<Employee>();
             RegisterReference<Counterparty>();

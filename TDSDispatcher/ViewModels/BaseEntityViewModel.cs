@@ -95,7 +95,14 @@ namespace TDSDispatcher.ViewModels
                 IsEdit = isEdit;
                 if(isEdit && navigationContext.Parameters.TryGetValue<T>("Model", out T model))
                 {
-                    Model = model;
+                    if (model is ICloneable cloneable)
+                    {
+                        Model = (T)cloneable.Clone();
+                    }
+                    else
+                    {
+                        Model = model;
+                    }
                 }
                 else
                 {
