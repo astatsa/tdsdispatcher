@@ -33,6 +33,7 @@ namespace TDSDispatcher.ViewModels
         private Filter filterParameter;
 
         public bool IsReferenceList => true;
+        public bool IsClosable => true;
 
         private string title;
         public string Title

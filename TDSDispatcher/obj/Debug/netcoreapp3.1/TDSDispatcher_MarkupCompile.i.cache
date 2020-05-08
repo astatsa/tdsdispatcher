@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NETCOREAPP;NETCOREAPP3_1
 D:\Igor\source\repos\TDSDispatcher\TDSDispatcher\App.xaml
-18-1853002429
+19-1221617227
 121391899491
-51-2077962260
+53-840553494
 211702279087
-Controls\ReferenceBox.xaml;Controls\SwitchButton.xaml;Resources\Styles\ElementWindowStyles.xaml;Resources\Styles\Generic.xaml;Resources\Styles\ReferenceStyles.xaml;Views\CounterpartyRestView.xaml;Views\CounterpartyView.xaml;Views\Dialogs\MessageBoxView.xaml;Views\ElementView.xaml;Views\EmployeeView.xaml;Views\GasStationView.xaml;Views\LoginView.xaml;Views\MainWindow.xaml;Views\MaterialView.xaml;Views\MeasureView.xaml;Views\OrderView.xaml;Views\ReferenceView.xaml;Views\RefuelView.xaml;
+Controls\ReferenceBox.xaml;Controls\SwitchButton.xaml;Resources\Styles\ElementWindowStyles.xaml;Resources\Styles\Generic.xaml;Resources\Styles\ReferenceStyles.xaml;Views\CounterpartyRestView.xaml;Views\CounterpartyView.xaml;Views\Dialogs\MessageBoxView.xaml;Views\ElementView.xaml;Views\EmployeeView.xaml;Views\GasStationView.xaml;Views\HomePageView.xaml;Views\LoginView.xaml;Views\MainWindow.xaml;Views\MaterialView.xaml;Views\MeasureView.xaml;Views\OrderView.xaml;Views\ReferenceView.xaml;Views\RefuelView.xaml;
 
 False
 

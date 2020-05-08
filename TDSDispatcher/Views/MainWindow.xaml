@@ -16,6 +16,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Resources/Styles/Generic.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+            <BooleanToVisibilityConverter x:Key="BoolToVisibleConverter"/>
         </ResourceDictionary>
     </Window.Resources>
     <Grid>
@@ -42,17 +43,56 @@
             </ToolBar>
         </StackPanel>
         <TabControl Grid.Row="1" prism:RegionManager.RegionName="{x:Static hlp:ViewRegions.MainContent}" Margin="0,3,0,0">
+            <TabControl.Resources>
+                <Style TargetType="TabItem">
+                    <Setter Property="Background" Value="White"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="TabItem">
+                                <Border BorderBrush="Transparent" Padding="5,5" Name="Border"
+                                        CornerRadius="7,7,0,0" BorderThickness="1,1,1,0"
+                                        Background="{TemplateBinding Background}">
+                                    <Grid>
+                                        <ContentPresenter ContentSource="Header"/>
+                                        <Border x:Name="UnselectBorder" BorderThickness="1,0,0,0" BorderBrush="LightGray" Margin="-7,2,0,2"/>
+                                    </Grid>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <MultiTrigger>
+                                        <MultiTrigger.Conditions>
+                                            <Condition Property="IsMouseOver" Value="True"/>
+                                            <Condition Property="IsSelected" Value="False"/>
+                                        </MultiTrigger.Conditions>
+                                        <Setter TargetName="Border" Property="BorderBrush" Value="LightGray"/>                                        
+                                        <Setter TargetName="UnselectBorder" Property="Visibility" Value="Hidden"/>
+                                    </MultiTrigger>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter Property="Background" Value="White"/>
+                                        <Setter TargetName="Border" Property="BorderBrush" Value="LightGray"/>
+                                        <Setter TargetName="UnselectBorder" Property="Visibility" Value="Hidden"/>
+                                        <Setter TargetName="Border" Property="Margin" Value="0,0,0,-1"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </TabControl.Resources>
             <TabControl.ItemTemplate>
                 <DataTemplate>
                     <!-- У TabItem DataContext - вьюха, поэтому берем DataContext вьюхи(DataContext.DataContext) -->
-                    <Grid MaxWidth="200" Margin="0,5" DataContext="{Binding DataContext.DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=TabItem}}">
+                    <Grid MaxWidth="200" Margin="5,5"
+                          DataContext="{Binding DataContext.DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=TabItem}}">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Text="{Binding Title}" Margin="0,0,10,0"/>
-                        <Button Grid.Column="1" BorderThickness="0" Background="Transparent"
-                                Command="{Binding DataContext.TabCloseCommand, ElementName=ThisWindow}" CommandParameter="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=TabItem}}">
+                        <Path Data="{Binding TabPicture}" Fill="Black" Height="18" Width="Auto" Stretch="Uniform"/>
+                        <TextBlock Grid.Column="1" Text="{Binding Title}" Margin="0,0,10,0"/>
+                        <Button Grid.Column="2" BorderThickness="0" Background="Transparent"
+                                Command="{Binding DataContext.TabCloseCommand, ElementName=ThisWindow}" CommandParameter="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=TabItem}}"
+                                Visibility="{Binding IsClosable, Converter={StaticResource BoolToVisibleConverter}}">
                             <Path Data="M0 0 L7 7 M0 7 L7 0" Stroke="Black"/>
                         </Button>
                     </Grid>

@@ -81,6 +81,9 @@ namespace TDSDispatcher
             RegisterReference<Order>();
             RegisterReference<GasStation>();
             RegisterReference<Refuel>();
+
+            containerRegistry.RegisterForNavigation<HomePageView>("HomePage");
+            ViewModelLocationProvider.Register<HomePageView, HomePageViewModel>();
         }
 
         private void RegisterReference<TModel>() where TModel : BaseModel
