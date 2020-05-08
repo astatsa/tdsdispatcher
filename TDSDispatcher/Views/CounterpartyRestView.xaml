@@ -27,10 +27,16 @@
         </UserControl.Style>
         <DataGrid AutoGenerateColumns="False" Style="{StaticResource BaseDataGridStyle}"
                   CanUserAddRows="False" CanUserDeleteRows="False"
-                  ItemsSource="{Binding Rests}">
+                  ItemsSource="{Binding Document.MaterialCorrections}">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Материал" Binding="{Binding MaterialName}" IsReadOnly="True"/>
-                <DataGridTextColumn Header="Остаток" TextBlock.TextAlignment="Right" Binding="{Binding Rest}"/>
+                <DataGridTextColumn Header="Остаток" Binding="{Binding Correction}">
+                    <DataGridTextColumn.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Setter Property="TextBlock.TextAlignment" Value="Right"/>
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
+                </DataGridTextColumn>
                 <DataGridTextColumn Width="*" IsReadOnly="True"/>
             </DataGrid.Columns>
         </DataGrid>

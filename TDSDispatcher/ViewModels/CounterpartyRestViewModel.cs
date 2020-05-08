@@ -3,33 +3,37 @@ using Prism.Mvvm;
 using Prism.Services.Dialogs;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using TDSDispatcher.Extensions;
+using TDSDispatcher.Repositories;
 using TDSDispatcher.Services;
+using TDSDTO.Documents;
 
 namespace TDSDispatcher.ViewModels
 {
     class CounterpartyRestViewModel : BindableBase, IDialogAware
     {
         private readonly IDialogService dialogService;
-        private readonly ITdsApiService apiService;
+        private readonly ITDSRepository repository;
         #region Commands
         public ICommand SaveCloseCommand => new DelegateCommand(
-            () =>
+            async () =>
             {
-                RequestClose?.Invoke(new DialogResult(ButtonResult.OK));
+                if(await Save())
+                    RequestClose?.Invoke(new DialogResult(ButtonResult.OK));
             });
         #endregion
 
         #region Properties
-        /*private ICollection<CounterpartyRest> myVar;
-
-        public ICollection<CounterpartyRest> MyProperty
+        private CounterpartyRestCorrection document;
+        public CounterpartyRestCorrection Document
         {
-            get { return myVar; }
-            set { myVar = value; }
-        }*/
+            get => document;
+            set => SetProperty(ref document, value);
+        }
 
         #endregion
 
@@ -45,20 +49,47 @@ namespace TDSDispatcher.ViewModels
             
         }
 
-        public void OnDialogOpened(IDialogParameters parameters)
+        public async void OnDialogOpened(IDialogParameters parameters)
         {
-            if(parameters == null || !parameters.TryGetValue("CounterpartyId", out int counterpartyId))
+            int counterpartyId = 0;
+            if (parameters == null || !parameters.TryGetValue("CounterpartyId", out counterpartyId))
             {
                 dialogService.ShowMessageBox("Ошибка", "Не указан идентификатор элемента справочника!", new ButtonResult[] { ButtonResult.OK });
                 RequestClose?.Invoke(new DialogResult(ButtonResult.Cancel));
             }
+
+            var rests = await repository.GetRestsByCounterpartyId(counterpartyId);
+            this.Document = new CounterpartyRestCorrection
+            {
+                CounterpartyId = counterpartyId,
+                Date = DateTime.Now,
+                MaterialCorrections = rests.Select(x => new CounterpartyRestCorrectionMaterial
+                {
+                    MaterialId = x.MaterialId,
+                    MaterialName = x.MaterialName,
+                    Correction = x.Rest
+                }).ToList()
+            };
         }
         #endregion
 
-        public CounterpartyRestViewModel(IDialogService dialogService, ITdsApiService apiService)
+        public CounterpartyRestViewModel(IDialogService dialogService, ITDSRepository repository)
         {
             this.dialogService = dialogService;
-            this.apiService = apiService;
+            this.repository = repository;
+        }
+
+        private async Task<bool> Save()
+        {
+            try
+            {
+                return await repository.SaveReferenceAsync(document);
+            }
+            catch (Exception ex)
+            {
+                dialogService.ShowMessageBox("Ошибка", ex.Message, new ButtonResult[] { ButtonResult.OK });
+                return false;
+            }
         }
     }
 }

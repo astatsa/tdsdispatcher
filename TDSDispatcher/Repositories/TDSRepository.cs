@@ -96,8 +96,25 @@ namespace TDSDispatcher.Repositories
                     URL = "Refuels",
                     ModelType = typeof(Refuel)
                 }
+            },
+            {
+                "CounterpartyRestCorrection", new EntityInfo
+                {
+                    ModelName = nameof(CounterpartyRestCorrection),
+                    Title = "Корректировка остатков поставщика",
+                    URL = "CounterpartyRestCorrections",
+                    ModelType = typeof(CounterpartyRestCorrection)
+                }
+            },
+            {
+                "CounterpartyMaterialRest", new EntityInfo
+                {
+                    ModelName = nameof(CounterpartyMaterialRest),
+                    Title = "Остатки поставщиков",
+                    URL = "CounterpartyRests",
+                    ModelType = typeof(CounterpartyMaterialRest)
+                }
             }
-
         };
 
         private readonly List<MenuItem> menuItems = new List<MenuItem>
@@ -180,6 +197,18 @@ namespace TDSDispatcher.Repositories
         {
             this.apiService = apiService;
         }
+
+        public async Task<ICollection<CounterpartyMaterialRest>> GetRestsByCounterpartyId(int id)
+        {
+            var url = GetEntityByName(nameof(CounterpartyMaterialRest)).URL;
+            var res = await apiService.GetByCounterpartyId<CounterpartyMaterialRest>(url, id);
+            if(String.IsNullOrWhiteSpace(res.Error))
+            {
+                return res.Result;
+            }
+            throw new Exception(res.Error);
+        }
+
         public ICollection<EntityInfo> GetEntities()
         {
             return entities.Values;
@@ -229,6 +258,17 @@ namespace TDSDispatcher.Repositories
             if (String.IsNullOrEmpty(res.Error))
                 return true;
 
+            throw new Exception(res.Error);
+        }
+
+        public async Task<bool> SaveReferenceAsync<T>(T entity)
+        {
+            var url = GetEntityByName(typeof(T).Name).URL;
+            var res = await apiService.SaveReferenceModelAsync<T>(url, entity);
+            if(String.IsNullOrEmpty(res.Error))
+            {
+                return true;
+            }
             throw new Exception(res.Error);
         }
     }

@@ -47,7 +47,7 @@
                                        IsChecked="{Binding Model.IsSupplier}"/>
                 <Button Grid.Column="3" Content="Остатки..." Style="{StaticResource SimpleButton}" VerticalAlignment="Center"
                         Visibility="{Binding Model.IsSupplier, Converter={StaticResource BoolToVisibleConverter}}"
-                        Command="{Binding OpenRestCommand}"/>
+                        Command="{Binding OpenRestCommand}" IsEnabled="{Binding IsEdit}"/>
             </Grid>
             <TextBlock Grid.Row="1" Text="Адрес:"/>
             <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Model.Address}"/>

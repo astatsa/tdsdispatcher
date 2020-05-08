@@ -21,5 +21,9 @@ namespace TDSDispatcher.Repositories
         Task<T> GetEntityByIdAsync<T>(int id);
 
         Task<bool> MarkUnmarkToDeleteAsync<T>(T entity) where T : BaseModel;
+
+        Task<ICollection<CounterpartyMaterialRest>> GetRestsByCounterpartyId(int id);
+
+        Task<bool> SaveReferenceAsync<T>(T entity);
     }
 }

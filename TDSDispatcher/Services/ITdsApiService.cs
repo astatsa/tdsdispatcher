@@ -26,5 +26,8 @@ namespace TDSDispatcher.Services
 
         [Post("/{name}/delete/{id}")]
         Task<ApiResult<bool>> MarkUnmarkToDeleteAsync(string name, int id);
+
+        [Get("/{name}/counterparty/{id}")]
+        Task<ApiResult<ICollection<T>>> GetByCounterpartyId<T>(string name, int id);
     }
 }
