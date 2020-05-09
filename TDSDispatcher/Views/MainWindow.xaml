@@ -24,7 +24,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Vertical">
+        <!--<StackPanel Orientation="Vertical">
             <Menu IsMainMenu="True" ItemsSource="{Binding MenuItems}">
                 <Menu.Resources>
                     <Style TargetType="MenuItem">
@@ -41,7 +41,7 @@
             </Menu>
             <ToolBar Visibility="Collapsed">
             </ToolBar>
-        </StackPanel>
+        </StackPanel>-->
         <TabControl Grid.Row="1" prism:RegionManager.RegionName="{x:Static hlp:ViewRegions.MainContent}" Margin="0,3,0,0">
             <TabControl.Resources>
                 <Style TargetType="TabItem">
@@ -49,28 +49,31 @@
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="TabItem">
-                                <Border BorderBrush="Transparent" Padding="5,5" Name="Border"
-                                        CornerRadius="7,7,0,0" BorderThickness="1,1,1,0"
-                                        Background="{TemplateBinding Background}">
+                                <Grid>
+                                    <Border BorderBrush="Transparent" Name="Border"
+                                            CornerRadius="7,7,0,0" BorderThickness="1,1,1,0"
+                                            Background="{TemplateBinding Background}">
+                                    </Border>
                                     <Grid>
-                                        <ContentPresenter ContentSource="Header"/>
-                                        <Border x:Name="UnselectBorder" BorderThickness="1,0,0,0" BorderBrush="LightGray" Margin="-7,2,0,2"/>
+                                        <ContentPresenter ContentSource="Header" Margin="5,5"/>
+                                        <Border x:Name="UnselectBorder" BorderThickness="0,0,1,0" BorderBrush="LightGray" Margin="0,7,-1,7"/>
                                     </Grid>
-                                </Border>
+                                </Grid>
                                 <ControlTemplate.Triggers>
                                     <MultiTrigger>
                                         <MultiTrigger.Conditions>
                                             <Condition Property="IsMouseOver" Value="True"/>
                                             <Condition Property="IsSelected" Value="False"/>
                                         </MultiTrigger.Conditions>
-                                        <Setter TargetName="Border" Property="BorderBrush" Value="LightGray"/>                                        
+                                        <Setter TargetName="Border" Property="BorderBrush" Value="LightGray"/>
+                                        <Setter TargetName="Border" Property="Margin" Value="-1,0,-1,0"/>
                                         <Setter TargetName="UnselectBorder" Property="Visibility" Value="Hidden"/>
                                     </MultiTrigger>
                                     <Trigger Property="IsSelected" Value="True">
                                         <Setter Property="Background" Value="White"/>
                                         <Setter TargetName="Border" Property="BorderBrush" Value="LightGray"/>
                                         <Setter TargetName="UnselectBorder" Property="Visibility" Value="Hidden"/>
-                                        <Setter TargetName="Border" Property="Margin" Value="0,0,0,-1"/>
+                                        <Setter TargetName="Border" Property="Margin" Value="-1,0,0,-1"/>
                                     </Trigger>
                                 </ControlTemplate.Triggers>
                             </ControlTemplate>
@@ -89,8 +92,8 @@
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
                         <Path Data="{Binding TabPicture}" Fill="Black" Height="18" Width="Auto" Stretch="Uniform"/>
-                        <TextBlock Grid.Column="1" Text="{Binding Title}" Margin="0,0,10,0"/>
-                        <Button Grid.Column="2" BorderThickness="0" Background="Transparent"
+                        <TextBlock Grid.Column="1" Text="{Binding Title}"/>
+                        <Button Grid.Column="2" BorderThickness="0" Background="Transparent" Margin="10,0,0,0"
                                 Command="{Binding DataContext.TabCloseCommand, ElementName=ThisWindow}" CommandParameter="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=TabItem}}"
                                 Visibility="{Binding IsClosable, Converter={StaticResource BoolToVisibleConverter}}">
                             <Path Data="M0 0 L7 7 M0 7 L7 0" Stroke="Black"/>

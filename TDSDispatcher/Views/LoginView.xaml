@@ -104,10 +104,10 @@
     <Grid Margin="10">
         <Border BorderBrush="White" BorderThickness="1">
             <Border.Effect>
-                <DropShadowEffect ShadowDepth="1" BlurRadius="20"/>
+                <DropShadowEffect ShadowDepth="1" BlurRadius="20" Color="Black"/>
             </Border.Effect>
         </Border>
-        <Grid Background="White" FocusManager.FocusedElement="{Binding ElementName=Login}">
+        <Grid FocusManager.FocusedElement="{Binding ElementName=Login}" Background="WhiteSmoke">
             <Button Style="{StaticResource RoundCloseButton}" HorizontalAlignment="Right"
                     VerticalAlignment="Top" Height="25" Margin="5"
                     Command="{Binding CloseCommand}" CommandParameter="{Binding ElementName=ThisWindow}"
@@ -115,7 +115,7 @@
             <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="50,0">
                 <TextBlock Text="Логин:" Style="{StaticResource Label}"/>
                 <TextBox Style="{StaticResource TextBoxStyle}" Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"
-                         x:Name="Login"/>
+                            x:Name="Login"/>
                 <TextBlock Text="Пароль:" Style="{StaticResource Label}"/>
                 <PasswordBox x:Name="Password" Style="{StaticResource TextBoxStyle}"/>
                 <Button Content="ВОЙТИ" Background="White" Style="{StaticResource LoginButton}"
