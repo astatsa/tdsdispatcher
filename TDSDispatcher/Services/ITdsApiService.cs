@@ -19,7 +19,7 @@ namespace TDSDispatcher.Services
         Task<ApiResult<ICollection<T>>> GetReferenceAsync<T>(string name, [Body] Filter filter, CancellationToken cancellationToken);
 
         [Post("/{name}")]
-        Task<DTO.ApiResult<bool>> SaveReferenceModelAsync<T>(string name, [Body] T model);
+        Task<DTO.ApiResult<bool>> SaveReferenceModelAsync<T>(string name, [Body] T model);  
 
         [Get("/{name}/{id}")]
         Task<ApiResult<T>> GetReferenceEntityByIdAsync<T>(string name, int id);

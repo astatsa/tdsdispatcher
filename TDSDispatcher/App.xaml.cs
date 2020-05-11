@@ -84,6 +84,8 @@ namespace TDSDispatcher
 
             containerRegistry.RegisterForNavigation<HomePageView>("HomePage");
             ViewModelLocationProvider.Register<HomePageView, HomePageViewModel>();
+
+            containerRegistry.RegisterForNavigation<HomePageView>();
         }
 
         private void RegisterReference<TModel>() where TModel : BaseModel
