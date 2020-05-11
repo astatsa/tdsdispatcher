@@ -45,7 +45,7 @@
                 </Grid.ColumnDefinitions>
                 <TextBox Text="{Binding Model.Number}"/>
                 <TextBlock Grid.Column="1" Text="Дата:"/>
-                <DatePicker Grid.Column="2" SelectedDateFormat="Short" Style="{StaticResource RoundedDatePicker}"
+                <DatePicker Grid.Column="2" SelectedDateFormat="Long" Style="{StaticResource RoundedDatePicker}"
                             SelectedDate="{Binding Model.Date, Mode=TwoWay, TargetNullValue={x:Static sys:DateTime.Now}}"/>
                 <TextBlock Grid.Column="3" Text="{Binding Model.OrderStateName, FallbackValue=Статус}" TextAlignment="Center"
                            HorizontalAlignment="Right" Foreground="Blue"/>
@@ -67,7 +67,7 @@
                 </Grid.ColumnDefinitions>
                 <controls:ReferenceBox RefName="Material" SelectService="{Binding ReferenceService}"
                                    DisplayMember="Name" ValueMember="Id"  SelectedValue="{Binding Material}"/>
-                <TextBlock Grid.Column="1" Text="Количество:"/>
+                <TextBlock Grid.Column="1" Text="Вес:"/>
                 <TextBox Grid.Column="2" TextAlignment="Right" Text="{Binding Model.Volume}"/>
             </Grid>
             <TextBlock Grid.Row="4" Text="Водитель:"/>

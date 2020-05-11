@@ -271,5 +271,11 @@ namespace TDSDispatcher.Repositories
             }
             throw new Exception(res.Error);
         }
+
+        public Task<DateTime> GetLastChangeDate<T>()
+        {
+            var url = GetEntityByName(typeof(T).Name).URL;
+            return apiService.GetLastChangeDate(url);
+        }
     }
 }

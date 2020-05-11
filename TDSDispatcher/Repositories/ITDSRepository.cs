@@ -25,5 +25,7 @@ namespace TDSDispatcher.Repositories
         Task<ICollection<CounterpartyMaterialRest>> GetRestsByCounterpartyId(int id);
 
         Task<bool> SaveReferenceAsync<T>(T entity);
+
+        Task<DateTime> GetLastChangeDate<T>();
     }
 }

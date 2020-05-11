@@ -1,4 +1,5 @@
 ﻿using Refit;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -29,5 +30,8 @@ namespace TDSDispatcher.Services
 
         [Get("/{name}/counterparty/{id}")]
         Task<ApiResult<ICollection<T>>> GetByCounterpartyId<T>(string name, int id);
+
+        [Get("/{name}/lastchange")]
+        Task<DateTime> GetLastChangeDate(string name);
     }
 }

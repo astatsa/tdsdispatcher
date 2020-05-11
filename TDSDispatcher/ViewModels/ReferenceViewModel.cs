@@ -24,6 +24,7 @@ namespace TDSDispatcher.ViewModels
     [RegionMemberLifetime(KeepAlive = true)]
     class ReferenceViewModel<T> : BindableBase, INavigationAware, ISelectionAware where T : BaseModel
     {
+        private const int REFRESH_TIMEOUT_SEC = 10;
         private readonly IRegionManager regionManager;
         private readonly IUnityContainer container;
         private readonly ITDSRepository repository;
@@ -31,6 +32,7 @@ namespace TDSDispatcher.ViewModels
         private EntityInfo entityInfo;
         private CancellationTokenSource cts;
         private Filter filterParameter;
+        private DateTime lastUpdateDate;
 
         public bool IsReferenceList => true;
         public bool IsClosable => true;
@@ -54,7 +56,12 @@ namespace TDSDispatcher.ViewModels
         public T CurrentItem
         {
             get => currentItem;
-            set => SetProperty(ref currentItem, value);
+            set
+            {
+                //Из-за того что Equals сравнивает Id, свойство не обновляется
+                currentItem = value;
+                RaisePropertyChanged();
+            }
         }
 
         private bool selectionMode;
@@ -132,6 +139,12 @@ namespace TDSDispatcher.ViewModels
                 }
             });
 
+        public ICommand RefreshCommand => new DelegateCommand<Window>(
+            x =>
+            {
+                LoadItems();
+            });
+
         private ICommand keyUpCommand;
         public ICommand KeyUpCommand =>
             keyUpCommand ?? (keyUpCommand = new DelegateCommand<KeyEventArgs>(
@@ -148,6 +161,8 @@ namespace TDSDispatcher.ViewModels
             this.container = container;
             this.repository = repository;
             this.dialogService = dialogService;
+
+            StartRefresher();
         }
 
         public bool IsNavigationTarget(NavigationContext navigationContext)
@@ -203,6 +218,7 @@ namespace TDSDispatcher.ViewModels
                 {
                     CurrentItem = Items.FirstOrDefault(x => x.Equals(selItem));
                 }
+                lastUpdateDate = DateTime.Now;
             }
             catch (TaskCanceledException)
             {
@@ -220,6 +236,20 @@ namespace TDSDispatcher.ViewModels
             {
                 IsLoading = false;
             }
+        }
+
+        private async void StartRefresher()
+        {
+            await Task.Delay(TimeSpan.FromSeconds(REFRESH_TIMEOUT_SEC));
+            if (!IsLoading)
+            {
+                var res = await repository.GetLastChangeDate<T>();
+                if (res > lastUpdateDate)
+                {
+                    LoadItems();
+                }
+            }
+            StartRefresher();
         }
     }
 }
