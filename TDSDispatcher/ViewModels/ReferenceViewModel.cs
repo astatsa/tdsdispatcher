@@ -3,6 +3,7 @@ using Prism.Ioc;
 using Prism.Mvvm;
 using Prism.Regions;
 using Prism.Services.Dialogs;
+using Refit;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -24,11 +25,11 @@ namespace TDSDispatcher.ViewModels
     [RegionMemberLifetime(KeepAlive = true)]
     class ReferenceViewModel<T> : BindableBase, INavigationAware, ISelectionAware where T : BaseModel
     {
-        private const int REFRESH_TIMEOUT_SEC = 10;
         private readonly IRegionManager regionManager;
         private readonly IUnityContainer container;
         private readonly ITDSRepository repository;
         private readonly IDialogService dialogService;
+        private readonly Settings settings;
         private EntityInfo entityInfo;
         private CancellationTokenSource cts;
         private Filter filterParameter;
@@ -155,14 +156,16 @@ namespace TDSDispatcher.ViewModels
         #endregion
 
         public ReferenceViewModel(IRegionManager regionManager, IUnityContainer container, ITDSRepository repository,
-            IDialogService dialogService)
+            IDialogService dialogService, Settings settings)
         {
             this.regionManager = regionManager;
             this.container = container;
             this.repository = repository;
             this.dialogService = dialogService;
+            this.settings = settings;
 
-            StartRefresher();
+            if(settings.ReloadListTimeout > 0)
+                StartRefresher();
         }
 
         public bool IsNavigationTarget(NavigationContext navigationContext)
@@ -240,16 +243,27 @@ namespace TDSDispatcher.ViewModels
 
         private async void StartRefresher()
         {
-            await Task.Delay(TimeSpan.FromSeconds(REFRESH_TIMEOUT_SEC));
-            if (!IsLoading)
+            while (true)
             {
-                var res = await repository.GetLastChangeDate<T>();
-                if (res > lastUpdateDate)
+                try
                 {
-                    LoadItems();
+                    await Task.Delay(TimeSpan.FromSeconds(settings.ReloadListTimeout));
+                    if (!IsLoading)
+                    {
+                        var res = await repository.GetLastChangeDate<T>();
+                        if (res > lastUpdateDate)
+                        {
+                            LoadItems();
+                        }
+                    }
+                }
+                catch(ApiException)
+                {
+                }
+                catch
+                {
                 }
             }
-            StartRefresher();
         }
     }
 }

@@ -10,20 +10,6 @@
         Title="{Binding Title}" Closing="Window_Closing"
         ShowInTaskbar="False" WindowStartupLocation="CenterOwner"
         FontFamily="/Resources/Fonts/Roboto/#Roboto" FontSize="14">
-    <Window.Style>
-        <Style TargetType="Window">
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding IsReferenceList}" Value="True">
-                    <Setter Property="Height" Value="400"/>
-                    <Setter Property="Width" Value="900"/>
-                </DataTrigger>
-                <DataTrigger Binding="{Binding IsReferenceList}" Value="False">
-                    <Setter Property="SizeToContent" Value="Height"/>
-                    <Setter Property="Width" Value="600"/>
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
-    </Window.Style>
     <ContentControl Grid.Row="1" x:Name="ContentControl"
                 Margin="5" MinHeight="100" MinWidth="200">
         

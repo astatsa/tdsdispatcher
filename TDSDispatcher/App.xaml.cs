@@ -39,6 +39,11 @@ namespace TDSDispatcher
                 .Build();
             var httpSettings = configuration.GetSection("HTTPSettings");
 
+            containerRegistry.RegisterInstance(new Settings
+            {
+                ReloadListTimeout = configuration.GetValue<int>("ReloadListTimeoutSec")
+            });
+
             containerRegistry.RegisterSingleton<SessionContext>();
             containerRegistry.RegisterInstance<ITdsApiService>(Refit.RestService.For<ITdsApiService>(
                     new System.Net.Http.HttpClient(new ApiMessageHandler(new HttpClientHandler(), Container.Resolve<SessionContext>()))
