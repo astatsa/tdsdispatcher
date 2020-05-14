@@ -17,7 +17,6 @@ using TDSDTO.Documents;
 using TDSDTO.References;
 using Unity;
 using Unity.Injection;
-using Unity.Lifetime;
 
 namespace TDSDispatcher
 {
@@ -45,6 +44,7 @@ namespace TDSDispatcher
             });
 
             containerRegistry.RegisterSingleton<SessionContext>();
+            containerRegistry.RegisterSingleton<PermissionServiceBuilder>();
             containerRegistry.RegisterInstance<ITdsApiService>(Refit.RestService.For<ITdsApiService>(
                     new System.Net.Http.HttpClient(new ApiMessageHandler(new HttpClientHandler(), Container.Resolve<SessionContext>()))
                     {
@@ -98,7 +98,7 @@ namespace TDSDispatcher
             var cont = Container.GetContainer();
             var modelTypeName = typeof(TModel).Name;
             cont.RegisterType<object, ReferenceViewModel<TModel>>($"{modelTypeName}ListViewModel");
-            cont.RegisterType<object, ReferenceView>($"{modelTypeName}List", 
+            cont.RegisterType<object, ReferenceView>($"{modelTypeName}List",
                 new InjectionConstructor((Func<object>)(() => Container.Resolve<object>($"{modelTypeName}ListViewModel"))));
         }
 

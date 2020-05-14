@@ -15,6 +15,7 @@ using System.Windows.Input;
 using TDSDispatcher.Extensions;
 using TDSDispatcher.Models;
 using TDSDispatcher.Repositories;
+using TDSDispatcher.Services;
 using TDSDispatcher.Views;
 using TDSDTO;
 using TDSDTO.Filter;
@@ -30,6 +31,7 @@ namespace TDSDispatcher.ViewModels
         private readonly ITDSRepository repository;
         private readonly IDialogService dialogService;
         private readonly Settings settings;
+        private readonly PermissionServiceBuilder permissionServiceBuilder;
         private EntityInfo entityInfo;
         private CancellationTokenSource cts;
         private Filter filterParameter;
@@ -37,6 +39,13 @@ namespace TDSDispatcher.ViewModels
 
         public bool IsReferenceList => true;
         public bool IsClosable => true;
+
+        private PermissionService permissionService;
+        public PermissionService PermissionService 
+        { 
+            get => permissionService; 
+            private set => SetProperty(ref permissionService, value);
+        }
 
         private string title;
         public string Title
@@ -93,7 +102,9 @@ namespace TDSDispatcher.ViewModels
                 {
                     LoadItems();
                 }
-            });
+            }, 
+            x => PermissionService?.HasPermission(EntityOperations.Edit) ?? true)
+            .ObservesProperty(() => PermissionService);
 
         public ICommand EditCommand => new DelegateCommand<Window>(
             x =>
@@ -104,7 +115,9 @@ namespace TDSDispatcher.ViewModels
                 {
                     LoadItems(CurrentItem);
                 }
-            });
+            },
+            x => PermissionService?.HasPermission(EntityOperations.Edit) ?? true)
+            .ObservesProperty(() => PermissionService);
 
         public ICommand DeleteCommand => new DelegateCommand(
             () =>
@@ -125,7 +138,9 @@ namespace TDSDispatcher.ViewModels
                             }
                         });
                 }
-            });
+            },
+            () => PermissionService?.HasPermission(EntityOperations.Edit) ?? true)
+            .ObservesProperty(() => PermissionService);
 
         public ICommand RowDoubleClickCommand => new DelegateCommand<Window>(
             x =>
@@ -136,7 +151,8 @@ namespace TDSDispatcher.ViewModels
                 }
                 else
                 {
-                    EditCommand.Execute(x);
+                    if(EditCommand.CanExecute(x))
+                        EditCommand.Execute(x);
                 }
             });
 
@@ -156,13 +172,14 @@ namespace TDSDispatcher.ViewModels
         #endregion
 
         public ReferenceViewModel(IRegionManager regionManager, IUnityContainer container, ITDSRepository repository,
-            IDialogService dialogService, Settings settings)
+            IDialogService dialogService, Settings settings, PermissionServiceBuilder permissionServiceBuilder)
         {
             this.regionManager = regionManager;
             this.container = container;
             this.repository = repository;
             this.dialogService = dialogService;
             this.settings = settings;
+            this.permissionServiceBuilder = permissionServiceBuilder;
 
             if(settings.ReloadListTimeout > 0)
                 StartRefresher();
@@ -205,6 +222,7 @@ namespace TDSDispatcher.ViewModels
                 if (entityInfo != null)
                 {
                     Title = entityInfo.Title;
+                    PermissionService = permissionServiceBuilder.Build(entityInfo);
                     LoadItems(selItem);
                 }
             }

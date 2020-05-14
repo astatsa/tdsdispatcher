@@ -10,5 +10,6 @@ namespace TDSDispatcher
     {
         public string Token { get; set; }
         public Employee Employee { get; set; }
+        public ICollection<string> Permissions { get; set; }
     }
 }

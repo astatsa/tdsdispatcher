@@ -29,13 +29,25 @@
             <Button Content="Выбрать" HorizontalAlignment="Right" Margin="0,0,50,0" Style="{StaticResource AccentButton}"
                     Visibility="{Binding SelectionMode, Converter={StaticResource BoolToVisibilityConverter}}"/>
             <Button Content="Создать новый"
-                    Command="{Binding AddCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"/>
+                    Command="{Binding AddCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}">
+                <i:Interaction.Behaviors>
+                    <bhv:PermissionBehavior PermissionService="{Binding PermissionService}" Operation="Edit"/>
+                </i:Interaction.Behaviors>
+            </Button>
             <Button Content="Изменить"
-                    Command="{Binding EditCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"/>
+                    Command="{Binding EditCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}">
+                <i:Interaction.Behaviors>
+                    <bhv:PermissionBehavior PermissionService="{Binding PermissionService}" Operation="Edit"/>
+                </i:Interaction.Behaviors>
+            </Button>
             <Button Content="Обновить"
                     Command="{Binding RefreshCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"/>
             <Button Content="Удалить"
-                    Command="{Binding DeleteCommand}"/>
+                    Command="{Binding DeleteCommand}">
+                <i:Interaction.Behaviors>
+                    <bhv:PermissionBehavior PermissionService="{Binding PermissionService}" Operation="Edit"/>
+                </i:Interaction.Behaviors>
+            </Button>
         </StackPanel>
         <DataGrid x:Name="dataGrid" Grid.Row="1" Margin="0,5,0,0" ItemsSource="{Binding Items}" AutoGeneratingColumn="DataGrid_AutoGeneratingColumn"
                   CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False" IsReadOnly="True"

@@ -58,7 +58,7 @@ namespace TDSDispatcher.ViewModels
                 IsLoading = true;
                 Message = "";
                 var cts = new CancellationTokenSource();
-                cts.CancelAfter(11000);
+                cts.CancelAfter(20000);
                 try
                 {
                     var result = await apiService.Auth(new
@@ -75,6 +75,7 @@ namespace TDSDispatcher.ViewModels
 
                     sessionContext.Token = result.Token;
                     sessionContext.Employee = result.Employee;
+                    sessionContext.Permissions = result.Permissions;
 
                     new MainWindow(regionManager).Show();
                     CloseRequest?.Invoke(this, true);
@@ -94,6 +95,7 @@ namespace TDSDispatcher.ViewModels
                 finally
                 {
                     IsLoading = false;
+                    cts.Dispose();
                 }
             },
             _ => !IsLoading && Username != null && Username.Length > 0)
