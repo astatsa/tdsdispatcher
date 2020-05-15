@@ -43,9 +43,9 @@
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <TextBox Text="{Binding Model.Number}"/>
+                <TextBox Text="{Binding Model.Number}" IsReadOnly="True"/>
                 <TextBlock Grid.Column="1" Text="Дата:"/>
-                <DatePicker Grid.Column="2" SelectedDateFormat="Long" Style="{StaticResource RoundedDatePicker}"
+                <DatePicker Grid.Column="2" SelectedDateFormat="Short" Style="{StaticResource RoundedDatePicker}"
                             SelectedDate="{Binding Model.Date, Mode=TwoWay, TargetNullValue={x:Static sys:DateTime.Now}}"/>
                 <TextBlock Grid.Column="3" Text="{Binding Model.OrderStateName, FallbackValue=Статус}" TextAlignment="Center"
                            HorizontalAlignment="Right" Foreground="Blue"/>

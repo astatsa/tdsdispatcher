@@ -62,6 +62,7 @@ namespace TDSDispatcher
             containerRegistry.RegisterForNavigation<GasStationView>("GasStation");
             containerRegistry.RegisterForNavigation<OrderView>("Order");
             containerRegistry.RegisterForNavigation<RefuelView>("Refuel");
+            containerRegistry.RegisterForNavigation<UserView>("User");
             containerRegistry.Register<ElementView>();
 
             ViewModelLocationProvider.Register<LoginView, LoginViewModel>();
@@ -73,6 +74,7 @@ namespace TDSDispatcher
             ViewModelLocationProvider.Register<GasStationView, GasStationViewModel>();
             ViewModelLocationProvider.Register<OrderView, OrderViewModel>();
             ViewModelLocationProvider.Register<RefuelView, RefuelViewModel>();
+            ViewModelLocationProvider.Register<UserView, UserViewModel>();
 
             containerRegistry.RegisterDialog<MessageBoxView, MessageBoxViewModel>("MessageBox");
             containerRegistry.RegisterDialog<CounterpartyRestView, CounterpartyRestViewModel>();
@@ -86,6 +88,7 @@ namespace TDSDispatcher
             RegisterReference<Order>();
             RegisterReference<GasStation>();
             RegisterReference<Refuel>();
+            RegisterReference<Role>();
 
             containerRegistry.RegisterForNavigation<HomePageView>("HomePage");
             ViewModelLocationProvider.Register<HomePageView, HomePageViewModel>();

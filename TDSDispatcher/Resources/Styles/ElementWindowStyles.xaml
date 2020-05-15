@@ -44,5 +44,8 @@
     <Style TargetType="TextBox" BasedOn="{StaticResource RoundedTextBox}" x:Key="GridTextBox">
         <Setter Property="Margin" Value="5"/>
     </Style>
+    <Style TargetType="PasswordBox" BasedOn="{StaticResource RoundedPasswordBox}" x:Key="GridPasswordBox">
+        <Setter Property="Margin" Value="5"/>
+    </Style>
 
 </ResourceDictionary>

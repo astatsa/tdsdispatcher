@@ -22,7 +22,8 @@ namespace TDSDispatcher.Repositories
                     ModelName = nameof(Employee),
                     Title = "Сотрудники",
                     URL = "Employees",
-                    ModelType = typeof(Employee)
+                    ModelType = typeof(Employee),
+                    Permission = "Reference"
                 } 
             },
             {
@@ -31,7 +32,8 @@ namespace TDSDispatcher.Repositories
                     ModelName = nameof(Position),
                     Title = "Должности",
                     URL = "Positions",
-                    ModelType = typeof(Position)
+                    ModelType = typeof(Position),
+                    Permission = "Position"
                 }
             },
             {
@@ -40,7 +42,8 @@ namespace TDSDispatcher.Repositories
                     ModelName = nameof(Counterparty),
                     Title = "Контрагенты",
                     URL = "Counterparties",
-                    ModelType = typeof(Counterparty)
+                    ModelType = typeof(Counterparty),
+                    Permission = "Reference"
                 }
             },
             {
@@ -49,7 +52,8 @@ namespace TDSDispatcher.Repositories
                     ModelName = nameof(User),
                     Title = "Пользователи",
                     URL = "Users",
-                    ModelType = typeof(User)
+                    ModelType = typeof(User),
+                    Permission = "User"
                 }
             },
             {
@@ -58,7 +62,8 @@ namespace TDSDispatcher.Repositories
                     ModelName = nameof(Material),
                     Title = "Материалы",
                     URL = "Materials",
-                    ModelType = typeof(Material)
+                    ModelType = typeof(Material),
+                    Permission = "Reference"
                 }
             },
             {
@@ -67,7 +72,8 @@ namespace TDSDispatcher.Repositories
                     ModelName = nameof(Measure),
                     Title = "Единицы измерения",
                     URL = "Measures",
-                    ModelType = typeof(Measure)
+                    ModelType = typeof(Measure),
+                    Permission = "Reference"
                 }
             },
             {
@@ -76,7 +82,8 @@ namespace TDSDispatcher.Repositories
                     ModelName = nameof(Order),
                     Title = "Заявки",
                     URL = "Orders",
-                    ModelType = typeof(Order)
+                    ModelType = typeof(Order),
+                    Permission = "Order"
                 }
             },
             {
@@ -85,7 +92,8 @@ namespace TDSDispatcher.Repositories
                     ModelName = nameof(GasStation),
                     Title = "АЗС",
                     URL = "GasStations",
-                    ModelType = typeof(GasStation)
+                    ModelType = typeof(GasStation),
+                    Permission = "Reference"
                 }
             },
             {
@@ -94,7 +102,8 @@ namespace TDSDispatcher.Repositories
                     ModelName = nameof(Refuel),
                     Title = "Заправки",
                     URL = "Refuels",
-                    ModelType = typeof(Refuel)
+                    ModelType = typeof(Refuel),
+                    Permission = "Refuel"
                 }
             },
             {
@@ -113,6 +122,15 @@ namespace TDSDispatcher.Repositories
                     Title = "Остатки поставщиков",
                     URL = "CounterpartyRests",
                     ModelType = typeof(CounterpartyMaterialRest)
+                }
+            },
+            {
+                "Role", new EntityInfo
+                {
+                    ModelName = nameof(Role),
+                    Title = "Роли пользователей",
+                    URL = "Roles",
+                    ModelType = typeof(Role)
                 }
             }
         };
@@ -138,13 +156,13 @@ namespace TDSDispatcher.Repositories
                     Title = "Контрагенты",
                     ParentId = 1
                 },
-                new MenuItem
-                {
-                    Id = 6,
-                    EntityName = "Measure",
-                    Title = "Единицы измерения",
-                    ParentId = 1
-                },
+                //new MenuItem
+                //{
+                //    Id = 6,
+                //    EntityName = "Measure",
+                //    Title = "Единицы измерения",
+                //    ParentId = 1
+                //},
                 new MenuItem
                 {
                     Id = 7,
@@ -247,9 +265,11 @@ namespace TDSDispatcher.Repositories
             throw new Exception(res.Error);
         }
 
-        public ICollection<MenuItem> GetMenuItems()
+        public ICollection<MenuItem> GetMenuItems(ICollection<string> permissions)
         {
-            return menuItems;
+            return menuItems
+                .Where(x => permissions.Any(p => String.IsNullOrEmpty(x.EntityName) || p.Contains(GetEntityByName(x.EntityName).Permission)))
+                .ToList();
         }
 
         public async Task<bool> MarkUnmarkToDeleteAsync<T>(T entity) where T : BaseModel

@@ -13,7 +13,7 @@ namespace TDSDispatcher.Repositories
     {
         ICollection<EntityInfo> GetEntities();
         EntityInfo GetEntityByName(string name);
-        ICollection<MenuItem> GetMenuItems();
+        ICollection<MenuItem> GetMenuItems(ICollection<string> permissions);
 
         Task<ICollection<T>> GetListAsync<T>(string entityName, CancellationToken token);
         Task<ICollection<T>> GetListAsync<T>(string entityName, Filter filter, CancellationToken token);

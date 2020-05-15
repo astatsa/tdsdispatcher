@@ -34,12 +34,12 @@ namespace TDSDispatcher.ViewModels
         private readonly IRegionManager regionManager;
         private readonly ITDSRepository repository;
 
-        public MainWindowViewModel(IRegionManager regionManager, ITDSRepository repository)
+        public MainWindowViewModel(IRegionManager regionManager, ITDSRepository repository, SessionContext sessionContext)
         {
             this.regionManager = regionManager;
             this.repository = repository;
 
-            MenuItems = GetMenuItems(repository.GetMenuItems());
+            //MenuItems = GetMenuItems(repository.GetMenuItems(sessionContext.Permissions));
         }
 
         private List<MenuItemVM> GetMenuItems(ICollection<Models.MenuItem> menuItems, int parentId = 0)

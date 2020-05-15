@@ -10,13 +10,13 @@ namespace TDSDispatcher.ViewModels
 {
     class MaterialViewModel : BaseEntityViewModel<Material>
     {
-        private Measure measure;
+        //private Measure measure;
 
-        public Measure Measure
-        {
-            get => measure;
-            set => SetProperty(ref measure, value, () => Model.MeasureId = measure.Id);
-        }
+        //public Measure Measure
+        //{
+        //    get => measure;
+        //    set => SetProperty(ref measure, value, () => Model.MeasureId = measure.Id);
+        //}
 
 
         public MaterialViewModel(ReferenceService referenceService, ITdsApiService apiService, IDialogService dialogService, ITDSRepository repository)
@@ -25,11 +25,11 @@ namespace TDSDispatcher.ViewModels
 
         }
 
-        protected async override void ModelChanged()
-        {
-            base.ModelChanged();
+        //protected async override void ModelChanged()
+        //{
+        //    base.ModelChanged();
 
-            await SetEntityByIdAsync<Measure>(Model.MeasureId, x => Measure = x);
-        }
+        //    await SetEntityByIdAsync<Measure>(Model.MeasureId, x => Measure = x);
+        //}
     }
 }

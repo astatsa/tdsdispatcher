@@ -90,6 +90,27 @@
                             CornerRadius="2">
                         <ScrollViewer x:Name="PART_ContentHost" SnapsToDevicePixels="True"/>
                     </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsReadOnly" Value="True">
+                            <Setter Property="Background" Value="WhiteSmoke"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Padding" Value="3"/>
+    </Style>
+
+    <Style TargetType="PasswordBox" x:Key="RoundedPasswordBox">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="PasswordBox">
+                    <Border BorderThickness="{TemplateBinding BorderThickness}" 
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            Background="{TemplateBinding Background}"
+                            CornerRadius="2">
+                        <ScrollViewer x:Name="PART_ContentHost" SnapsToDevicePixels="True"/>
+                    </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

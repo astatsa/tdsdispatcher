@@ -57,6 +57,11 @@ namespace TDSDispatcher.ViewModels
         public ICommand SaveCloseCommand => new DelegateCommand(
             async () =>
             {
+                bool cancel = false;
+                OnBeforeSave(ref cancel);
+                if (cancel)
+                    return;
+
                 if (await Save())
                 {
                     CloseRequest?.Invoke(this, true);
@@ -138,6 +143,11 @@ namespace TDSDispatcher.ViewModels
         }
 
         protected virtual void ModelChanged()
+        {
+
+        }
+
+        protected virtual void OnBeforeSave(ref bool cancel)
         {
 
         }

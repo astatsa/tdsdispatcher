@@ -55,6 +55,9 @@
     <Compile Update="Views\RefuelView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\UserView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Controls\ReferenceBox.xaml">
@@ -115,6 +118,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\RefuelView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\UserView.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>

@@ -1,6 +1,7 @@
 ﻿using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Regions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
@@ -38,11 +39,12 @@ namespace TDSDispatcher.ViewModels
                     });
             });
 
-        public HomePageViewModel(ITDSRepository repository, IRegionManager regionManager)
+        public HomePageViewModel(ITDSRepository repository, IRegionManager regionManager, SessionContext sessionContext)
         {
             this.repository = repository;
             this.regionManager = regionManager;
-            MenuItems = GetMenuItems(repository.GetMenuItems());
+
+            MenuItems = GetMenuItems(repository.GetMenuItems(sessionContext.Permissions));
         }
 
         private List<MenuItemVM> GetMenuItems(ICollection<Models.MenuItem> menuItems, int parentId = 0)
@@ -55,6 +57,7 @@ namespace TDSDispatcher.ViewModels
                     EntityName = x.EntityName,
                     Childs = GetMenuItems(menuItems, x.Id)
                 })
+                .Where(x => !String.IsNullOrEmpty(x.EntityName) || x.Childs.Any())
                 .ToList();
         }
 

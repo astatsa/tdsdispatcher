@@ -16,24 +16,24 @@ namespace TDSDispatcher.Services
 
         public PermissionService Build(EntityInfo entityInfo)
         {
-            return new PermissionService(sessionContext, entityInfo.ModelName);
+            return new PermissionService(sessionContext, entityInfo.Permission);
         }
     }
 
     class PermissionService
     {
         private readonly SessionContext sessionContext;
-        private readonly string modelName;
+        private readonly string obj;
 
-        public PermissionService(SessionContext sessionContext, string modelName)
+        public PermissionService(SessionContext sessionContext, string obj)
         {
             this.sessionContext = sessionContext;
-            this.modelName = modelName;
+            this.obj = obj;
         }
 
         public bool HasPermission(EntityOperations operation)
         {
-            return sessionContext.Permissions.Contains($"{modelName}{operation}");
+            return sessionContext.Permissions.Contains($"{obj}{operation}");
         }
     }
 

@@ -109,7 +109,7 @@ namespace TDSDispatcher.ViewModels
 
         public event EventHandler<bool> CloseRequest;
 
-        private string GetPasswordHash(string password)
+        public static string GetPasswordHash(string password)
         {
             using var sha = SHA256.Create();
             return String.Join("", sha.ComputeHash(Encoding.UTF8.GetBytes(password)).Select(x => x.ToString("x2")));

@@ -10,5 +10,6 @@ namespace TDSDispatcher.Models
         public string URL { get; set; }
         public string ModelName { get; set; }
         public Type ModelType { get; set; }
+        public string Permission { get; set; }
     }
 }
