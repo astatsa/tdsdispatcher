@@ -30,6 +30,7 @@ namespace TDSDispatcher.ViewModels
             });
 
         public List<MenuItemVM> MenuItems { get; set; }
+        public string UserFullName { get; set; }
 
         private readonly IRegionManager regionManager;
         private readonly ITDSRepository repository;
@@ -38,6 +39,7 @@ namespace TDSDispatcher.ViewModels
         {
             this.regionManager = regionManager;
             this.repository = repository;
+            this.UserFullName = sessionContext.Employee?.FullName;
 
             //MenuItems = GetMenuItems(repository.GetMenuItems(sessionContext.Permissions));
         }

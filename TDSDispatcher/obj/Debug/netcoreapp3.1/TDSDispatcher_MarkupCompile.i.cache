@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NETCOREAPP;NETCOREAPP3_1
 D:\Igor\source\repos\TDSDispatcher\TDSDispatcher\App.xaml
-211691928027
+22530560734
 121391899491
-61357470464
+631100242082
 211702279087
-Controls\ReferenceBox.xaml;Controls\SwitchButton.xaml;Resources\Styles\ElementWindowStyles.xaml;Resources\Styles\Generic.xaml;Resources\Styles\ReferenceStyles.xaml;Views\CounterpartyRestView.xaml;Views\CounterpartyView.xaml;Views\Dialogs\MessageBoxView.xaml;Views\ElementView.xaml;Views\EmployeeView.xaml;Views\GasStationView.xaml;Views\HomePageView.xaml;Views\LoginView.xaml;Views\MainWindow.xaml;Views\MaterialView.xaml;Views\MeasureView.xaml;Views\OrderListView.xaml;Views\OrderView.xaml;Views\ReferenceView.xaml;Views\RefuelView.xaml;Views\UserView.xaml;
+Controls\ReferenceBox.xaml;Controls\SwitchButton.xaml;Resources\Styles\ElementWindowStyles.xaml;Resources\Styles\Generic.xaml;Resources\Styles\ReferenceStyles.xaml;Views\CounterpartyRestView.xaml;Views\CounterpartyView.xaml;Views\Dialogs\MessageBoxView.xaml;Views\Dialogs\QuickSearchView.xaml;Views\ElementView.xaml;Views\EmployeeView.xaml;Views\GasStationView.xaml;Views\HomePageView.xaml;Views\LoginView.xaml;Views\MainWindow.xaml;Views\MaterialView.xaml;Views\MeasureView.xaml;Views\OrderListView.xaml;Views\OrderView.xaml;Views\ReferenceView.xaml;Views\RefuelView.xaml;Views\UserView.xaml;
 
-True
+False
 

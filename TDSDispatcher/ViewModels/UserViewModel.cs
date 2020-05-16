@@ -18,7 +18,7 @@ namespace TDSDispatcher.ViewModels
         public Role Role
         {
             get => role;
-            set => SetProperty(ref role, value);
+            set => SetProperty(ref role, value, () => Model.RoleId = role.Id);
         }
 
 
@@ -35,7 +35,8 @@ namespace TDSDispatcher.ViewModels
                 return;
             }
 
-            if(Password.Length > 0)
+            Model.PasswordHash = null;
+            if (Password != null && Password.Length > 0)
                 Model.PasswordHash = LoginViewModel.GetPasswordHash(Password);
         }
 

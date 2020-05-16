@@ -76,6 +76,7 @@ namespace TDSDispatcher.ViewModels
                     sessionContext.Token = result.Token;
                     sessionContext.Employee = result.Employee;
                     sessionContext.Permissions = result.Permissions;
+                    sessionContext.UserFullName = result.UserFullName;
 
                     new MainWindow(regionManager).Show();
                     CloseRequest?.Invoke(this, true);
