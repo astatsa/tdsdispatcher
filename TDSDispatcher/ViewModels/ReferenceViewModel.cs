@@ -63,7 +63,14 @@ namespace TDSDispatcher.ViewModels
         public ICollection<T> Items
         {
             get => items;
-            private set => SetProperty(ref items, value, () => ItemsView = CollectionViewSource.GetDefaultView(items));
+            private set => SetProperty(ref items, value, 
+                () =>
+                {
+                    var filterPredicate = ItemsView?.Filter;
+
+                    ItemsView = CollectionViewSource.GetDefaultView(items);
+                    ItemsView.Filter = filterPredicate;
+                });
         }
 
         private ICollectionView itemsView;
