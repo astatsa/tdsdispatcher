@@ -103,6 +103,13 @@ namespace TDSDispatcher.ViewModels
             set => SetProperty(ref isLoading, value);
         }
 
+        private string filterText;
+        public string FilterText
+        {
+            get => filterText;
+            set => SetProperty(ref filterText, value);
+        }
+
 
         #region Commands
         public ICommand AddCommand => new DelegateCommand<Window>(
@@ -202,23 +209,46 @@ namespace TDSDispatcher.ViewModels
                                 || !result.Parameters.TryGetValue("SearchText", out string searchText))
                                 return;
 
-                            var param = Exp.Parameter(typeof(T));
-                            var getProperty = Exp.Lambda<Func<T, string>>(
-                                Exp.Property(
-                                    param,
-                                    entityColumn.Name),
-                                param).Compile();
+                            try
+                            {
+                                var param = Exp.Parameter(typeof(T));
+                                var getProperty = Exp.Lambda<Func<T, object>>(
+                                    Exp.Convert(
+                                        Exp.Property(
+                                            param,
+                                            entityColumn.Name),
+                                        typeof(object)),
+                                    param).Compile();
 
-                            ItemsView.Filter =
-                                x =>
-                                {
-                                    var value = getProperty((T)x);
-                                    if (value == null)
-                                        return false;
+                                ItemsView.Filter =
+                                    x =>
+                                    {
+                                        var value = getProperty((T)x);
+                                        if (value == null)
+                                            return false;
 
-                                    return value.Contains(searchText);
-                                };
+                                        return value.ToString().Contains(searchText, StringComparison.OrdinalIgnoreCase);
+                                    };
+
+                                FilterText = $"{entityColumn.DisplayName} содержит \"{searchText}\"";
+                            }
+                            catch(Exception ex)
+                            {
+                                dialogService.ShowMessageBox("Ошибка", "Ошибка добавления фильтра!", detail: ex.ToString());
+                            }
                         });
+                }));
+
+        private ICommand clearFilterCommand;
+        public ICommand ClearFilterCommand =>
+            clearFilterCommand ?? (clearFilterCommand = new DelegateCommand(
+                () =>
+                {
+                    if(ItemsView != null)
+                    {
+                        ItemsView.Filter = null;
+                    }
+                    FilterText = String.Empty;
                 }));
         #endregion
 

@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TDSDispatcher.Views"
              xmlns:prism="http://prismlibrary.com/"
+             xmlns:sys="clr-namespace:System;assembly=System.Runtime"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:bhv="clr-namespace:TDSDispatcher.Behaviors"
              mc:Ignorable="d" 
@@ -61,6 +62,41 @@
                     <bhv:PermissionBehavior PermissionService="{Binding PermissionService}" Operation="Edit"/>
                 </i:Interaction.Behaviors>
             </Button>
+            <StackPanel Orientation="Horizontal">
+                <StackPanel.Style>
+                    <Style TargetType="StackPanel">
+                        <Style.Triggers>
+                            <!--<DataTrigger Binding="{Binding FilterText}" Value="{x:Static}"-->
+                        </Style.Triggers>
+                    </Style>
+                </StackPanel.Style>
+                <TextBlock Text="Фильтр:"
+                               VerticalAlignment="Center"
+                               Margin="5,0"/>
+                <Border BorderThickness="1"
+                    BorderBrush="Gray"
+                    CornerRadius="3">
+                    <Grid Margin="3">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="{Binding FilterText, FallbackValue=Фильтр}"
+                               VerticalAlignment="Center"
+                               TextWrapping="Wrap"
+                               MaxWidth="250"
+                               MaxHeight="18"/>
+                        <Button Grid.Column="1"
+                                Content="{StaticResource PathX}"
+                                Style="{x:Null}"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                Margin="5,0"                            
+                                ToolTip="Очистить фильтр"
+                                Command="{Binding ClearFilterCommand}"/>
+                    </Grid>
+                </Border>
+            </StackPanel>
         </StackPanel>
         <DataGrid x:Name="dataGrid" Grid.Row="1" Margin="0,5,0,0" ItemsSource="{Binding ItemsView}" AutoGeneratingColumn="DataGrid_AutoGeneratingColumn"
                   CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False" IsReadOnly="True"
