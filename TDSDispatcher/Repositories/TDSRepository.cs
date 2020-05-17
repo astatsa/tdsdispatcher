@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using TDSDispatcher.Models;
@@ -211,6 +213,8 @@ namespace TDSDispatcher.Repositories
         };
         private readonly ITdsApiService apiService;
 
+        private Dictionary<string, ICollection<EntityColumn>> entityColumnsCache = new Dictionary<string, ICollection<EntityColumn>>();
+
         public TDSRepository(ITdsApiService apiService)
         {
             this.apiService = apiService;
@@ -296,6 +300,33 @@ namespace TDSDispatcher.Repositories
         {
             var url = GetEntityByName(typeof(T).Name).URL;
             return apiService.GetLastChangeDate(url);
+        }
+
+        public ICollection<EntityColumn> GetEntityDisplayColumns<T>()
+        {
+            var type = typeof(T);
+
+            if (!entityColumnsCache.TryGetValue(type.FullName, out ICollection<EntityColumn> entityColumns))
+            {
+                entityColumns = type.GetProperties().Select(
+                    x =>
+                    {
+                        var attr = x.GetCustomAttribute<DisplayFormatAttribute>();
+                        if (attr == null || String.IsNullOrEmpty(attr.DisplayName))
+                            return null;
+
+                        return new EntityColumn
+                        {
+                            DisplayName = attr.DisplayName,
+                            Name = x.Name
+                        };
+                    })
+                    .Where(x => x != null)
+                    .ToList();
+                entityColumnsCache[type.FullName] = entityColumns;
+            }
+
+            return entityColumns;
         }
     }
 }

@@ -27,5 +27,7 @@ namespace TDSDispatcher.Repositories
         Task<bool> SaveReferenceAsync<T>(T entity);
 
         Task<DateTime> GetLastChangeDate<T>();
+
+        ICollection<EntityColumn> GetEntityDisplayColumns<T>();
     }
 }

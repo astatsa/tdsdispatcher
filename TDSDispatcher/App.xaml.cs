@@ -78,6 +78,7 @@ namespace TDSDispatcher
 
             containerRegistry.RegisterDialog<MessageBoxView, MessageBoxViewModel>("MessageBox");
             containerRegistry.RegisterDialog<CounterpartyRestView, CounterpartyRestViewModel>();
+            containerRegistry.RegisterDialog<QuickSearchView, QuickSearchViewModel>("QuickSearch");
 
             RegisterReference<Employee>();
             RegisterReference<Counterparty>();

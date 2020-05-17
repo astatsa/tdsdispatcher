@@ -26,7 +26,7 @@
             <Setter Property="prism:Dialog.WindowStartupLocation" Value="CenterOwner"/>
         </Style>
     </prism:Dialog.WindowStyle>
-    <Grid MinWidth="300" Margin="5">
+    <Grid MinWidth="350" Margin="5">
         <Grid.Resources>
             <Style TargetType="TextBlock">
                 <Setter Property="Margin" Value="5,5,10,5"/>
@@ -36,7 +36,7 @@
                 <Setter Property="Margin" Value="5"/>
             </Style>
             <Style TargetType="ComboBox">
-                <Setter Property="Margin" Value="5"/>
+                <Setter Property="Margin" Value="0"/>
             </Style>
         </Grid.Resources>
         <Grid.ColumnDefinitions>
@@ -46,10 +46,39 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <TextBlock Text="Где искать:"/>
-        <ComboBox Grid.Column="1"/>
+        <Border Grid.Column="1" 
+                BorderBrush="#FFBBBBBB" 
+                BorderThickness="1" 
+                CornerRadius="3" 
+                Margin="5" 
+                Padding="1"
+                Background="#FFE6E6E6">
+            <ComboBox BorderThickness="0"
+                      ItemsSource="{Binding SearchPlaces}"
+                      DisplayMemberPath="DisplayName"
+                      SelectedItem="{Binding CurrentSearchPlace}"/>
+        </Border>
         <TextBlock Grid.Row="1" Text="Что искать:"/>
-        <TextBox Grid.Row="1" Grid.Column="1"/>
+        <TextBox Grid.Row="1" 
+                 Grid.Column="1"
+                 x:Name="SearchTextBox"
+                 Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"/>
+        <StackPanel Grid.Row="2" 
+                    Grid.ColumnSpan="2" 
+                    Orientation="Horizontal" 
+                    FlowDirection="RightToLeft"
+                    Margin="5">
+            <Button Content="Закрыть" 
+                    Style="{StaticResource SimpleButton}" 
+                    IsCancel="True"
+                    Command="{Binding CloseCommand}"/>
+            <Button Content="Найти" 
+                    Style="{StaticResource AccentButton}" 
+                    IsDefault="True"
+                    Command="{Binding SearchCommand}"/>
+        </StackPanel>
     </Grid>
 </UserControl>

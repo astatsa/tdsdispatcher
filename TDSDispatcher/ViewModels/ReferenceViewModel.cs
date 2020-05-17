@@ -7,10 +7,14 @@ using Refit;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
+using Exp = System.Linq.Expressions.Expression;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using TDSDispatcher.Extensions;
 using TDSDispatcher.Models;
@@ -20,6 +24,7 @@ using TDSDispatcher.Views;
 using TDSDTO;
 using TDSDTO.Filter;
 using Unity;
+using System.Security.Cryptography.Xml;
 
 namespace TDSDispatcher.ViewModels
 {
@@ -58,11 +63,18 @@ namespace TDSDispatcher.ViewModels
         public ICollection<T> Items
         {
             get => items;
-            private set => SetProperty(ref items, value);
+            private set => SetProperty(ref items, value, () => ItemsView = CollectionViewSource.GetDefaultView(items));
         }
 
-        private T currentItem;
+        private ICollectionView itemsView;
+        public ICollectionView ItemsView
+        {
+            get => itemsView;
+            set => SetProperty(ref itemsView, value);
+        }
 
+
+        private T currentItem;
         public T CurrentItem
         {
             get => currentItem;
@@ -162,12 +174,51 @@ namespace TDSDispatcher.ViewModels
                 LoadItems();
             });
 
-        private ICommand keyUpCommand;
-        public ICommand KeyUpCommand =>
-            keyUpCommand ?? (keyUpCommand = new DelegateCommand<KeyEventArgs>(
+        private ICommand textInputCommand;
+        public ICommand TextInputCommand =>
+            textInputCommand ?? (textInputCommand = new DelegateCommand<TextCompositionEventArgs>(
                 x =>
                 {
+                    if (!(x.OriginalSource is DataGridCell cell)
+                        || !(cell.Column is DataGridBoundColumn column) 
+                        || column.Binding == null
+                        || !(column.Binding is Binding binding))
+                        return;
 
+                    var searchPlaces = repository.GetEntityDisplayColumns<T>();
+                    var columnName = binding.Path.Path;
+
+                    dialogService.ShowDialog("QuickSearch",
+                        new DialogParameters
+                        {
+                            { "SearchText", x.Text },
+                            { "SearchPlaces", searchPlaces },
+                            { "CurrentSearchPlace", searchPlaces.FirstOrDefault(s => s.Name == columnName) }
+                        },
+                        result =>
+                        {
+                            if (result == null || result.Result != ButtonResult.OK
+                                || !result.Parameters.TryGetValue("SearchPlace", out EntityColumn entityColumn)
+                                || !result.Parameters.TryGetValue("SearchText", out string searchText))
+                                return;
+
+                            var param = Exp.Parameter(typeof(T));
+                            var getProperty = Exp.Lambda<Func<T, string>>(
+                                Exp.Property(
+                                    param,
+                                    entityColumn.Name),
+                                param).Compile();
+
+                            ItemsView.Filter =
+                                x =>
+                                {
+                                    var value = getProperty((T)x);
+                                    if (value == null)
+                                        return false;
+
+                                    return value.Contains(searchText);
+                                };
+                        });
                 }));
         #endregion
 

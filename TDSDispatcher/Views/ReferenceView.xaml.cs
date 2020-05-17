@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Input;
 using TDSDTO;
 
 namespace TDSDispatcher.Views
@@ -72,6 +73,11 @@ namespace TDSDispatcher.Views
                 });
                 //grid.Columns[^1].Width = new DataGridLength(1, DataGridLengthUnitType.Star);
             }
+        }
+
+        private void dataGrid_TextInput(object sender, TextCompositionEventArgs e)
+        {
+
         }
     }
 }
