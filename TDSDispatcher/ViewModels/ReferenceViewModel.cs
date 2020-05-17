@@ -327,7 +327,7 @@ namespace TDSDispatcher.ViewModels
                 {
                     CurrentItem = Items.FirstOrDefault(x => x.Equals(selItem));
                 }
-                lastUpdateDate = DateTime.Now;
+                lastUpdateDate = DateTime.UtcNow.AddSeconds(5);
             }
             catch (TaskCanceledException)
             {
