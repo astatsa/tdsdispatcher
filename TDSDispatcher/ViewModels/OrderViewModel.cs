@@ -81,6 +81,9 @@ namespace TDSDispatcher.ViewModels
             var mat = GetEntityByIdAsync<Material>(Model.MaterialId);
             var driv = GetEntityByIdAsync<Employee>(Model.DriverId);
 
+            if (Model.Date == null)
+                Model.Date = DateTime.Now;
+
             Supplier = await supp;
             Customer = await cust;
             Material = await mat;

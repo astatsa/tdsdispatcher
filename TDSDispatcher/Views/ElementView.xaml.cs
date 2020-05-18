@@ -76,7 +76,7 @@ namespace TDSDispatcher.Views
             this.ContentControl.Content = view;
             this.Owner = owner;
             this.DataContext = view.DataContext;
-            this.Width = 800;
+            this.Width = 900;
             this.Height = 500;
             object res = null;
             if(view.DataContext is ISelectionAware selectionAware)

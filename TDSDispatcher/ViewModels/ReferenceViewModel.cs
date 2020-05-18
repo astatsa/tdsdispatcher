@@ -135,6 +135,9 @@ namespace TDSDispatcher.ViewModels
         public ICommand EditCommand => new DelegateCommand<Window>(
             x =>
             {
+                if (CurrentItem == null)
+                    return;
+
                 var ev = container.Resolve<ElementView>();
                 var res = ev.AddOrEdit(entityInfo, true, x, CurrentItem);
                 if (res.HasValue && res.Value)
@@ -142,8 +145,9 @@ namespace TDSDispatcher.ViewModels
                     LoadItems(CurrentItem);
                 }
             },
-            x => PermissionService?.HasPermission(EntityOperations.Edit) ?? true)
-            .ObservesProperty(() => PermissionService);
+            x => PermissionService?.HasPermission(EntityOperations.Edit) ?? true && CurrentItem != null)
+            .ObservesProperty(() => PermissionService)
+            .ObservesProperty(() => CurrentItem);
 
         public ICommand DeleteCommand => new DelegateCommand(
             () =>
@@ -171,14 +175,17 @@ namespace TDSDispatcher.ViewModels
         public ICommand RowDoubleClickCommand => new DelegateCommand<Window>(
             x =>
             {
-                if (SelectionMode)
+                if (CurrentItem != null)
                 {
-                    Selected?.Invoke(this, CurrentItem);
-                }
-                else
-                {
-                    if(EditCommand.CanExecute(x))
-                        EditCommand.Execute(x);
+                    if (SelectionMode)
+                    {
+                        Selected?.Invoke(this, CurrentItem);
+                    }
+                    else
+                    {
+                        if (EditCommand.CanExecute(x))
+                            EditCommand.Execute(x);
+                    }
                 }
             });
 
